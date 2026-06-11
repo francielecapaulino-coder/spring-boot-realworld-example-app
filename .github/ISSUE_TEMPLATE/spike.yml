@@ -1,0 +1,90 @@
+name: "🔍 Spike"
+description: "Investigação técnica com timebox — resultado é conhecimento documentado, não código de produção"
+title: "spike(<escopo>): <descrição da investigação>"
+labels: ["spike"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## O que é um spike
+        Um spike é uma investigação com **timebox definido**.
+        O resultado é conhecimento documentado — não código de produção.
+
+        Exemplos neste projeto:
+        - Verificar compatibilidade DGS 10.x com Spring Boot 4 (ADR-001)
+        - Testar LGTM Stack versions localmente (R-14)
+        - Testar Testcontainers no CI (R-08)
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico ou ADR que motiva este spike"
+      placeholder: "EPIC-XX ou ADR-XX ou R-XX"
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: "Pergunta a ser respondida"
+      description: "A questão específica que este spike deve responder — mensurável"
+      placeholder: |
+        O DGS Framework 10.x é compatível com Spring Boot 4.0.6?
+        Versão exata disponível no Maven Central?
+        Quais breaking changes existem nos resolvers?
+    validations:
+      required: true
+
+  - type: input
+    id: timebox
+    attributes:
+      label: "Timebox"
+      description: "Tempo máximo — ao expirar, documentar o que foi descoberto e parar"
+      placeholder: "ex: 2 horas, meio dia, 1 dia"
+    validations:
+      required: true
+
+  - type: textarea
+    id: deliverable
+    attributes:
+      label: "Entregável esperado"
+      description: "O que será documentado como resultado — ADR atualizado, comentário, relatório"
+      placeholder: |
+        - Atualização do ADR-001 com a conclusão
+        - Lista de breaking changes encontradas
+        - Decisão: manter DGS ou migrar para Spring for GraphQL
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      description: "Fonte de verdade: docs/process/definition-of-done.md"
+      value: |
+        > Referência: `docs/process/definition-of-done.md`
+
+        - [ ] Pergunta respondida com evidências (não apenas opinião)
+        - [ ] Resultado documentado (ADR atualizado, comentário na issue, relatório)
+        - [ ] Próximos passos definidos com base no resultado
+        - [ ] Timebox respeitado — se não concluiu, documentar o que faltou
+        - [ ] Conventional Commit com `closes #XX`
+        - [ ] Prompts usados documentados no Coda
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      placeholder: "https://coda.io/d/... (preencher durante o desenvolvimento)"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR ou commit com resultado"
+      placeholder: "#XX"
+    validations:
+      required: false

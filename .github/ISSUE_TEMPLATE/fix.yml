@@ -1,0 +1,106 @@
+name: "🐛 Bug Fix"
+description: "Correção de comportamento incorreto ou inesperado"
+title: "fix(<escopo>): <descrição curta>"
+labels: ["fix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Antes de começar
+        - Reproduza o bug localmente antes de criar esta issue
+        - Confirme que o bug existe na branch `master` atual
+        - Consulte os testes de contrato (EPIC-08) para verificar se já deveria estar coberto
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico relacionado"
+      placeholder: "EPIC-XX — Nome do épico"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_behavior
+    attributes:
+      label: "Comportamento atual (buggy)"
+      description: "O que acontece hoje que está incorreto — com comando ou URL para reproduzir"
+      placeholder: |
+        Ao chamar DELETE /articles/:slug com token válido,
+        o endpoint retorna 200 em vez de 204.
+
+        Reprodução:
+        curl -X DELETE http://localhost:8080/articles/my-article \
+          -H "Authorization: Token ..." -w "%{http_code}"
+        Resultado: 200
+        Esperado: 204
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: "Comportamento esperado (correto)"
+      description: "O que deveria acontecer — referencie o contrato da API ou spec se aplicável"
+      placeholder: |
+        DELETE /articles/:slug deve retornar 204 No Content
+        conforme a RealWorld spec e o contrato em API-mapping.md.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Passos para reproduzir"
+      description: "Comandos exatos para reproduzir o bug localmente"
+      placeholder: |
+        1. docker compose up
+        2. POST /users — criar usuário
+        3. POST /users/login — obter token
+        4. POST /articles — criar artigo
+        5. DELETE /articles/:slug — observar status code
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      description: "Fonte de verdade completa: docs/process/definition-of-done.md"
+      value: |
+        > Referência completa: `docs/process/definition-of-done.md`
+
+        - [ ] Bug corrigido e verificado localmente
+        - [ ] Teste de regressão adicionado — falha antes da correção, passa depois
+        - [ ] `./gradlew test` passando
+        - [ ] `./gradlew pitest` — mutation score ≥ 95% mantido (quando há mudança de código)
+        - [ ] Conventional Commit: `fix(escopo): descrição` com `closes #XX`
+        - [ ] Prompts usados documentados no Coda
+        - [ ] PR aberta com link para esta issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceitação"
+      placeholder: |
+        - CA-01: DELETE /articles/:slug retorna 204 No Content
+        - CA-02: teste de regressão falha na branch master e passa na branch do fix
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      placeholder: "https://coda.io/d/... (preencher durante o desenvolvimento)"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR relacionada"
+      placeholder: "#XX"
+    validations:
+      required: false

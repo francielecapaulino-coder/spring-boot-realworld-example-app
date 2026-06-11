@@ -1,0 +1,111 @@
+name: "🔧 Chore"
+description: "Setup, configuração, dependências, ferramentas — sem impacto funcional. Também usado para tipos ci, perf e style."
+title: "chore(<escopo>): <descrição curta>"
+labels: ["chore"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Quando usar este template
+        - Setup e configuração (Docker Compose, Spring profiles, etc.)
+        - Upgrade de dependências (Spring Boot, Gradle, Java)
+        - Configuração de CI/CD (GitHub Actions, Pitest gate)
+        - Ferramentas de processo (Coda, GitAhead, truffleHog)
+
+        > **Tipos `ci`, `perf` e `style`** também usam este template.
+        > Ajuste o título para o tipo correto: `ci(escopo):`, `perf(escopo):`, `style:`.
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico relacionado"
+      placeholder: "EPIC-XX — Nome do épico"
+    validations:
+      required: true
+
+  - type: input
+    id: phase
+    attributes:
+      label: "Fase"
+      placeholder: "Fase X"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "O que será feito"
+      description: "Descrição clara do que esta tarefa entrega"
+      placeholder: |
+        Configurar Docker Compose com app + PostgreSQL 16 + LGTM Stack.
+        Após esta tarefa, `docker compose up` sobe todos os serviços.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: "Por que é necessário"
+      description: "Qual problema resolve ou qual capacidade habilita"
+      placeholder: |
+        Sem ambiente padronizado, cada dev monta o ambiente diferente.
+        O Docker Compose garante ambiente idêntico para todo o time.
+    validations:
+      required: true
+
+  - type: textarea
+    id: dor
+    attributes:
+      label: "Definition of Ready (DoR)"
+      description: "Fonte de verdade: docs/process/definition-of-ready.md"
+      value: |
+        > Referência: `docs/process/definition-of-ready.md`
+
+        - [ ] Escopo claro e aprovado pela PM
+        - [ ] Dependências desta tarefa concluídas
+        - [ ] Ambiente local funcionando
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      description: "Fonte de verdade: docs/process/definition-of-done.md"
+      value: |
+        > Referência: `docs/process/definition-of-done.md`
+
+        - [ ] Configuração implementada e funcionando localmente
+        - [ ] Verificada no CI (se aplicável)
+        - [ ] Documentação atualizada (se aplicável)
+        - [ ] Conventional Commit com `closes #XX` ou `refs #XX`
+        - [ ] Prompts usados documentados no Coda
+        - [ ] PR aberta com link para esta issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceitação"
+      placeholder: |
+        - CA-01: [verificação concreta — input/output]
+        - CA-02: ...
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      placeholder: "https://coda.io/d/... (preencher durante o desenvolvimento)"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR relacionada"
+      placeholder: "#XX"
+    validations:
+      required: false

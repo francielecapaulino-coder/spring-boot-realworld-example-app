@@ -1,0 +1,9 @@
+# .github/ISSUE_TEMPLATE/config.yml
+blank_issues_enabled: false
+contact_links:
+  - name: "📋 Documentação do projeto"
+    url: https://github.com/gothinkster/spring-boot-realworld-example-app/tree/master/docs
+    about: "Consulte as iniciativas, épicos e ADRs antes de abrir uma issue"
+  - name: "📐 Mapeamento de tipos para templates"
+    url: https://github.com/gothinkster/spring-boot-realworld-example-app/blob/master/CONTRIBUTING.md
+    about: "Tipos ci, perf e style usam o template Chore. Consulte o CONTRIBUTING.md"

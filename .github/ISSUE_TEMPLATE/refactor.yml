@@ -1,0 +1,102 @@
+name: "♻️ Refactor"
+description: "Reestruturação de código sem mudança de comportamento externo"
+title: "refactor(<escopo>): <descrição curta>"
+labels: ["refactor"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Regra de ouro do refactor
+        O comportamento externo deve ser **idêntico** antes e depois.
+        Os testes de contrato (EPIC-08) devem passar sem alteração.
+        Se o comportamento muda, use o template `feat` ou `fix`.
+
+        **Leia os ADRs antes de iniciar** — refatorações neste projeto seguem decisões arquiteturais documentadas em `06-architecture-decisions.md`.
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico relacionado"
+      placeholder: "EPIC-XX — Nome do épico"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_state
+    attributes:
+      label: "Estado atual do código"
+      description: "O que existe hoje — com path de arquivo, classe e problema identificado"
+      placeholder: |
+        ArticleData.java (io.spring.application.data):
+        - Classe com Lombok @Data, @AllArgsConstructor (30+ linhas boilerplate)
+        - Usa Joda DateTime nos campos createdAt/updatedAt
+        - Implementa Node com getCursor() retornando DateTimeCursor(updatedAt)
+    validations:
+      required: true
+
+  - type: textarea
+    id: target_state
+    attributes:
+      label: "Estado alvo do código"
+      description: "Como ficará após a refatoração — com decisões arquiteturais referenciadas"
+      placeholder: |
+        ArticleData será record Java 25 implementando Node com getCursor() explícito.
+        Usará java.time.Instant em vez de Joda DateTime.
+        Conforme ADR-005 — Node interface e cursor pagination.
+    validations:
+      required: true
+
+  - type: textarea
+    id: adrs
+    attributes:
+      label: "ADRs relacionados (obrigatório para refactors)"
+      description: "Quais ADRs de 06-architecture-decisions.md definem como esta refatoração deve ser feita"
+      placeholder: |
+        - ADR-005: Node interface e cursor pagination — migração para records
+        - ADR-002: Spring Data JPA — estratégia de queries
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      description: "Fonte de verdade: docs/process/definition-of-done.md"
+      value: |
+        > Referência: `docs/process/definition-of-done.md`
+
+        - [ ] Comportamento externo idêntico ao anterior
+        - [ ] `./gradlew test` passando sem alterações nos testes existentes
+        - [ ] Testes de contrato (EPIC-08) passando sem alteração
+        - [ ] `./gradlew pitest` ≥ 95% mantido
+        - [ ] Conventional Commit: `refactor(escopo): descrição` com `closes #XX`
+        - [ ] Prompts usados documentados no Coda
+        - [ ] PR aberta com link para esta issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceitação"
+      placeholder: |
+        - CA-01: comportamento idêntico verificado pelos testes existentes
+        - CA-02: [verificação específica desta refatoração]
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      placeholder: "https://coda.io/d/... (preencher durante o desenvolvimento)"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR relacionada"
+      placeholder: "#XX"
+    validations:
+      required: false

@@ -1,0 +1,68 @@
+name: "📝 Documentation"
+description: "ADRs, OpenAPI/Swagger, CONTRIBUTING, README, documentação de processo"
+title: "docs(<escopo>): <descrição curta>"
+labels: ["docs"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Tipos de documentação neste projeto
+        - **ADRs:** decisões arquiteturais em `06-architecture-decisions.md`
+        - **OpenAPI/Swagger:** documentação de contratos em Swagger UI
+        - **Processo:** DoR, DoD, CONTRIBUTING.md, guias de setup
+        - **API Mapping:** mapeamento REST e GraphQL
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico relacionado"
+      placeholder: "EPIC-XX — Nome do épico"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "O que será documentado"
+      description: "Descreva o artefato de documentação que será criado ou atualizado"
+      placeholder: |
+        Documentar ADR-001 sobre a decisão de manter DGS Framework 10.x
+        em vez de migrar para Spring for GraphQL nativo.
+
+        Arquivo: 06-architecture-decisions.md, seção ADR-001
+        Referência: EPIC-04, US-04.01
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      description: "Fonte de verdade: docs/process/definition-of-done.md"
+      value: |
+        > Referência: `docs/process/definition-of-done.md`
+
+        - [ ] Documentação criada ou atualizada e acessível no repositório
+        - [ ] Conteúdo revisado pela PM ou Tech Lead
+        - [ ] Links internos verificados (referências a outros docs funcionam)
+        - [ ] Conventional Commit: `docs(escopo): descrição` com `closes #XX`
+        - [ ] Prompts usados documentados no Coda
+        - [ ] PR aberta com link para esta issue
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      placeholder: "https://coda.io/d/... (preencher durante o desenvolvimento)"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR relacionada"
+      placeholder: "#XX"
+    validations:
+      required: false
