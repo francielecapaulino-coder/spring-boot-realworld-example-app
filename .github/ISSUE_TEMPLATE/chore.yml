@@ -1,0 +1,103 @@
+name: "chore - Setup, deps e configuracao"
+description: "Setup, dependências, configuração de ferramentas, CI/CD, performance e formatação. Também cobre os tipos ci, perf e style."
+labels: ["chore"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Chore — Setup, dependências e configuração
+        Use este template para trabalho sem impacto funcional direto:
+        - **chore**: setup, dependências, ferramentas de processo
+        - **ci**: workflows GitHub Actions, scripts de build, pipelines
+        - **perf**: melhorias mensuráveis de performance
+        - **style**: formatação de código sem mudança de lógica
+
+        Referência completa: `docs/process/definition-of-done.md`
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico relacionado"
+      description: "Ex: EPIC-01 — Fundação do processo de desenvolvimento"
+      placeholder: "EPIC-XX — Nome do épico"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: commit_type
+    attributes:
+      label: "Tipo de commit"
+      description: "Qual tipo Conventional Commit melhor descreve esta issue?"
+      options:
+        - "chore (setup, deps, ferramentas)"
+        - "ci (workflows, pipelines, scripts de build)"
+        - "perf (melhoria de performance mensurável)"
+        - "style (formatação sem mudança de lógica)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Descrição do trabalho"
+      description: "O que será feito e por quê."
+      placeholder: |
+        O que: ...
+        Por que: ...
+        Impacto esperado: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceite"
+      placeholder: |
+        - [ ] CA-01: ...
+        - [ ] CA-02: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: dor
+    attributes:
+      label: "Definition of Ready (DoR)"
+      value: |
+        - [ ] Escopo definido
+        - [ ] Impacto no build/CI avaliado
+        - [ ] Dependências mapeadas
+        - [ ] Issue criada no GitHub antes de qualquer código
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      value: |
+        - [ ] Trabalho concluído e verificado
+        - [ ] Build e CI passando sem erros ou warnings novos
+        - [ ] Conventional Commit com closes #XX ou refs #XX
+        - [ ] PR aberta com link para esta issue
+        - [ ] Prompts usados documentados no Coda
+        - [ ] Referência completa: docs/process/definition-of-done.md
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
+      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > chore/...'"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR relacionada"
+      description: "Preencher após abrir a PR."
+      placeholder: "#XX"
+    validations:
+      required: false

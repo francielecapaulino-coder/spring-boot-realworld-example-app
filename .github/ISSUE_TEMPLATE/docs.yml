@@ -1,0 +1,86 @@
+name: "docs - Documentacao"
+description: "Adicionar ou atualizar documentação: ADRs, OpenAPI/Swagger, CONTRIBUTING, mapeamento de API ou guias."
+labels: ["docs"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Documentação
+        Use este template para trabalho de documentação: ADRs, especificações OpenAPI,
+        CONTRIBUTING.md, mapeamento de API, README ou qualquer guia do processo.
+        Referência completa: `docs/process/definition-of-done.md`
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico relacionado"
+      description: "Ex: EPIC-11 — Documentação de API — OpenAPI / Swagger"
+      placeholder: "EPIC-XX — Nome do épico"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_to_document
+    attributes:
+      label: "O que será documentado"
+      description: "Descreva o escopo: qual componente, endpoint, decisão arquitetural ou processo."
+      placeholder: |
+        Tipo de documentação: (ADR / OpenAPI / CONTRIBUTING / API mapping / outro)
+        Escopo:
+        - ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceite"
+      placeholder: |
+        - [ ] CA-01: ...
+        - [ ] CA-02: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: dor
+    attributes:
+      label: "Definition of Ready (DoR)"
+      value: |
+        - [ ] Escopo de documentação definido
+        - [ ] Fonte de verdade identificada (código, ADR, contrato, etc.)
+        - [ ] Issue criada no GitHub antes de qualquer trabalho
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      value: |
+        - [ ] Documentação criada ou atualizada
+        - [ ] Revisada por pelo menos um membro do time
+        - [ ] Links e referências cruzadas verificados
+        - [ ] Conventional Commit com closes #XX ou refs #XX
+        - [ ] PR aberta com link para esta issue
+        - [ ] Prompts usados documentados no Coda
+        - [ ] Referência completa: docs/process/definition-of-done.md
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
+      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > docs/...'"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR relacionada"
+      description: "Preencher após abrir a PR."
+      placeholder: "#XX"
+    validations:
+      required: false

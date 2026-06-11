@@ -1,0 +1,106 @@
+name: "refactor - Reestruturacao de codigo"
+description: "Reestruturar código sem alterar comportamento externo visível."
+labels: ["refactor"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Refactor — Reestruturação sem mudança de comportamento
+        > **Regra de ouro:** se o comportamento externo muda, use `feat` ou `fix`.
+        > Refactor é exclusivamente para mudanças internas que preservam o contrato existente.
+
+        Exemplos válidos: migração MyBatis → JPA, extração de classes, introdução de record types,
+        eliminação de Joda-Time, reorganização de pacotes.
+
+        Referência completa: `docs/process/definition-of-done.md`
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico relacionado"
+      description: "Ex: EPIC-05 — Migração de persistência MyBatis para JPA"
+      placeholder: "EPIC-XX — Nome do épico"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Descrição da reestruturação"
+      description: "O que será reestruturado, como e por quê — sem alterar o comportamento externo."
+      placeholder: |
+        O que: ...
+        Como: ...
+        Por que (motivação técnica): ...
+        Comportamento preservado: todos os testes existentes continuam passando
+    validations:
+      required: true
+
+  - type: textarea
+    id: adrs
+    attributes:
+      label: "ADRs relacionados"
+      description: "Decisões arquiteturais que motivam ou documentam este refactor."
+      placeholder: |
+        - ADR-XX: ...
+        - ADR-YY: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceite"
+      placeholder: |
+        - [ ] CA-01: Todos os testes existentes continuam passando
+        - [ ] CA-02: Nenhuma mudança de comportamento externo
+        - [ ] CA-03: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: dor
+    attributes:
+      label: "Definition of Ready (DoR)"
+      value: |
+        - [ ] Escopo definido — o que muda e o que não muda
+        - [ ] ADR relacionado identificado ou criado
+        - [ ] Suite de testes existente passa 100% (rede de segurança)
+        - [ ] Issue criada no GitHub antes de qualquer código
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      value: |
+        - [ ] Reestruturação concluída
+        - [ ] Todos os testes existentes continuam passando
+        - [ ] Pitest score >= 95% mantido
+        - [ ] Nenhuma mudança de comportamento externo verificada
+        - [ ] ADR atualizado ou criado se necessário
+        - [ ] Conventional Commit com closes #XX ou refs #XX
+        - [ ] PR aberta com link para esta issue
+        - [ ] Prompts usados documentados no Coda
+        - [ ] Referência completa: docs/process/definition-of-done.md
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
+      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > refactor/...'"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR relacionada"
+      description: "Preencher após abrir a PR."
+      placeholder: "#XX"
+    validations:
+      required: false

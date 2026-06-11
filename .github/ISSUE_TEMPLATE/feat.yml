@@ -1,0 +1,90 @@
+name: "feat - Nova funcionalidade"
+description: "Adicionar uma nova capacidade funcional ao sistema."
+labels: ["feat"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Nova funcionalidade
+        Use este template para funcionalidades novas visíveis ao usuário ou ao sistema.
+        Referência completa: `docs/process/definition-of-done.md`
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico relacionado"
+      description: "Ex: EPIC-07 — Qualidade por mutação"
+      placeholder: "EPIC-XX — Nome do épico"
+    validations:
+      required: true
+
+  - type: textarea
+    id: story
+    attributes:
+      label: "História de usuário"
+      description: "Como [quem], quero [o quê], para que [por quê]."
+      placeholder: |
+        Como ...
+        Quero ...
+        Para que ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceite"
+      description: "Liste os critérios verificáveis para considerar esta issue concluída."
+      placeholder: |
+        - [ ] CA-01: ...
+        - [ ] CA-02: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: dor
+    attributes:
+      label: "Definition of Ready (DoR)"
+      description: "O que precisa ser verdade antes de começar a implementar."
+      value: |
+        - [ ] História escrita e revisada
+        - [ ] Critérios de aceite definidos
+        - [ ] Épico relacionado identificado
+        - [ ] Dependências mapeadas
+        - [ ] Issue criada no GitHub antes de qualquer código
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      description: "O que precisa ser verdade para fechar esta issue."
+      value: |
+        - [ ] Código implementado e revisado
+        - [ ] Testes escritos — unitários, integração e/ou E2E conforme o escopo
+        - [ ] Pitest score >= 95% mantido (quando há mudança de código)
+        - [ ] Conventional Commit com closes #XX ou refs #XX
+        - [ ] PR aberta com link para esta issue
+        - [ ] Prompts usados documentados no Coda
+        - [ ] Referência completa: docs/process/definition-of-done.md
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
+      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > feat/...'"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR relacionada"
+      description: "Preencher após abrir a PR."
+      placeholder: "#XX"
+    validations:
+      required: false

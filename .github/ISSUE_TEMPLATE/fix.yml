@@ -1,0 +1,94 @@
+name: "fix - Correção de bug"
+description: "Corrigir um comportamento incorreto ou inesperado do sistema."
+labels: ["fix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Correção de bug
+        Use este template para bugs — comportamentos que deveriam funcionar mas não funcionam.
+        Referência completa: `docs/process/definition-of-done.md`
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico relacionado"
+      description: "Ex: EPIC-02 — Segurança e eliminação de vulnerabilidades"
+      placeholder: "EPIC-XX — Nome do épico"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Descrição do bug"
+      description: "O que acontece, o que deveria acontecer e como reproduzir."
+      placeholder: |
+        **Comportamento atual:**
+        ...
+
+        **Comportamento esperado:**
+        ...
+
+        **Passos para reproduzir:**
+        1. ...
+        2. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceite"
+      description: "Como confirmar que o bug foi corrigido."
+      placeholder: |
+        - [ ] CA-01: ...
+        - [ ] CA-02: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: dor
+    attributes:
+      label: "Definition of Ready (DoR)"
+      value: |
+        - [ ] Bug reproduzido e documentado
+        - [ ] Critérios de aceite definidos
+        - [ ] Épico relacionado identificado
+        - [ ] Issue criada no GitHub antes de qualquer código
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      value: |
+        - [ ] Bug corrigido e verificado
+        - [ ] Testes escritos — unitários, integração e/ou E2E conforme o escopo
+        - [ ] Pitest score >= 95% mantido (quando há mudança de código)
+        - [ ] Teste de regressão adicionado para cobrir o bug
+        - [ ] Conventional Commit com closes #XX ou refs #XX
+        - [ ] PR aberta com link para esta issue
+        - [ ] Prompts usados documentados no Coda
+        - [ ] Referência completa: docs/process/definition-of-done.md
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
+      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > fix/...'"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR relacionada"
+      description: "Preencher após abrir a PR."
+      placeholder: "#XX"
+    validations:
+      required: false

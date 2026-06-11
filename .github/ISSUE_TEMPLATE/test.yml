@@ -1,0 +1,102 @@
+name: "test - Testes"
+description: "Adicionar ou corrigir testes: unitários, slice, integração, mutação (Pitest) ou E2E (Playwright)."
+labels: ["test"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Testes
+        Use este template para qualquer trabalho relacionado a testes.
+        Inclui: testes unitários, slice tests, testes de integração, mutação com Pitest e E2E com Playwright.
+        Referência completa: `docs/process/definition-of-done.md`
+
+  - type: input
+    id: epic
+    attributes:
+      label: "Épico relacionado"
+      description: "Ex: EPIC-07 — Qualidade por mutação | EPIC-08 — Testes de contrato | EPIC-09 — Playwright"
+      placeholder: "EPIC-XX — Nome do épico"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_type
+    attributes:
+      label: "Tipo de teste"
+      description: "Selecione o tipo principal de teste desta issue."
+      options:
+        - "Unitário"
+        - "Slice (WebMvcTest, DataJpaTest, etc.)"
+        - "Integração (contrato REST/GraphQL)"
+        - "Mutação (Pitest)"
+        - "E2E (Playwright)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_to_test
+    attributes:
+      label: "O que será testado"
+      description: "Descreva o escopo: qual componente, endpoint, fluxo ou funcionalidade."
+      placeholder: |
+        Componente/Endpoint: ...
+        Cenários cobertos:
+        - [ ] Cenário 1: ...
+        - [ ] Cenário 2: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceite"
+      placeholder: |
+        - [ ] CA-01: ...
+        - [ ] CA-02: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: dor
+    attributes:
+      label: "Definition of Ready (DoR)"
+      value: |
+        - [ ] Escopo de testes definido
+        - [ ] Componente/endpoint alvo identificado
+        - [ ] Tipo de teste selecionado
+        - [ ] Issue criada no GitHub antes de qualquer código
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: "Definition of Done (DoD)"
+      value: |
+        - [ ] Testes implementados e passando no CI
+        - [ ] Cobertura do escopo definido verificada
+        - [ ] Pitest score >= 95% mantido (obrigatório para tipo Mutação)
+        - [ ] Conventional Commit com closes #XX ou refs #XX
+        - [ ] PR aberta com link para esta issue
+        - [ ] Prompts usados documentados no Coda
+        - [ ] Referência completa: docs/process/definition-of-done.md
+    validations:
+      required: true
+
+  - type: input
+    id: coda
+    attributes:
+      label: "Prompts e skills — Coda"
+      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
+      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > test/...'"
+    validations:
+      required: true
+
+  - type: input
+    id: pr
+    attributes:
+      label: "PR relacionada"
+      description: "Preencher após abrir a PR."
+      placeholder: "#XX"
+    validations:
+      required: false

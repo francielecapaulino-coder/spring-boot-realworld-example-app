@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Documentacao do processo"
+    url: https://github.com/gothinkster/spring-boot-realworld-example-app/tree/master/docs/process
+    about: "DoR, DoD, convencoes de commit e guia de contribuicao"
