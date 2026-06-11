@@ -24,3 +24,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+# Node.js - process tools only (commitlint, playwright)
+node_modules/

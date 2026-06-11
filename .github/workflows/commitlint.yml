@@ -1,0 +1,36 @@
+name: Commitlint
+
+on:
+  push:
+    branches-ignore:
+      - master
+      - bleeding
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  commitlint:
+    name: Validate commit messages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install commitlint
+        run: npm ci
+
+      - name: Validate all commits in branch
+        run: |
+          npx commitlint \
+            --from ${{ github.event.pull_request.base.sha || 'HEAD~1' }} \
+            --to HEAD \
+            --verbose

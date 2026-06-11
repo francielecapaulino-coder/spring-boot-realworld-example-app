@@ -1,0 +1,13 @@
+{
+  "name": "realworld-process-tools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node.js tools for development process — commitlint, Playwright (future). Does not affect Java/Gradle build.",
+  "devDependencies": {
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
