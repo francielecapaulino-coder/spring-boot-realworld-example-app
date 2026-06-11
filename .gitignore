@@ -27,3 +27,9 @@ nbdist/
 
 # Node.js - process tools only (commitlint, playwright)
 node_modules/
+
+### Eclipse / build output ###
+bin/
+
+### VS Code ###
+.vscode/
