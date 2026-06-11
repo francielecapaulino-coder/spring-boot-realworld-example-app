@@ -1,25 +1,25 @@
-name: "spike - Investigacao tecnica"
-description: "Investigação técnica com timebox definido para responder uma pergunta específica."
+name: "🔍 Spike"
+description: "Investigação técnica com timebox — resultado é conhecimento documentado, não código de produção"
+title: "spike(<escopo>): <descrição da investigação>"
 labels: ["spike"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Spike — Investigação técnica com timebox
-        Use este template para investigações técnicas cujo objetivo é **responder uma pergunta**,
-        não entregar código em produção.
+        ## O que é um spike
+        Um spike é uma investigação com **timebox definido**.
+        O resultado é conhecimento documentado — não código de produção.
 
-        O resultado de um spike é: decisão documentada, ADR criado ou descartado, e uma issue
-        de implementação criada com o escopo definido.
-
-        Referência completa: `docs/process/definition-of-done.md`
+        Exemplos neste projeto:
+        - Verificar compatibilidade DGS 10.x com Spring Boot 4 (ADR-001)
+        - Testar LGTM Stack versions localmente (R-14)
+        - Testar Testcontainers no CI (R-08)
 
   - type: input
     id: epic
     attributes:
-      label: "Épico relacionado"
-      description: "Ex: EPIC-04 — Modernização do runtime"
-      placeholder: "EPIC-XX — Nome do épico"
+      label: "Épico ou ADR que motiva este spike"
+      placeholder: "EPIC-XX ou ADR-XX ou R-XX"
     validations:
       required: true
 
@@ -27,10 +27,11 @@ body:
     id: question
     attributes:
       label: "Pergunta a ser respondida"
-      description: "A pergunta clara e objetiva que este spike deve responder."
+      description: "A questão específica que este spike deve responder — mensurável"
       placeholder: |
-        Ex: O DGS Framework é compatível com Spring Boot 4.0.3?
-        Se não, qual é a alternativa mais adequada para GraphQL neste projeto?
+        O DGS Framework 10.x é compatível com Spring Boot 4.0.6?
+        Versão exata disponível no Maven Central?
+        Quais breaking changes existem nos resolvers?
     validations:
       required: true
 
@@ -38,43 +39,20 @@ body:
     id: timebox
     attributes:
       label: "Timebox"
-      description: "Tempo máximo dedicado a esta investigação. Ao esgotar, documenta o que foi descoberto e decide."
-      placeholder: "Ex: 4 horas | 1 dia | 2 dias"
+      description: "Tempo máximo — ao expirar, documentar o que foi descoberto e parar"
+      placeholder: "ex: 2 horas, meio dia, 1 dia"
     validations:
       required: true
 
   - type: textarea
-    id: context
+    id: deliverable
     attributes:
-      label: "Contexto e motivação"
-      description: "Por que esta investigação é necessária agora? Qual decisão ela desbloqueia?"
+      label: "Entregável esperado"
+      description: "O que será documentado como resultado — ADR atualizado, comentário, relatório"
       placeholder: |
-        Contexto: ...
-        Decisão que será desbloqueada: ...
-    validations:
-      required: true
-
-  - type: textarea
-    id: success_criteria
-    attributes:
-      label: "Critério de sucesso"
-      description: "Como sabemos que o spike terminou — independentemente da resposta encontrada."
-      placeholder: |
-        - [ ] Pergunta respondida com evidências (POC, leitura de docs, teste isolado)
-        - [ ] Decisão documentada (ADR criado ou descartado com justificativa)
-        - [ ] Issue de implementação criada com escopo definido (se aplicável)
-    validations:
-      required: true
-
-  - type: textarea
-    id: dor
-    attributes:
-      label: "Definition of Ready (DoR)"
-      value: |
-        - [ ] Pergunta clara e objetiva definida
-        - [ ] Timebox acordado com o time
-        - [ ] Contexto e motivação documentados
-        - [ ] Issue criada no GitHub antes de iniciar a investigação
+        - Atualização do ADR-001 com a conclusão
+        - Lista de breaking changes encontradas
+        - Decisão: manter DGS ou migrar para Spring for GraphQL
     validations:
       required: true
 
@@ -82,15 +60,16 @@ body:
     id: dod
     attributes:
       label: "Definition of Done (DoD)"
+      description: "Fonte de verdade: docs/process/definition-of-done.md"
       value: |
-        - [ ] Pergunta respondida com evidências documentadas
-        - [ ] ADR criado ou atualizado com a decisão
-        - [ ] Issue de implementação criada (se a resposta gerar trabalho)
-        - [ ] Timebox respeitado — decisão tomada ao esgotar o tempo
-        - [ ] Conventional Commit com closes #XX ou refs #XX
-        - [ ] PR aberta com link para esta issue
+        > Referência: `docs/process/definition-of-done.md`
+
+        - [ ] Pergunta respondida com evidências (não apenas opinião)
+        - [ ] Resultado documentado (ADR atualizado, comentário na issue, relatório)
+        - [ ] Próximos passos definidos com base no resultado
+        - [ ] Timebox respeitado — se não concluiu, documentar o que faltou
+        - [ ] Conventional Commit com `closes #XX`
         - [ ] Prompts usados documentados no Coda
-        - [ ] Referência completa: docs/process/definition-of-done.md
     validations:
       required: true
 
@@ -98,16 +77,14 @@ body:
     id: coda
     attributes:
       label: "Prompts e skills — Coda"
-      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
-      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > spike/...'"
+      placeholder: "https://coda.io/d/... (preencher durante o desenvolvimento)"
     validations:
       required: true
 
   - type: input
     id: pr
     attributes:
-      label: "PR relacionada"
-      description: "Preencher após abrir a PR."
+      label: "PR ou commit com resultado"
       placeholder: "#XX"
     validations:
       required: false

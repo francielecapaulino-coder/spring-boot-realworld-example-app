@@ -1,20 +1,24 @@
-name: "test - Testes"
-description: "Adicionar ou corrigir testes: unitários, slice, integração, mutação (Pitest) ou E2E (Playwright)."
+name: "🧪 Test"
+description: "Testes unitários, integração, mutação (Pitest) ou E2E (Playwright)"
+title: "test(<escopo>): <descrição curta>"
 labels: ["test"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Testes
-        Use este template para qualquer trabalho relacionado a testes.
-        Inclui: testes unitários, slice tests, testes de integração, mutação com Pitest e E2E com Playwright.
-        Referência completa: `docs/process/definition-of-done.md`
+        ## Tipo de teste neste projeto
+        - **Unitário:** JUnit 5 + Mockito — lógica de negócio isolada
+        - **Slice:** @WebMvcTest / @DataJpaTest — controllers e repos em isolamento
+        - **Integração:** REST Assured + Testcontainers PostgreSQL — contratos de API
+        - **Mutação:** Pitest ≥ 95% — valida qualidade dos testes
+        - **E2E:** Playwright via APIRequestContext — fluxos completos do consumidor
+
+        Referências: EPIC-07 (Pitest), EPIC-08 (integração), EPIC-09 (Playwright)
 
   - type: input
     id: epic
     attributes:
       label: "Épico relacionado"
-      description: "Ex: EPIC-07 — Qualidade por mutação | EPIC-08 — Testes de contrato | EPIC-09 — Playwright"
       placeholder: "EPIC-XX — Nome do épico"
     validations:
       required: true
@@ -23,48 +27,29 @@ body:
     id: test_type
     attributes:
       label: "Tipo de teste"
-      description: "Selecione o tipo principal de teste desta issue."
       options:
-        - "Unitário"
-        - "Slice (WebMvcTest, DataJpaTest, etc.)"
-        - "Integração (contrato REST/GraphQL)"
-        - "Mutação (Pitest)"
-        - "E2E (Playwright)"
+        - Unitário (JUnit 5 + Mockito)
+        - Slice (@WebMvcTest / @DataJpaTest)
+        - Integração (REST Assured + Testcontainers)
+        - Mutação (Pitest)
+        - E2E (Playwright)
     validations:
       required: true
 
   - type: textarea
-    id: what_to_test
+    id: scope
     attributes:
       label: "O que será testado"
-      description: "Descreva o escopo: qual componente, endpoint, fluxo ou funcionalidade."
+      description: "Classes, endpoints, operações, fluxos — seja específico"
       placeholder: |
-        Componente/Endpoint: ...
-        Cenários cobertos:
-        - [ ] Cenário 1: ...
-        - [ ] Cenário 2: ...
-    validations:
-      required: true
+        Testes de integração para os endpoints de artigo:
+        - GET /articles (lista com filtros)
+        - GET /articles/feed (feed autenticado)
+        - POST /articles (criação com readingTimeMinutes)
+        - PUT /articles/:slug (atualização)
+        - DELETE /articles/:slug (soft delete → 204)
 
-  - type: textarea
-    id: acceptance_criteria
-    attributes:
-      label: "Critérios de aceite"
-      placeholder: |
-        - [ ] CA-01: ...
-        - [ ] CA-02: ...
-    validations:
-      required: true
-
-  - type: textarea
-    id: dor
-    attributes:
-      label: "Definition of Ready (DoR)"
-      value: |
-        - [ ] Escopo de testes definido
-        - [ ] Componente/endpoint alvo identificado
-        - [ ] Tipo de teste selecionado
-        - [ ] Issue criada no GitHub antes de qualquer código
+        Banco: PostgreSQL 16 via Testcontainers (sem H2)
     validations:
       required: true
 
@@ -72,14 +57,27 @@ body:
     id: dod
     attributes:
       label: "Definition of Done (DoD)"
+      description: "Fonte de verdade: docs/process/definition-of-done.md"
       value: |
-        - [ ] Testes implementados e passando no CI
-        - [ ] Cobertura do escopo definido verificada
-        - [ ] Pitest score >= 95% mantido (obrigatório para tipo Mutação)
-        - [ ] Conventional Commit com closes #XX ou refs #XX
-        - [ ] PR aberta com link para esta issue
+        > Referência: `docs/process/definition-of-done.md`
+
+        - [ ] Testes escritos e passando localmente
+        - [ ] `./gradlew test` passando
+        - [ ] `./gradlew pitest` ≥ 95% mantido (se mutação)
+        - [ ] Testcontainers PostgreSQL usado (sem H2 ou SQLite)
+        - [ ] Conventional Commit: `test(escopo): descrição` com `closes #XX`
         - [ ] Prompts usados documentados no Coda
-        - [ ] Referência completa: docs/process/definition-of-done.md
+        - [ ] PR aberta com link para esta issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceitação"
+      placeholder: |
+        - CA-01: 5/5 endpoints de artigo com ≥ 1 teste de sucesso e ≥ 1 de erro
+        - CA-02: todos os testes usam PostgreSQL via Testcontainers (zero H2)
     validations:
       required: true
 
@@ -87,8 +85,7 @@ body:
     id: coda
     attributes:
       label: "Prompts e skills — Coda"
-      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
-      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > test/...'"
+      placeholder: "https://coda.io/d/... (preencher durante o desenvolvimento)"
     validations:
       required: true
 
@@ -96,7 +93,6 @@ body:
     id: pr
     attributes:
       label: "PR relacionada"
-      description: "Preencher após abrir a PR."
       placeholder: "#XX"
     validations:
       required: false

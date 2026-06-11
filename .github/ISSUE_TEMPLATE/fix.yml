@@ -1,61 +1,63 @@
-name: "fix - Correção de bug"
-description: "Corrigir um comportamento incorreto ou inesperado do sistema."
+name: "🐛 Bug Fix"
+description: "Correção de comportamento incorreto ou inesperado"
+title: "fix(<escopo>): <descrição curta>"
 labels: ["fix"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Correção de bug
-        Use este template para bugs — comportamentos que deveriam funcionar mas não funcionam.
-        Referência completa: `docs/process/definition-of-done.md`
+        ## Antes de começar
+        - Reproduza o bug localmente antes de criar esta issue
+        - Confirme que o bug existe na branch `master` atual
+        - Consulte os testes de contrato (EPIC-08) para verificar se já deveria estar coberto
 
   - type: input
     id: epic
     attributes:
       label: "Épico relacionado"
-      description: "Ex: EPIC-02 — Segurança e eliminação de vulnerabilidades"
       placeholder: "EPIC-XX — Nome do épico"
     validations:
       required: true
 
   - type: textarea
-    id: description
+    id: current_behavior
     attributes:
-      label: "Descrição do bug"
-      description: "O que acontece, o que deveria acontecer e como reproduzir."
+      label: "Comportamento atual (buggy)"
+      description: "O que acontece hoje que está incorreto — com comando ou URL para reproduzir"
       placeholder: |
-        **Comportamento atual:**
-        ...
+        Ao chamar DELETE /articles/:slug com token válido,
+        o endpoint retorna 200 em vez de 204.
 
-        **Comportamento esperado:**
-        ...
-
-        **Passos para reproduzir:**
-        1. ...
-        2. ...
+        Reprodução:
+        curl -X DELETE http://localhost:8080/articles/my-article \
+          -H "Authorization: Token ..." -w "%{http_code}"
+        Resultado: 200
+        Esperado: 204
     validations:
       required: true
 
   - type: textarea
-    id: acceptance_criteria
+    id: expected_behavior
     attributes:
-      label: "Critérios de aceite"
-      description: "Como confirmar que o bug foi corrigido."
+      label: "Comportamento esperado (correto)"
+      description: "O que deveria acontecer — referencie o contrato da API ou spec se aplicável"
       placeholder: |
-        - [ ] CA-01: ...
-        - [ ] CA-02: ...
+        DELETE /articles/:slug deve retornar 204 No Content
+        conforme a RealWorld spec e o contrato em API-mapping.md.
     validations:
       required: true
 
   - type: textarea
-    id: dor
+    id: reproduction
     attributes:
-      label: "Definition of Ready (DoR)"
-      value: |
-        - [ ] Bug reproduzido e documentado
-        - [ ] Critérios de aceite definidos
-        - [ ] Épico relacionado identificado
-        - [ ] Issue criada no GitHub antes de qualquer código
+      label: "Passos para reproduzir"
+      description: "Comandos exatos para reproduzir o bug localmente"
+      placeholder: |
+        1. docker compose up
+        2. POST /users — criar usuário
+        3. POST /users/login — obter token
+        4. POST /articles — criar artigo
+        5. DELETE /articles/:slug — observar status code
     validations:
       required: true
 
@@ -63,15 +65,27 @@ body:
     id: dod
     attributes:
       label: "Definition of Done (DoD)"
+      description: "Fonte de verdade completa: docs/process/definition-of-done.md"
       value: |
-        - [ ] Bug corrigido e verificado
-        - [ ] Testes escritos — unitários, integração e/ou E2E conforme o escopo
-        - [ ] Pitest score >= 95% mantido (quando há mudança de código)
-        - [ ] Teste de regressão adicionado para cobrir o bug
-        - [ ] Conventional Commit com closes #XX ou refs #XX
-        - [ ] PR aberta com link para esta issue
+        > Referência completa: `docs/process/definition-of-done.md`
+
+        - [ ] Bug corrigido e verificado localmente
+        - [ ] Teste de regressão adicionado — falha antes da correção, passa depois
+        - [ ] `./gradlew test` passando
+        - [ ] `./gradlew pitest` — mutation score ≥ 95% mantido (quando há mudança de código)
+        - [ ] Conventional Commit: `fix(escopo): descrição` com `closes #XX`
         - [ ] Prompts usados documentados no Coda
-        - [ ] Referência completa: docs/process/definition-of-done.md
+        - [ ] PR aberta com link para esta issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceitação"
+      placeholder: |
+        - CA-01: DELETE /articles/:slug retorna 204 No Content
+        - CA-02: teste de regressão falha na branch master e passa na branch do fix
     validations:
       required: true
 
@@ -79,8 +93,7 @@ body:
     id: coda
     attributes:
       label: "Prompts e skills — Coda"
-      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
-      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > fix/...'"
+      placeholder: "https://coda.io/d/... (preencher durante o desenvolvimento)"
     validations:
       required: true
 
@@ -88,7 +101,6 @@ body:
     id: pr
     attributes:
       label: "PR relacionada"
-      description: "Preencher após abrir a PR."
       placeholder: "#XX"
     validations:
       required: false

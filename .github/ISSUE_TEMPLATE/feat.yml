@@ -1,73 +1,112 @@
-name: "feat - Nova funcionalidade"
-description: "Adicionar uma nova capacidade funcional ao sistema."
+name: "✨ Feature"
+description: "Nova funcionalidade ou comportamento novo no sistema"
+title: "feat(<escopo>): <descrição curta>"
 labels: ["feat"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Nova funcionalidade
-        Use este template para funcionalidades novas visíveis ao usuário ou ao sistema.
-        Referência completa: `docs/process/definition-of-done.md`
+        ## Antes de começar
+        - Leia o épico correspondente em `05-backlog.md`
+        - Consulte os ADRs relevantes em `06-architecture-decisions.md`
+        - **Nenhum código é gerado antes de esta issue estar preenchida e aprovada pela PM**
+        - DoR e DoD completos: `docs/process/definition-of-ready.md` e `docs/process/definition-of-done.md`
 
   - type: input
     id: epic
     attributes:
-      label: "Épico relacionado"
-      description: "Ex: EPIC-07 — Qualidade por mutação"
+      label: "Épico"
+      description: "ID e nome do épico (ex: EPIC-12 — Soft delete)"
       placeholder: "EPIC-XX — Nome do épico"
     validations:
       required: true
 
-  - type: textarea
-    id: story
+  - type: input
+    id: initiative
     attributes:
-      label: "História de usuário"
-      description: "Como [quem], quero [o quê], para que [por quê]."
-      placeholder: |
-        Como ...
-        Quero ...
-        Para que ...
+      label: "Iniciativa"
+      description: "Iniciativa relacionada (ex: INI-12)"
+      placeholder: "INI-XX"
+    validations:
+      required: true
+
+  - type: input
+    id: phase
+    attributes:
+      label: "Fase"
+      description: "Fase do roadmap (ex: Fase 5)"
+      placeholder: "Fase X"
     validations:
       required: true
 
   - type: textarea
-    id: acceptance_criteria
+    id: user_story
     attributes:
-      label: "Critérios de aceite"
-      description: "Liste os critérios verificáveis para considerar esta issue concluída."
+      label: "História de usuário"
+      description: "Como [quem], quero [o quê], para que [por quê]"
       placeholder: |
-        - [ ] CA-01: ...
-        - [ ] CA-02: ...
+        Como usuário da plataforma,
+        quero ver o tempo estimado de leitura de cada artigo,
+        para que eu possa decidir se tenho tempo de ler agora ou depois.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "Contexto técnico"
+      description: "Arquitetura envolvida, ADRs relevantes, dependências técnicas, camadas afetadas"
+      placeholder: |
+        - ADR-002: estratégia de queries JPA (Specifications para filtros)
+        - Camadas afetadas: api, application, infrastructure
+        - Depende de: EPIC-05 concluído (Spring Data JPA disponível)
     validations:
       required: true
 
   - type: textarea
     id: dor
     attributes:
-      label: "Definition of Ready (DoR)"
-      description: "O que precisa ser verdade antes de começar a implementar."
+      label: "Definition of Ready (DoR) — checklist resumido"
+      description: "Fonte de verdade completa: docs/process/definition-of-ready.md"
       value: |
-        - [ ] História escrita e revisada
-        - [ ] Critérios de aceite definidos
-        - [ ] Épico relacionado identificado
-        - [ ] Dependências mapeadas
-        - [ ] Issue criada no GitHub antes de qualquer código
+        > Referência completa: `docs/process/definition-of-ready.md`
+
+        - [ ] Épico e ADRs relevantes lidos e compreendidos
+        - [ ] Dependências desta história concluídas
+        - [ ] Ambiente local funcionando (`docker compose up` — todos os serviços healthy)
+        - [ ] Branch criada a partir da `master` atualizada
+        - [ ] Prompts de vibe coding planejados com contexto dos ADRs
     validations:
       required: true
 
   - type: textarea
     id: dod
     attributes:
-      label: "Definition of Done (DoD)"
-      description: "O que precisa ser verdade para fechar esta issue."
+      label: "Definition of Done (DoD) — checklist resumido"
+      description: "Fonte de verdade completa: docs/process/definition-of-done.md"
       value: |
-        - [ ] Código implementado e revisado
+        > Referência completa: `docs/process/definition-of-done.md`
+
+        - [ ] Código implementado e funcionando localmente
         - [ ] Testes escritos — unitários, integração e/ou E2E conforme o escopo
-        - [ ] Pitest score >= 95% mantido (quando há mudança de código)
-        - [ ] Conventional Commit com closes #XX ou refs #XX
+        - [ ] `./gradlew test` passando sem falhas
+        - [ ] `./gradlew pitest` — mutation score ≥ 95% mantido (quando há mudança de código)
+        - [ ] Critérios de aceitação verificados manualmente
+        - [ ] Conventional Commit com referência à issue: `closes #XX` ou `refs #XX`
+        - [ ] Prompts usados documentados no Coda (link abaixo)
         - [ ] PR aberta com link para esta issue
-        - [ ] Prompts usados documentados no Coda
-        - [ ] Referência completa: docs/process/definition-of-done.md
+        - [ ] Code review aprovado
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceitação"
+      description: "Lista verificável de inputs e outputs esperados"
+      placeholder: |
+        - CA-01: dado [contexto], quando [ação], então [resultado esperado]
+        - CA-02: ...
     validations:
       required: true
 
@@ -75,8 +114,8 @@ body:
     id: coda
     attributes:
       label: "Prompts e skills — Coda"
-      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
-      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > feat/...'"
+      description: "Link para o registro no Coda. Preencher ao iniciar o desenvolvimento."
+      placeholder: "https://coda.io/d/... (preencher durante o desenvolvimento)"
     validations:
       required: true
 
@@ -84,7 +123,7 @@ body:
     id: pr
     attributes:
       label: "PR relacionada"
-      description: "Preencher após abrir a PR."
+      description: "Número da PR — preencher ao abrir a PR. Usar 'closes #XX' no commit."
       placeholder: "#XX"
     validations:
       required: false

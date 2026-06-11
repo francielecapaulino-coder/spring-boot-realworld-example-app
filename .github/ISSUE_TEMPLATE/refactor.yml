@@ -1,72 +1,59 @@
-name: "refactor - Reestruturacao de codigo"
-description: "Reestruturar código sem alterar comportamento externo visível."
+name: "♻️ Refactor"
+description: "Reestruturação de código sem mudança de comportamento externo"
+title: "refactor(<escopo>): <descrição curta>"
 labels: ["refactor"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Refactor — Reestruturação sem mudança de comportamento
-        > **Regra de ouro:** se o comportamento externo muda, use `feat` ou `fix`.
-        > Refactor é exclusivamente para mudanças internas que preservam o contrato existente.
+        ## Regra de ouro do refactor
+        O comportamento externo deve ser **idêntico** antes e depois.
+        Os testes de contrato (EPIC-08) devem passar sem alteração.
+        Se o comportamento muda, use o template `feat` ou `fix`.
 
-        Exemplos válidos: migração MyBatis → JPA, extração de classes, introdução de record types,
-        eliminação de Joda-Time, reorganização de pacotes.
-
-        Referência completa: `docs/process/definition-of-done.md`
+        **Leia os ADRs antes de iniciar** — refatorações neste projeto seguem decisões arquiteturais documentadas em `06-architecture-decisions.md`.
 
   - type: input
     id: epic
     attributes:
       label: "Épico relacionado"
-      description: "Ex: EPIC-05 — Migração de persistência MyBatis para JPA"
       placeholder: "EPIC-XX — Nome do épico"
     validations:
       required: true
 
   - type: textarea
-    id: description
+    id: current_state
     attributes:
-      label: "Descrição da reestruturação"
-      description: "O que será reestruturado, como e por quê — sem alterar o comportamento externo."
+      label: "Estado atual do código"
+      description: "O que existe hoje — com path de arquivo, classe e problema identificado"
       placeholder: |
-        O que: ...
-        Como: ...
-        Por que (motivação técnica): ...
-        Comportamento preservado: todos os testes existentes continuam passando
+        ArticleData.java (io.spring.application.data):
+        - Classe com Lombok @Data, @AllArgsConstructor (30+ linhas boilerplate)
+        - Usa Joda DateTime nos campos createdAt/updatedAt
+        - Implementa Node com getCursor() retornando DateTimeCursor(updatedAt)
+    validations:
+      required: true
+
+  - type: textarea
+    id: target_state
+    attributes:
+      label: "Estado alvo do código"
+      description: "Como ficará após a refatoração — com decisões arquiteturais referenciadas"
+      placeholder: |
+        ArticleData será record Java 25 implementando Node com getCursor() explícito.
+        Usará java.time.Instant em vez de Joda DateTime.
+        Conforme ADR-005 — Node interface e cursor pagination.
     validations:
       required: true
 
   - type: textarea
     id: adrs
     attributes:
-      label: "ADRs relacionados"
-      description: "Decisões arquiteturais que motivam ou documentam este refactor."
+      label: "ADRs relacionados (obrigatório para refactors)"
+      description: "Quais ADRs de 06-architecture-decisions.md definem como esta refatoração deve ser feita"
       placeholder: |
-        - ADR-XX: ...
-        - ADR-YY: ...
-    validations:
-      required: true
-
-  - type: textarea
-    id: acceptance_criteria
-    attributes:
-      label: "Critérios de aceite"
-      placeholder: |
-        - [ ] CA-01: Todos os testes existentes continuam passando
-        - [ ] CA-02: Nenhuma mudança de comportamento externo
-        - [ ] CA-03: ...
-    validations:
-      required: true
-
-  - type: textarea
-    id: dor
-    attributes:
-      label: "Definition of Ready (DoR)"
-      value: |
-        - [ ] Escopo definido — o que muda e o que não muda
-        - [ ] ADR relacionado identificado ou criado
-        - [ ] Suite de testes existente passa 100% (rede de segurança)
-        - [ ] Issue criada no GitHub antes de qualquer código
+        - ADR-005: Node interface e cursor pagination — migração para records
+        - ADR-002: Spring Data JPA — estratégia de queries
     validations:
       required: true
 
@@ -74,16 +61,27 @@ body:
     id: dod
     attributes:
       label: "Definition of Done (DoD)"
+      description: "Fonte de verdade: docs/process/definition-of-done.md"
       value: |
-        - [ ] Reestruturação concluída
-        - [ ] Todos os testes existentes continuam passando
-        - [ ] Pitest score >= 95% mantido
-        - [ ] Nenhuma mudança de comportamento externo verificada
-        - [ ] ADR atualizado ou criado se necessário
-        - [ ] Conventional Commit com closes #XX ou refs #XX
-        - [ ] PR aberta com link para esta issue
+        > Referência: `docs/process/definition-of-done.md`
+
+        - [ ] Comportamento externo idêntico ao anterior
+        - [ ] `./gradlew test` passando sem alterações nos testes existentes
+        - [ ] Testes de contrato (EPIC-08) passando sem alteração
+        - [ ] `./gradlew pitest` ≥ 95% mantido
+        - [ ] Conventional Commit: `refactor(escopo): descrição` com `closes #XX`
         - [ ] Prompts usados documentados no Coda
-        - [ ] Referência completa: docs/process/definition-of-done.md
+        - [ ] PR aberta com link para esta issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Critérios de aceitação"
+      placeholder: |
+        - CA-01: comportamento idêntico verificado pelos testes existentes
+        - CA-02: [verificação específica desta refatoração]
     validations:
       required: true
 
@@ -91,8 +89,7 @@ body:
     id: coda
     attributes:
       label: "Prompts e skills — Coda"
-      description: "Link ou nome do documento no Coda com os prompts usados nesta issue."
-      placeholder: "https://coda.io/... ou 'Coda > RealWorld > Prompts > refactor/...'"
+      placeholder: "https://coda.io/d/... (preencher durante o desenvolvimento)"
     validations:
       required: true
 
@@ -100,7 +97,6 @@ body:
     id: pr
     attributes:
       label: "PR relacionada"
-      description: "Preencher após abrir a PR."
       placeholder: "#XX"
     validations:
       required: false
