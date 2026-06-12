@@ -89,5 +89,6 @@ Please fork and PR to improve the project.
 | ✅ Definition of Done | [docs/process/definition-of-done.md](docs/process/definition-of-done.md) |
 | 🔀 Harness Development | [docs/process/harness-development.md](docs/process/harness-development.md) |
 | 🤖 Guia Coda | [docs/process/coda-guide.md](docs/process/coda-guide.md) |
+| 🔍 Guia GitAhead | [docs/process/gitahead-guide.md](docs/process/gitahead-guide.md) |
 
 > Para contribuir: leia a [Definition of Ready](docs/process/definition-of-ready.md) antes de iniciar qualquer história.
