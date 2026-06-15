@@ -71,7 +71,6 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
   }
 
   @Override
-  @SuppressWarnings("deprecation")
   public DataFetcherExceptionHandlerResult onException(
       DataFetcherExceptionHandlerParameters handlerParameters) {
     return handleException(handlerParameters).join();
