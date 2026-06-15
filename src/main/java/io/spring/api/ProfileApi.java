@@ -7,6 +7,7 @@ import io.spring.core.user.FollowRelation;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class ProfileApi {
   private UserRepository userRepository;
 
   @GetMapping
-  public ResponseEntity getProfile(
+  public ResponseEntity<Map<String, Object>> getProfile(
       @PathVariable("username") String username, @AuthenticationPrincipal User user) {
     return profileQueryService
         .findByUsername(username, user)
@@ -35,7 +36,7 @@ public class ProfileApi {
   }
 
   @PostMapping(path = "follow")
-  public ResponseEntity follow(
+  public ResponseEntity<Map<String, Object>> follow(
       @PathVariable("username") String username, @AuthenticationPrincipal User user) {
     return userRepository
         .findByUsername(username)
@@ -49,7 +50,7 @@ public class ProfileApi {
   }
 
   @DeleteMapping(path = "follow")
-  public ResponseEntity unfollow(
+  public ResponseEntity<Map<String, Object>> unfollow(
       @PathVariable("username") String username, @AuthenticationPrincipal User user) {
     Optional<User> userOptional = userRepository.findByUsername(username);
     if (userOptional.isPresent()) {
@@ -67,7 +68,7 @@ public class ProfileApi {
     }
   }
 
-  private ResponseEntity profileResponse(ProfileData profile) {
+  private ResponseEntity<Map<String, Object>> profileResponse(ProfileData profile) {
     return ResponseEntity.ok(
         new HashMap<String, Object>() {
           {
