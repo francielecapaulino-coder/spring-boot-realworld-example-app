@@ -124,6 +124,47 @@ this.signingKey =
 
 ---
 
+## 4. Warnings do compilador (`-Xlint:all`)
+
+Após as correções acima a auditoria foi expandida com `-Xlint:all` no `javac` e atacou os 15 warnings remanescentes (a aba *Problems* do VS Code mostrava 11 — os demais eram avisos de jar/anotações filtrados pelo IDE).
+
+| # | Categoria | Arquivo | Correção |
+|---|---|---|---|
+| 1 | `[rawtypes] PageCursor` | `application/Node.java:4` | `PageCursor` → `PageCursor<?>` |
+| 2 | `[rawtypes] PageCursor` | `application/CursorPager.java:32` | retorno → `PageCursor<?>` |
+| 3 | `[rawtypes] PageCursor` | `application/CursorPager.java:36` | retorno → `PageCursor<?>` |
+| 4 | `[rawtypes] Class` | `application/user/UserService.java:65` | `Class[]` → `Class<?>[]` |
+| 5 | `[rawtypes] Class` | `application/user/UserService.java:67` | `Class[]` → `Class<? extends Payload>[]` |
+| 6 | `[rawtypes] CursorPageParameter` | `infrastructure/mybatis/readservice/ArticleReadService.java:33` | `CursorPageParameter` → `CursorPageParameter<?>` |
+| 7 | `[rawtypes] CursorPageParameter` | `infrastructure/mybatis/readservice/ArticleReadService.java:41` | `CursorPageParameter` → `CursorPageParameter<?>` |
+| 8 | `[serial]` | `JacksonCustomizations$RealWorldModules` | adicionado `serialVersionUID = 1L` |
+| 9 | `[serial]` | `JacksonCustomizations$DateTimeSerializer` | adicionado `serialVersionUID = 1L` |
+| 10 | `[serial]` | `graphql/exception/AuthenticationException` | adicionado `serialVersionUID = 1L` |
+| 11 | `[serial]` | `api/exception/NoAuthorizationException` | adicionado `serialVersionUID = 1L` |
+| 12 | `[serial]` | `api/exception/ResourceNotFoundException` | adicionado `serialVersionUID = 1L` |
+| 13 | `[serial]` | `api/exception/InvalidAuthenticationException` | adicionado `serialVersionUID = 1L` |
+| 14 | `[unchecked]` | `graphql/exception/GraphQLCustomizeExceptionHandler.errorsToMap` | refatorado para `Map<String, List<String>>` + `computeIfAbsent` (eliminado cast `(List)` raw) |
+| 15 | `[deprecation]` | `graphql/exception/GraphQLCustomizeExceptionHandler.onException` | implementado `handleException` (novo método não-deprecated) — `onException` legado delega via `.join()` com `@SuppressWarnings("deprecation")` para satisfazer a interface abstrata da graphql-java 17.3 |
+
+### Comando
+
+```bash
+./gradlew --init-script lint-init.gradle compileJava --rerun-tasks --console=plain \
+  2>&1 | grep -E "warning:|error:"
+```
+
+| Métrica | Antes | Depois |
+|---|---|---|
+| Warnings `[rawtypes]` | 7 | 0 |
+| Warnings `[serial]` | 6 | 0 |
+| Warnings `[unchecked]` | 1 | 0 |
+| Warnings `[deprecation]` | 1 | 0 |
+| **Total** | **15** | **0** |
+
+> O init-script `lint-init.gradle` apenas habilita `-Xlint:all -Xlint:-processing -Xlint:-classfile` no `JavaCompile` — não é commitado.
+
+---
+
 ## Como reproduzir
 
 ```bash
