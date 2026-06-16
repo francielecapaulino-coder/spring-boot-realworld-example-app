@@ -33,3 +33,8 @@ bin/
 
 ### VS Code ###
 .vscode/
+
+# Local environment variables - NEVER commit
+.env
+.env.local
+.env.*.local
