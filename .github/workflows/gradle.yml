@@ -30,5 +30,7 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
+    - name: Generate JWT secret for tests
+      run: echo "JWT_SECRET=$(openssl rand -base64 64 | tr -d '\n')" >> $GITHUB_ENV
     - name: Test with Gradle
       run: ./gradlew clean test
