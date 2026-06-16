@@ -2,8 +2,9 @@ package io.spring.api.exception;
 
 import org.springframework.validation.Errors;
 
-@SuppressWarnings("serial")
 public class InvalidRequestException extends RuntimeException {
+  private static final long serialVersionUID = 1L;
+
   private final Errors errors;
 
   public InvalidRequestException(Errors errors) {

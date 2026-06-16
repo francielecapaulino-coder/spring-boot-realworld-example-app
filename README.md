@@ -79,3 +79,16 @@ Use spotless for code format.
 # Help
 
 Please fork and PR to improve the project.
+
+## Documentação do projeto de modernização
+
+| Documento | Link |
+|---|---|
+| 📋 Vibe Coding Log (Coda) | [RealWorld Platform Modernization — Vibe Coding Log](TODO-CODA-URL) |
+| 📐 Definition of Ready | [docs/process/definition-of-ready.md](docs/process/definition-of-ready.md) |
+| ✅ Definition of Done | [docs/process/definition-of-done.md](docs/process/definition-of-done.md) |
+| 🔀 Harness Development | [docs/process/harness-development.md](docs/process/harness-development.md) |
+| 🤖 Guia Coda | [docs/process/coda-guide.md](docs/process/coda-guide.md) |
+| 🔍 Guia GitAhead | [docs/process/gitahead-guide.md](docs/process/gitahead-guide.md) |
+
+> Para contribuir: leia a [Definition of Ready](docs/process/definition-of-ready.md) antes de iniciar qualquer história.
