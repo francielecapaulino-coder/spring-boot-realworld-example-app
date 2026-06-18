@@ -1,0 +1,16 @@
+# Spring Profile: staging
+# Ativado com: export SPRING_PROFILES_ACTIVE=staging
+# JWT_SESSION_TIME padrão: 86400 (24 horas)
+
+jwt:
+  sessionTime: ${JWT_SESSION_TIME:86400}
+
+logging:
+  level:
+    root: INFO
+    io.spring: INFO
+    org.springframework.security: INFO
+
+spring:
+  # jpa:
+  #   show-sql: false
