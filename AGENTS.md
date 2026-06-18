@@ -19,10 +19,12 @@ Você é um agente de desenvolvimento assistido por IA operando no projeto RealW
 
 Antes de gerar qualquer código, proposta ou alteração:
 
-1. Leia o épico atual em `docs/05-backlog.md` v2.0
-2. Leia os ADRs em `docs/06-architecture-decisions.md` v1.0
-3. Leia o contrato de API em `docs/01.1-api-mapping.md` v2.0
-4. Verifique o código real antes de assumir qualquer estrutura
+1. Leia docs/00-original-mandate.md — mandato original da gestão; toda história cita o item (G/J) atendido
+2. Leia docs/00.1-execution-guardrails.md — nunca execute ação sensível sem confirmação explícita
+3. Leia o épico atual em `docs/05-backlog.md` v2.0
+4. Leia os ADRs em `docs/06-architecture-decisions.md` v1.0
+5. Leia o contrato de API em `docs/01.1-api-mapping.md` v2.0
+6. Verifique o código real antes de assumir qualquer estrutura
 
 **Não assuma. Não invente paths. Não suponha APIs. Leia o código real.**
 
@@ -262,6 +264,8 @@ O CI usa o mesmo ambiente — falha local = falha no CI.
 
 | Documento | Descrição |
 |---|---|
+| `docs/00-original-mandate.md` v1.0 | Mandato original da gestão — citar item específico em cada história |
+| `docs/00.1-execution-guardrails.md` v1.0 | Guardrails de execução autônoma — ler SEMPRE junto com a lista vermelha |
 | `docs/01-current-state.md` v2.0 | Situação atual do código real |
 | `docs/01.1-api-mapping.md` v2.0 | Contratos REST e GraphQL |
 | `docs/02-product-vision.md` | Visão do produto |
