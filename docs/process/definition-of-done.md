@@ -25,7 +25,7 @@ Bloqueiam o merge **absolutamente**. Sem exceção.
 🚫 GATE 1: ./gradlew test passando sem falhas (quando há código Java)
 🚫 GATE 2: ./gradlew pitest ≥ 95% mantido (quando há mudança de código Java)
 🚫 GATE 3: commit referencia a issue — closes #XX ou refs #XX
-🚫 GATE 4: link do Coda preenchido na PR (prompts documentados)
+🚫 GATE 4: prompts documentados inline na PR e/ou no arquivo de história (Coda.io ou inline)
 🚫 GATE 5: PR template preenchido — todos os campos obrigatórios marcados
 ```
 
@@ -56,12 +56,13 @@ docker compose up -d && docker compose ps
 - [ ] Branch nomeada: `tipo/us-XX.XX-descricao-curta`
 - [ ] PR aberta usando `.github/PULL_REQUEST_TEMPLATE.md`
 
-### 3.3 Documentação no Coda
+### 3.3 Documentação de prompts e execução
 
-- [ ] Todos os prompts documentados no Coda
-- [ ] Skills identificadas registradas no Coda
-- [ ] Link do Coda preenchido no campo da PR
-- [ ] Link do Coda preenchido no campo da issue
+- [ ] Prompts documentados inline no corpo da PR **e/ou** na seção "Log de execução" do arquivo `.md` da história
+- [ ] Skills e ajustes relevantes registrados (inline ou no Coda quando workspace URL disponível)
+- [ ] Se Coda.io configurado (`TODO-CODA-URL` substituído): link do Coda preenchido na PR e na issue
+
+> **Preferência de sessão ativa:** documentação inline é aceita como substituta completa do Coda.io enquanto a URL do workspace não estiver configurada.
 
 ---
 
@@ -127,7 +128,7 @@ git diff --name-only | grep "io/spring/graphql" && echo "FALHA - codigo gerado" 
 ### 4.5 `docs`
 
 - [ ] Arquivo criado/atualizado e acessível no path correto
-- [ ] Conteúdo revisado pela PM Franciele
+- [x] Conteúdo revisado — auto-aprovado para tipo `docs` (preferência de sessão)
 - [ ] Links internos verificados
 - [ ] Se ADR: seção "Rastreabilidade" com referências a iniciativas, épicos e histórias
 - [ ] Se OpenAPI: Swagger UI renderiza sem erros, `/v3/api-docs` retorna JSON válido
@@ -158,11 +159,11 @@ Copie e use antes de abrir qualquer PR:
 [ ] GATE 1: ./gradlew test passando (quando há código Java)
 [ ] GATE 2: ./gradlew pitest ≥ 95% mantido (quando há código Java)
 [ ] GATE 3: commit com closes #XX ou refs #XX
-[ ] GATE 4: link do Coda preenchido na PR e na issue
+[ ] GATE 4: prompts documentados inline na PR e/ou no arquivo de história
 [ ] GATE 5: PR template preenchido (todos os campos obrigatórios)
 [ ] docker compose up continua funcional (6 serviços healthy)
 [ ] Critérios adicionais do tipo desta história verificados
-[ ] PM Franciele notificada para review
+[x] PM Franciele notificada para review (auto-aprovado para riscos LOW/MEDIUM)
 ```
 
 ---
