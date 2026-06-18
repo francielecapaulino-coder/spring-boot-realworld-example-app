@@ -19,10 +19,12 @@ Você é um agente de desenvolvimento assistido por IA operando no projeto RealW
 
 Antes de gerar qualquer código, proposta ou alteração:
 
-1. Leia o épico atual em `docs/05-backlog.md` v2.0
-2. Leia os ADRs em `docs/06-architecture-decisions.md` v1.0
-3. Leia o contrato de API em `docs/01.1-api-mapping.md` v2.0
-4. Verifique o código real antes de assumir qualquer estrutura
+1. Leia docs/00-original-mandate.md — mandato original da gestão; toda história cita o item (G/J) atendido
+2. Leia docs/00.1-execution-guardrails.md — nunca execute ação sensível sem confirmação explícita
+3. Leia o épico atual em `docs/05-backlog.md` v2.0
+4. Leia os ADRs em `docs/06-architecture-decisions.md` v1.0
+5. Leia o contrato de API em `docs/01.1-api-mapping.md` v2.0
+6. Verifique o código real antes de assumir qualquer estrutura
 
 **Não assuma. Não invente paths. Não suponha APIs. Leia o código real.**
 
@@ -153,7 +155,7 @@ grep -r "mySecretKey\|jwt\.secret=[a-zA-Z]\|password=[a-zA-Z]" src/main/resource
 1. Identificar componente e comportamento
 2. Corrigir o código — não o teste
 3. Rodar `./gradlew test` novamente
-4. Se revelar regra não documentada → propor adição ao AGENTS.md
+4. Se revelar regra não documentada → propor adição ao docs/AGENTS.md
 
 ### Quando Pitest < 95%:
 1. Abrir `build/reports/pitest/index.html`
@@ -262,6 +264,8 @@ O CI usa o mesmo ambiente — falha local = falha no CI.
 
 | Documento | Descrição |
 |---|---|
+| `docs/00-original-mandate.md` v1.0 | Mandato original da gestão — citar item específico em cada história |
+| `docs/00.1-execution-guardrails.md` v1.0 | Guardrails de execução autônoma — ler SEMPRE junto com a lista vermelha |
 | `docs/01-current-state.md` v2.0 | Situação atual do código real |
 | `docs/01.1-api-mapping.md` v2.0 | Contratos REST e GraphQL |
 | `docs/02-product-vision.md` | Visão do produto |
@@ -276,4 +280,4 @@ O CI usa o mesmo ambiente — falha local = falha no CI.
 | `docs/process/coda-guide.md` v1.0 | Documentar prompts e skills |
 | `docs/process/harness-development.md` v1.0 | Usar o branch bleeding |
 | `docs/process/gitahead-guide.md` | Guia de instalação e uso do GitAhead |
-| `AGENTS.md` | Este arquivo — reler ao iniciar cada sessão |
+| `docs/AGENTS.md` | Este arquivo — reler ao iniciar cada sessão |
