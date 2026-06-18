@@ -24,6 +24,49 @@ Antes de contribuir, leia os documentos de processo:
 
 ---
 
+## Configuração de ambiente
+
+Antes de rodar `./gradlew bootRun` ou os testes, configure as variáveis de ambiente obrigatórias.
+
+### Variáveis JWT (obrigatórias)
+
+| Variável | Obrigatória? | Padrão se ausente | Referência |
+|---|---|---|---|
+| `JWT_SECRET` | **Sim** — a aplicação não inicia sem ela | Nenhum (fail-fast) | ADR-006 |
+| `JWT_SESSION_TIME` | Não | `86400` (24h) | ADR-006 |
+
+**Como gerar `JWT_SECRET` de forma segura:**
+
+```bash
+export JWT_SECRET=$(openssl rand -base64 64)
+```
+
+Nunca use valores fracos, placeholders conhecidos ou o mesmo valor entre ambientes diferentes.
+
+**Configuração rápida:**
+
+```bash
+cp .env.example .env
+# edite .env e preencha JWT_SECRET com o comando acima
+source .env
+```
+
+### Perfis Spring (`SPRING_PROFILES_ACTIVE`)
+
+| Perfil | `JWT_SESSION_TIME` padrão | Quando usar |
+|---|---|---|
+| `dev` | 604800 (7 dias) | Desenvolvimento local |
+| `staging` | 86400 (24 horas) | Homologação |
+| `prod` | 3600 (1 hora) | Produção |
+
+```bash
+export SPRING_PROFILES_ACTIVE=dev
+```
+
+Veja `.env.example` para o template completo e `docs/06-architecture-decisions.md` (ADR-006) para o racional completo da decisão.
+
+---
+
 ## Branch `bleeding` e harness development
 
 O branch `bleeding` registra cada etapa verificável do desenvolvimento. Guia completo:
