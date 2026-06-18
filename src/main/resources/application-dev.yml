@@ -1,0 +1,21 @@
+# Spring Profile: dev
+# Ativado com: export SPRING_PROFILES_ACTIVE=dev
+# JWT_SESSION_TIME padrão: 604800 (7 dias)
+
+jwt:
+  sessionTime: ${JWT_SESSION_TIME:604800}
+
+logging:
+  level:
+    root: INFO
+    io.spring: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+
+spring:
+  # JPA (EPIC-05): show-sql pode ser habilitado em dev
+  # jpa:
+  #   show-sql: true
+  #   properties:
+  #     hibernate:
+  #       format_sql: true

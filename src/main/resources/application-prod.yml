@@ -1,0 +1,22 @@
+# Spring Profile: prod
+# Ativado com: export SPRING_PROFILES_ACTIVE=prod
+# JWT_SESSION_TIME padrão: 3600 (1 hora)
+
+jwt:
+  sessionTime: ${JWT_SESSION_TIME:3600}
+
+logging:
+  level:
+    root: WARN
+    io.spring: WARN
+    org.springframework.security: WARN
+
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
+
+spring:
+  # jpa:
+  #   show-sql: false
