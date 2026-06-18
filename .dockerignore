@@ -1,0 +1,37 @@
+# Build artifacts — gerados localmente, não devem entrar na imagem
+build/
+.gradle/
+
+# Git — histórico não é necessário no contexto de build
+.git/
+.github/
+
+# Documentação — não necessária na imagem
+docs/
+*.md
+
+# Arquivos de ambiente — nunca commitar segredos na imagem
+.env
+.env.local
+.env.example
+
+# Node / npm — tooling de frontend/scripts, não usado no container
+node_modules/
+package.json
+package-lock.json
+
+# IDE e OS
+.idea/
+*.iml
+.DS_Store
+*.swp
+*.swo
+
+# Banco de dados local SQLite
+dev.db
+
+# Scripts de bleeding commit — não necessários na imagem
+scripts/bleeding-commit.sh
+
+# Imagens de documentação
+*.png
