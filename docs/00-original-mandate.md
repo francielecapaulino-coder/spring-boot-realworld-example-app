@@ -64,7 +64,7 @@ with no information
 
 > **Nota sobre repetição no texto original:** "Add integration tests" aparece três vezes e "Test with Playwright" / "Add end-to-end tests" se sobrepõem. Isso não foi um erro de transcrição — o texto original da gestão já continha essa repetição. Por rastreabilidade, cada ocorrência recebe um número de item abaixo (`G3`, `G9`, `G13`), mas as três apontam para a mesma entrega real (EPIC-08).
 
-> **Nota sobre versão do Spring Boot:** o item `J3` pede explicitamente **Spring Boot 4.0.3**. Toda a documentação do projeto (`02-product-vision.md`, ADRs, AGENTS.md, backlog) foi escrita em torno de **Spring Boot 4.0.6**. Esta divergência está registrada aqui e precisa de confirmação da PM antes do EPIC-04 iniciar — ver seção "Divergências abertas" abaixo.
+> **Nota sobre versão do Spring Boot:** o item `J3` pede explicitamente **Spring Boot 4.0.3**. Toda a documentação do projeto (`02-product-vision.md`, ADRs, docs/AGENTS.md, backlog) foi escrita em torno de **Spring Boot 4.0.6**. Esta divergência está registrada aqui e precisa de confirmação da PM antes do EPIC-04 iniciar — ver seção "Divergências abertas" abaixo.
 
 ---
 
@@ -113,7 +113,7 @@ with no information
 
 | Item | Mandato original | Documentação atual | Status |
 |---|---|---|---|
-| Versão Spring Boot | J3: "4.0.3" | `02-product-vision.md`, ADRs, AGENTS.md: "4.0.6" | 🔶 Aguardando confirmação da PM Franciele — qual valor é o correto antes de iniciar EPIC-04 |
+| Versão Spring Boot | J3: "4.0.3" | `02-product-vision.md`, ADRs, docs/AGENTS.md: "4.0.6" | 🔶 Aguardando confirmação da PM Franciele — qual valor é o correto antes de iniciar EPIC-04 |
 | **EPIC-02 sem item de origem** | Nenhum item de "General" ou "Java" menciona JWT, secrets ou perfis de ambiente | EPIC-02 existe como épico completo em `05-backlog.md` e INI-02 em `03-initiatives.md` | 🔶 **Gap de rastreabilidade.** Diferente de todos os outros 12 épicos (cada um mapeia 1:1 para algum item `G`/`J`), o EPIC-02 não tem origem no texto verbatim do mandato. Ele aparenta ter sido adicionado pelo time a partir da auditoria técnica AS IS (`01-current-state.md` — JWT secret hardcoded identificado como vulnerabilidade crítica), e não de uma instrução direta da gestão. As histórias deste épico (US-02.01–02.06) citam apenas os itens de processo geral (`G1`, `G11`, `G12`, `G18`) como premissa — não um item que justifique *por que* corrigir o JWT especificamente. Recomendado: confirmar com a PM se isso foi uma decisão consciente do time ou se há uma instrução da gestão sobre segurança que não chegou a este texto. |
 
 ---
@@ -131,7 +131,7 @@ Toda história em `docs/09-user-stories/` deve incluir, na seção **"Premissas 
 E, no cabeçalho de "Identificação" da história, uma linha fixa:
 
 ```
-> Pré-requisito: ler AGENTS.md (REGRA ZERO + 6 ADRs ATIVOS) e docs/00-original-mandate.md (item <G/J-XX>) antes de implementar.
+> Pré-requisito: ler docs/AGENTS.md (REGRA ZERO + 6 ADRs ATIVOS) e docs/00-original-mandate.md (item <G/J-XX>) antes de implementar.
 ```
 
 ---
@@ -144,7 +144,7 @@ E, no cabeçalho de "Identificação" da história, uma linha fixa:
 | `03-initiatives.md` | Todas as 13 iniciativas — origem de cada uma rastreada aqui |
 | `05-backlog.md` | Todos os 13 épicos |
 | `04-roadmap.md` | "As 8 demandas da gestão e onde vivem neste roadmap" — complementar a este documento |
-| `AGENTS.md` | REGRA ZERO — deve ser lido junto com este documento antes de qualquer prompt |
+| `docs/AGENTS.md` | REGRA ZERO — deve ser lido junto com este documento antes de qualquer prompt |
 
 ---
 
