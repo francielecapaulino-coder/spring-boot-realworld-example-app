@@ -155,7 +155,7 @@ grep -r "mySecretKey\|jwt\.secret=[a-zA-Z]\|password=[a-zA-Z]" src/main/resource
 1. Identificar componente e comportamento
 2. Corrigir o código — não o teste
 3. Rodar `./gradlew test` novamente
-4. Se revelar regra não documentada → propor adição ao AGENTS.md
+4. Se revelar regra não documentada → propor adição ao docs/AGENTS.md
 
 ### Quando Pitest < 95%:
 1. Abrir `build/reports/pitest/index.html`
@@ -280,4 +280,4 @@ O CI usa o mesmo ambiente — falha local = falha no CI.
 | `docs/process/coda-guide.md` v1.0 | Documentar prompts e skills |
 | `docs/process/harness-development.md` v1.0 | Usar o branch bleeding |
 | `docs/process/gitahead-guide.md` | Guia de instalação e uso do GitAhead |
-| `AGENTS.md` | Este arquivo — reler ao iniciar cada sessão |
+| `docs/AGENTS.md` | Este arquivo — reler ao iniciar cada sessão |
