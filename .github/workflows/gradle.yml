@@ -11,7 +11,24 @@ on:
       - '**'
 
 jobs:
+  secret-scan:
+    name: Scan for secrets (TruffleHog)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch base branch for diff
+        run: git fetch origin ${{ github.event.repository.default_branch }}:${{ github.event.repository.default_branch }}
+      - uses: trufflesecurity/trufflehog@v3.95.5
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --results=verified,unknown
+
   build:
+    needs: secret-scan
 
     runs-on: ubuntu-latest
 
