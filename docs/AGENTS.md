@@ -32,7 +32,7 @@ Antes de gerar qualquer código, proposta ou alteração:
 
 ## MAPA DE IMPACTO — OBRIGATÓRIO ANTES DE IMPLEMENTAR
 
-Antes de qualquer implementação, produza e aguarde aprovação:
+Antes de qualquer implementação, avalie o impacto e prossiga conforme a tabela de risco:
 
 1. Quais arquivos serão alterados?
 2. Qual camada: `api` | `core` | `application` | `infrastructure` | `resources`?
@@ -41,7 +41,16 @@ Antes de qualquer implementação, produza e aguarde aprovação:
 5. Existe teste de contrato (EPIC-08) que valida este comportamento?
 6. O Pitest cobre esta camada? (threshold: 95% — nunca reduzir)
 
-**Aguarde validação humana antes de implementar.**
+### Tabela de aprovação por risco
+
+| Risco | Exemplos | Ação |
+|---|---|---|
+| **LOW** | Docs, comments, README, user-stories | ✅ Executar imediatamente sem perguntar |
+| **MEDIUM** | CI/CD, config, CONTRIBUTING, .env.example, testes | ✅ Auto-aprovado — executar sem perguntar |
+| **HIGH** | Código Java de produção, contratos de API, ADRs, secrets | ⚠️ Apresentar mapa de impacto e aguardar confirmação explícita |
+| **ADR violation** | Qualquer ação que viole os 6 ADRs ativos | 🚫 PARAR — descrever conflito e aguardar decisão humana |
+
+> **Preferência de sessão ativa:** Auto-approve até MEDIUM. Commits e PRs sempre executados automaticamente.
 
 ---
 
@@ -189,8 +198,8 @@ Uma história só está concluída quando **TODOS** estes itens são verdadeiros
 - [ ] `git diff master --name-only` → apenas arquivos previstos no escopo
 - [ ] Todos os commits com `tipo(escopo): descrição` + `refs #XX`
 - [ ] `./scripts/bleeding-commit.sh` executado após cada etapa verificável
-- [ ] Coda atualizado com prompt e output desta etapa
-- [ ] PR aberta com `.github/PULL_REQUEST_TEMPLATE.md` preenchido
+- [ ] Prompts documentados inline: no corpo da PR e/ou na seção "Log de execução" do arquivo de história
+- [ ] PR aberta com `.github/PULL_REQUEST_TEMPLATE.md` preenchido e commitada automaticamente
 
 ---
 
@@ -257,6 +266,31 @@ python scripts/validate_startup.py
 
 Se qualquer serviço não estiver healthy: investigar antes de continuar.
 O CI usa o mesmo ambiente — falha local = falha no CI.
+
+---
+
+## PREFERÊNCIAS DE SESSÃO — COMPORTAMENTO PADRÃO DO AGENTE
+
+> Estas preferências foram definidas pela PM Franciele e se aplicam a todas as sessões.
+> São persistentes — não precisam ser reafirmadas a cada conversa.
+
+| Preferência | Comportamento |
+|---|---|
+| **Auto-approve até MEDIUM** | Executar imediatamente sem pedir permissão para riscos LOW e MEDIUM |
+| **Commits automáticos** | Após cada etapa verificável, commitar e fazer push sem aguardar confirmação |
+| **PRs automáticas** | Abrir PR imediatamente após push, preenchendo o template sem aguardar aprovação |
+| **Documentação inline** | Prompts e outputs documentados no corpo da PR e na seção "Log de execução" do arquivo `.md` da história |
+| **Issue automática** | Criar issue antes de iniciar qualquer história que não tenha issue aberta |
+| **Bleeding automático** | Executar `./scripts/bleeding-commit.sh` após cada etapa sem aguardar confirmação |
+
+### O que ainda requer confirmação humana
+
+| Situação | Por quê |
+|---|---|
+| Risco HIGH (código Java de produção, segredos, contratos de API) | Impacto irreversível ou sistêmico |
+| Violação de ADR | Decisão arquitetural que pode quebrar garantias de sistema |
+| Push direto em `master` | Branch protegida — sempre via PR |
+| Edição de `.env` real (não `.env.example`) | Guardrail de segurança |
 
 ---
 

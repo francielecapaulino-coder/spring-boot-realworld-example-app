@@ -7,6 +7,8 @@
 > ℹ️ **Pendência:** a URL real do workspace Coda (Parte A, manual) ainda não foi inserida.
 > Os marcadores `TODO-CODA-URL` abaixo devem ser substituídos pela URL real assim que disponível.
 
+> ✅ **Alternativa inline (preferência de sessão ativa):** enquanto `TODO-CODA-URL` não estiver configurado, a documentação de prompts e execução deve ser feita **inline** — no corpo da PR e na seção "Log de execução" do arquivo `.md` da história. Esta alternativa é aceita como substituta completa do Coda.io para fins de DoD. Ver formato em `docs/09-user-stories/epico-02/US-02.06.md` §"Log de execução".
+
 ---
 
 ## 1. Workspace do projeto
@@ -139,7 +141,7 @@ RealWorld Platform Modernization — Vibe Coding Log
 2. **Prompt completo, não resumo** — cole o prompt inteiro, não uma paráfrase.
 3. **Um registro por etapa** — uma linha na sub-tabela por etapa verificável.
 4. **Skills honestas** — incluir os ajustes humanos necessários sobre o output da IA.
-5. **Link obrigatório na PR** — a PM Franciele não aprova PR sem o link do Coda.
+5. **Documentação obrigatória na PR** — via link do Coda.io (quando configurado) OU via seção "Log de execução" inline na PR e na história.
 
 ---
 
