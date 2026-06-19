@@ -38,3 +38,7 @@ bin/
 .env
 .env.local
 .env.*.local
+
+# Python bytecode (scripts de automação — US-03.06)
+__pycache__/
+*.pyc
