@@ -63,6 +63,7 @@ dependencies {
 tasks.named('test') {
         useJUnitPlatform()
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 
 tasks.named('clean') {
@@ -71,6 +72,8 @@ tasks.named('clean') {
     }
 =======
 >>>>>>> chore/us-03.03-postgresql-flyway
+=======
+>>>>>>> chore/us-03.04-docker-compose
 }
 
 tasks.named('generateJava') {
