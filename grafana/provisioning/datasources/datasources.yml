@@ -1,0 +1,32 @@
+# ============================================================================
+# Grafana datasources provisioning — RealWorld Platform (US-03.05)
+# ============================================================================
+#
+# Lido automaticamente pelo Grafana no startup (montado em
+# /etc/grafana/provisioning/datasources via docker-compose.yml).
+# Configura as 3 fontes de dados da stack LGTM sem intervenção manual.
+#
+# URLs usam os nomes dos serviços da rede interna do compose (US-03.04).
+# ============================================================================
+
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    editable: false
+
+  - name: Tempo
+    type: tempo
+    access: proxy
+    url: http://tempo:3200
+    editable: false
