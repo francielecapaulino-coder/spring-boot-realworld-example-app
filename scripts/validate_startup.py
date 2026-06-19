@@ -28,7 +28,8 @@ except ImportError:
     sys.exit(1)
 
 HEALTH_URL = "http://localhost:8080/actuator/health"
-STARTUP_TIMEOUT_S = 60
+# Spring Boot boot time in CI (cold JVM + Flyway migrations) can exceed 60s.
+STARTUP_TIMEOUT_S = 120
 SHUTDOWN_TIMEOUT_S = 30
 POLL_INTERVAL_S = 3
 
@@ -89,7 +90,12 @@ def main():
             f"✗ Startup validation failed: timeout after {STARTUP_TIMEOUT_S}s",
             file=sys.stderr,
         )
-        run(["docker", "compose", "down"])
+        # Dump diagnostics to ease debugging in CI before tearing down.
+        ps = run(["docker", "compose", "ps"])
+        print(f"--- docker compose ps ---\n{ps.stdout}{ps.stderr}", file=sys.stderr)
+        logs = run(["docker", "compose", "logs", "--no-color", "--tail", "100", "app"])
+        print(f"--- app logs (tail) ---\n{logs.stdout}{logs.stderr}", file=sys.stderr)
+        run(["docker", "compose", "down", "--volumes", "--remove-orphans"])
         return 1
 
     elapsed = round(time.time() - start)

@@ -36,8 +36,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    # A imagem runtime é jre-alpine (sem curl); usa o wget do busybox.
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -66,16 +67,13 @@ services:
       - realworld
     restart: unless-stopped
 
+  # prometheus/loki/tempo usam imagens distroless (sem shell nem wget/curl),
+  # portanto não definem healthcheck — o Grafana depende delas via service_started.
   prometheus:
     image: prom/prometheus:latest
     container_name: realworld-prometheus
     ports:
       - "9090:9090"
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9090/-/healthy || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
     networks:
       - realworld
     restart: unless-stopped
@@ -86,11 +84,6 @@ services:
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/ready || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
     networks:
       - realworld
     restart: unless-stopped
@@ -101,11 +94,6 @@ services:
     ports:
       - "3200:3200"
     command: -target=all -storage.trace.backend=local -storage.trace.local.path=/var/tempo
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3200/ready || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
     networks:
       - realworld
     restart: unless-stopped
@@ -124,11 +112,11 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       prometheus:
-        condition: service_healthy
+        condition: service_started
       loki:
-        condition: service_healthy
+        condition: service_started
       tempo:
-        condition: service_healthy
+        condition: service_started
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
       interval: 15s
