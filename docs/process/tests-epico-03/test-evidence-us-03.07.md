@@ -79,5 +79,26 @@ if: always()
 ## Observação sobre o resultado do CI
 
 O job `validate-startup` constrói a imagem da aplicação (`build: .`) e sobe 6 serviços;
-seu tempo de execução é maior que os demais jobs. O resultado final é confirmado nos
-checks da PR desta história.
+seu tempo de execução é maior que os demais jobs.
+
+### Defeito revelado pelo CI (e corrigido nesta PR)
+
+A primeira execução do job `validate-startup` **falhou** com:
+
+```
+✗ docker compose up failed:
+dependency failed to start: container realworld-tempo is unhealthy
+Process completed with exit code 1.
+```
+
+**Causa raiz:** os healthchecks definidos na US-03.04 usavam `wget`/`curl`, mas:
+- `prom/prometheus`, `grafana/loki`, `grafana/tempo` são imagens **distroless** (sem shell, sem `wget`/`curl`) → healthcheck sempre falhava → `unhealthy`, bloqueando o `grafana` (que dependia delas via `service_healthy`);
+- a imagem runtime do `app` é `eclipse-temurin:11-jre-alpine`, que **não tem `curl`** (apenas o `wget` do busybox).
+
+**Correção aplicada ao `docker-compose.yml` nesta PR:**
+- `app` healthcheck: `curl -f` → `wget --spider ... /actuator/health` (busybox, presente no alpine);
+- `prometheus`/`loki`/`tempo`: healthchecks removidos (imagens sem ferramenta de checagem);
+- `grafana.depends_on`: `service_healthy` → `service_started` para os 3 serviços de observabilidade.
+
+Este é exatamente o tipo de regressão que a US-03.07 foi criada para capturar — o CI
+funcionou como esperado. O resultado verde final é confirmado nos checks desta PR.
