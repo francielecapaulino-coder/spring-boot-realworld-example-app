@@ -101,4 +101,25 @@ Process completed with exit code 1.
 - `grafana.depends_on`: `service_healthy` → `service_started` para os 3 serviços de observabilidade.
 
 Este é exatamente o tipo de regressão que a US-03.07 foi criada para capturar — o CI
-funcionou como esperado. O resultado verde final é confirmado nos checks desta PR.
+funcionou como esperado.
+
+### Segundo defeito revelado: timeout de startup (boot lento + endpoint protegido)
+
+Após corrigir os healthchecks, o job passou a falhar com `✗ Startup validation failed:
+timeout after 60s`. O dump de diagnóstico adicionado ao script mostrou:
+
+```
+realworld-app   Up 2 minutes (health: starting)
+realworld-app  | ... Failed to authorize filter invocation [GET /actuator/health] with attributes [authenticated]
+```
+
+**Causa raiz (gap da US-03.02):** `io.spring.api.security.WebSecurityConfig` usa
+`anyRequest().authenticated()` e **nunca liberou** `/actuator/**` → `GET /actuator/health`
+retornava 401, impedindo o script (e o healthcheck Docker, e o scrape do Prometheus)
+de verem `{"status":"UP"}`.
+
+**Correções aplicadas:**
+1. `scripts/validate_startup.py`: `STARTUP_TIMEOUT_S` 60 → 120s (boot Spring Boot + Flyway no CI) e dump de `docker compose ps` + logs do app em caso de timeout.
+2. `WebSecurityConfig` (issue #67, módulo de auth — alteração confirmada pelo usuário): `permitAll` em GET para `/actuator/health`, `/actuator/info`, `/actuator/prometheus`, `/actuator/metrics`.
+
+O resultado verde final é confirmado nos checks desta PR.
