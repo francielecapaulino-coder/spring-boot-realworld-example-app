@@ -67,6 +67,82 @@ Veja `.env.example` para o template completo e `docs/06-architecture-decisions.m
 
 ---
 
+## Onboarding — ambiente local com Docker Compose
+
+> Tempo estimado: < 15 minutos com conexão de internet estável.
+
+### Pré-requisitos
+
+| Ferramenta | Versão mínima | Verificação |
+|---|---|---|
+| Docker Desktop / Engine | 24.x+ | `docker --version` |
+| Docker Compose | v2.x+ | `docker compose version` |
+| Python 3 | 3.10+ | `python3 --version` |
+| Git | 2.x+ | `git --version` |
+
+### Passo a passo
+
+1. Clone o repositório:
+
+   ```bash
+   git clone https://github.com/francielecapaulino-coder/spring-boot-realworld-example-app.git
+   cd spring-boot-realworld-example-app
+   ```
+
+2. Crie o arquivo `.env` a partir do exemplo e preencha os segredos:
+
+   ```bash
+   cp .env.example .env
+   # Gere e copie os valores para o .env (ou exporte no shell atual):
+   export JWT_SECRET=$(openssl rand -base64 64)
+   export POSTGRES_PASSWORD=$(openssl rand -base64 32)
+   ```
+
+3. Suba a stack completa (6 serviços):
+
+   ```bash
+   docker compose up -d
+   ```
+
+4. Aguarde os serviços ficarem saudáveis (~60s) e verifique:
+
+   ```bash
+   curl http://localhost:8080/actuator/health   # {"status":"UP"}
+   curl http://localhost:8080/tags              # {"tags":[...]}
+   ```
+
+5. Acesse os serviços:
+
+   - Aplicação:  http://localhost:8080
+   - Grafana:    http://localhost:3000  (admin/admin)
+   - Prometheus: http://localhost:9090
+
+6. (Opcional) Valide o startup e o shutdown via script:
+
+   ```bash
+   pip install -r requirements-scripts.txt
+   python3 scripts/validate_startup.py
+   # Esperado: exit code 0 — ✓ Startup validated / ✓ Shutdown validated
+   ```
+
+7. Para encerrar o ambiente:
+
+   ```bash
+   docker compose down
+   ```
+
+### Troubleshooting
+
+| Problema | Causa provável | Solução |
+|---|---|---|
+| `app` não sobe | `JWT_SECRET` ausente no `.env` | Gerar com `openssl rand -base64 64` (fail-fast, ADR-006) |
+| `postgres` unhealthy | `POSTGRES_PASSWORD` não configurada | Verificar `POSTGRES_PASSWORD` no `.env` |
+| Porta 8080 ocupada | Outro processo usando a porta | `lsof -i :8080` e encerrar o processo |
+| Grafana sem fontes de dados | Volume de provisioning não montado | Verificar a seção `grafana.volumes` no `docker-compose.yml` |
+| `validate_startup.py` falha com timeout | App ainda iniciando (boot lento) | Aguardar mais e reexecutar; ver `docker compose logs app` |
+
+---
+
 ## Branch `bleeding` e harness development
 
 O branch `bleeding` registra cada etapa verificável do desenvolvimento. Guia completo:
