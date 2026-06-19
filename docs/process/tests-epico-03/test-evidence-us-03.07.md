@@ -123,3 +123,21 @@ de verem `{"status":"UP"}`.
 2. `WebSecurityConfig` (issue #67, módulo de auth — alteração confirmada pelo usuário): `permitAll` em GET para `/actuator/health`, `/actuator/info`, `/actuator/prometheus`, `/actuator/metrics`.
 
 O resultado verde final é confirmado nos checks desta PR.
+
+### Teste de regressão automatizado (issue #67)
+
+Para que a regra de segurança do Actuator passe a ser validada também pelo job `build`
+(mais rápido que o `validate-startup`), foi adicionado
+`src/test/java/io/spring/api/security/ActuatorSecurityTest.java`
+(`@SpringBootTest(webEnvironment = RANDOM_PORT)`, perfil `test` com Testcontainers):
+
+| Teste | Verificação |
+|---|---|
+| `health_endpoint_is_public_and_reports_up` | `GET /actuator/health` → 200 + `"status":"UP"` |
+| `info_endpoint_is_public` | `GET /actuator/info` → 200 |
+| `prometheus_endpoint_is_public` | `GET /actuator/prometheus` → 200 |
+| `protected_endpoint_still_requires_authentication` | `GET /articles/feed` (sem auth) → 401 |
+
+> Os testes sobem a aplicação completa via Testcontainers PostgreSQL 16; rodam no job
+> `build` do CI (Docker nativo). Localmente, sem Docker, apenas a compilação é validada
+> (`compileTestJava` → BUILD SUCCESSFUL).
