@@ -121,10 +121,15 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       # Provisioning automático das fontes de dados (US-03.05)
       - ./grafana/provisioning:/etc/grafana/provisioning
 >>>>>>> chore/us-03.05-grafana-provisioning
+=======
+      # Provisioning automático das fontes de dados (US-03.05)
+      - ./grafana/provisioning:/etc/grafana/provisioning
+>>>>>>> chore/us-03.06-validate-startup-script
     depends_on:
       prometheus:
         condition: service_healthy

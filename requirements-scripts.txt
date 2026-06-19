@@ -1,0 +1,2 @@
+# Dependências dos scripts de automação (US-03.06)
+requests>=2.31.0
