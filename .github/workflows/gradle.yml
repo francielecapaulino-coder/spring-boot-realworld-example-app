@@ -54,3 +54,40 @@ jobs:
       run: echo "JWT_SECRET=$(openssl rand -base64 64 | tr -d '\n')" >> $GITHUB_ENV
     - name: Test with Gradle
       run: ./gradlew clean test
+
+  validate-startup:
+    name: Validate Docker Compose startup
+    runs-on: ubuntu-latest
+    needs: secret-scan
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install script dependencies
+        run: pip install -r requirements-scripts.txt
+
+      - name: Generate secrets for Docker Compose
+        run: |
+          echo "JWT_SECRET=$(openssl rand -base64 64 | tr -d '\n')" >> $GITHUB_ENV
+          echo "POSTGRES_PASSWORD=$(openssl rand -base64 32 | tr -d '\n')" >> $GITHUB_ENV
+
+      - name: Create .env file for Docker Compose
+        run: |
+          echo "JWT_SECRET=${JWT_SECRET}" > .env
+          echo "JWT_SESSION_TIME=604800" >> .env
+          echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" >> .env
+          echo "POSTGRES_DB=realworld" >> .env
+          echo "POSTGRES_USER=postgres" >> .env
+          echo "SPRING_PROFILES_ACTIVE=dev" >> .env
+
+      - name: Validate Docker Compose startup and shutdown
+        run: python3 scripts/validate_startup.py
+
+      - name: Cleanup Docker Compose
+        if: always()
+        run: docker compose down --volumes --remove-orphans
