@@ -118,6 +118,8 @@ A decisão pode ser revisada em uma fase futura quando o projeto estiver estáve
 | `03-initiatives.md` | INI-04: "ADR sobre DGS Framework vs Spring for GraphQL deve ser documentado antes de iniciar" |
 | `04-roadmap.md` | Fase 3: "ADR sobre DGS aprovado antes de iniciar qualquer história" |
 | `05-backlog.md` | EPIC-04, US-04.01 |
+| `05-backlog.md` | EPIC-04, US-04.03 (upgrade Spring Boot 4.0.3) — depende desta decisão |
+| `05-backlog.md` | EPIC-04, US-04.06 (atualização DGS para 10.x) — implementa a Opção A |
 
 ---
 
