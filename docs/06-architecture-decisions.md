@@ -48,7 +48,7 @@ ADRs são documentos imutáveis no sentido de que registram o que foi decidido e
 
 O projeto usa atualmente o **Netflix DGS Framework versão 4.9.21** para expor a API GraphQL. Este framework foi escolhido originalmente porque era o estado da arte em 2021-2022 para GraphQL em Spring Boot.
 
-Com o upgrade para Spring Boot 4.0.6 (INI-04), surgiu uma decisão de arquitetura: manter o DGS Framework ou migrar para o **Spring for GraphQL** — solução nativa do ecossistema Spring, introduzida com Spring Boot 3.x e consolidada no 4.x.
+Com o upgrade para Spring Boot 4.0.3 (INI-04), surgiu uma decisão de arquitetura: manter o DGS Framework ou migrar para o **Spring for GraphQL** — solução nativa do ecossistema Spring, introduzida com Spring Boot 3.x e consolidada no 4.x.
 
 Esta decisão precisa ser tomada **antes** de iniciar qualquer código do INI-04, pois impacta diretamente a estratégia de upgrade e o volume de trabalho.
 

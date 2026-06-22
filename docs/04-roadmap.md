@@ -31,14 +31,14 @@
 |---|---|---|---|
 | 1 | Migrar MyBatis para Spring Data JPA/Hibernate | Fase 3 | INI-05 |
 | 2 | Migrar para Java 25 | Fase 3 | INI-04 |
-| 3 | Migrar para Spring Boot 4.0.3 → **adotamos 4.0.6** ¹ | Fase 3 | INI-04 |
+| 3 | Migrar para Spring Boot 4.0.3 ¹ | Fase 3 | INI-04 |
 | 4 | Migrar para Gradle 9.3.1+ sem deprecation warnings | Fase 3 | INI-04 |
 | 5 | Introduzir record types onde possível | Fase 3 | INI-06 |
 | 6 | Soft delete com flag `is_deleted` | Fase 5 | INI-12 |
 | 7 | Tempo de leitura estimado por artigo (200 wpm) | Fase 5 | INI-13 |
 | 8 | Cache do tempo de leitura com lazy update | Fase 5 | INI-13 |
 
-> ¹ **Nota sobre versão — GAP-D corrigido:** a gestão especificou Spring Boot 4.0.3. A versão atual estável da mesma linha é **4.0.6**, que inclui três patches de segurança e correções de bugs sobre a 4.0.3. Adotar uma versão mais antiga da mesma linha em um projeto de modernização de segurança não faz sentido. Todo este documento usa 4.0.6 de forma consistente.
+> ¹ **Nota sobre versão — GAP-D resolvido:** a gestão especificou Spring Boot **4.0.3** (item J3 do mandato). Em 2026-06-22 a PM Franciele decidiu **manter o literal do mandato (`4.0.3`)**. Este documento foi alinhado para usar `4.0.3` de forma consistente. Histórico: uma revisão anterior havia proposto adotar `4.0.6` (patches posteriores da mesma linha); essa proposta foi substituída pela decisão da PM. Ver `docs/00-original-mandate.md` (Divergências — GAP-D).
 
 ---
 
@@ -78,7 +78,7 @@ INI-09 (3 fluxos) OpenAPI campos novos ─────────────�
 INI-01 (Processo)
   └─▶ INI-02 (JWT + perfis)
         └─▶ INI-03 (Docker + PostgreSQL + Actuator + LGTM)
-              ├─▶ INI-04 (Java 25 + SB 4.0.6 + Gradle 9.3.1) ◀─┐
+              ├─▶ INI-04 (Java 25 + SB 4.0.3 + Gradle 9.3.1) ◀─┐
               │     ├─▶ INI-05 (JPA)                             │ paralelo
               │     │     ├─▶ INI-12 (Soft delete)               │ durante
               │     │     └─▶ INI-13 (Tempo de leitura)          │ INI-04
@@ -207,7 +207,7 @@ As cinco demandas atendidas nesta fase:
 | Demanda | Iniciativa | Por que foi escolhida |
 |---|---|---|
 | Java 25 | INI-04 | LTS mais recente, suporte até 2030; traz virtual threads estáveis que melhoram performance sem reescrita |
-| Spring Boot 4.0.6 ¹ | INI-04 | Versão com suporte ativo; Jakarta EE 11; OpenTelemetry nativo — base para Fase 4 |
+| Spring Boot 4.0.3 ¹ | INI-04 | Versão com suporte ativo; Jakarta EE 11; OpenTelemetry nativo — base para Fase 4 |
 | Gradle 9.3.1 | INI-04 | Build mais rápido, sem warnings; compatibilidade nativa com Spring Boot 4 |
 | MyBatis → Spring Data JPA | INI-05 | Reduz código manual de banco; habilita `@Where` para soft delete (INI-12) e cache lazy (INI-13) |
 | Record types | INI-06 | Elimina boilerplate nos DTOs; imutabilidade por padrão; Java 25 torna records estáveis e expressivos |
@@ -215,7 +215,7 @@ As cinco demandas atendidas nesta fase:
 ### Sequência interna obrigatória
 
 ```
-INI-04 (Java 25 + Spring Boot 4.0.6 + Gradle 9.3.1)
+INI-04 (Java 25 + Spring Boot 4.0.3 + Gradle 9.3.1)
     ↓ concluída
     ├── INI-05 (MyBatis → Spring Data JPA) ──┐ paralelas entre si
     └── INI-06 (Record types Java 25)      ──┘ após INI-04 concluída
@@ -249,7 +249,7 @@ Dupla B precisa de INI-03 concluída (Docker disponível para Testcontainers em 
 
 | Iniciativa | Descrição | Depende de | Paralelo com |
 |---|---|---|---|
-| **INI-04** | Java 25 + Spring Boot 4.0.6 + Gradle 9.3.1 | INI-03 | INI-07, INI-08 ⚠️ |
+| **INI-04** | Java 25 + Spring Boot 4.0.3 + Gradle 9.3.1 | INI-03 | INI-07, INI-08 ⚠️ |
 | **INI-05** | MyBatis → Spring Data JPA + Hibernate | INI-04 | INI-06 |
 | **INI-06** | Record types Java 25 | INI-04 | INI-05 |
 
@@ -258,7 +258,7 @@ Dupla B precisa de INI-03 concluída (Docker disponível para Testcontainers em 
 | Entregável | O que significa na prática | Verificação |
 |---|---|---|
 | Java 25 em execução | Runtime com suporte Oracle até 2030 | `java -version` no container → Java 25 |
-| Spring Boot 4.0.6 | Framework com suporte ativo e patches de segurança | `build.gradle` atualizado |
+| Spring Boot 4.0.3 | Framework com suporte ativo e patches de segurança | `build.gradle` atualizado |
 | Gradle 9.3.1 sem warnings | Build limpo, sem avisos de deprecação | `./gradlew build` → zero `[WARNING]` |
 | Virtual threads habilitados | Performance de concorrência melhorada sem reescrita | `spring.threads.virtual.enabled=true` no log de startup |
 | Zero imports `javax.*` | Migração completa para Jakarta EE 11 (obrigatório no Spring Boot 4) | `grep -r "import javax\." src/` → 0 resultados |
@@ -581,7 +581,7 @@ Cada atividade tem uma iniciativa de origem — não é trabalho solto.
 │  e Ambiente  │  Marco M1                                                           │
 │              │  [Não existe Fase 2 — INI-02 e INI-03 são sequenciais na Fase 1]   │
 ├──────────────┼────────────────────────────────────────────────────────────────────┤
-│  FASE 3      │  ████████████████████ INI-04 (Java 25 + SB 4.0.6 + Gradle 9.3.1)  │
+│  FASE 3      │  ████████████████████ INI-04 (Java 25 + SB 4.0.3 + Gradle 9.3.1)  │
 │  Stack       │  ◀── Dupla A                                                        │
 │              │                       ████████ INI-05 (JPA) ──┐ paralelas após 04  │
 │              │                       ████████ INI-06 (Rec.) ──┘                   │

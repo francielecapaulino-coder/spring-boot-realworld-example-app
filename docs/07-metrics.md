@@ -166,7 +166,7 @@ Cada métrica tem:
 |---|---|
 | **Descrição** | Versão do Spring Boot declarada no `build.gradle` |
 | **AS IS** | 2.6.3 (EOL novembro de 2023 — confirmado no `build.gradle`) |
-| **Meta** | **4.0.6** |
+| **Meta** | **4.0.3** |
 | **Como medir** | `grep "spring-boot" build.gradle` · `./gradlew dependencies \| grep spring-boot-starter` |
 | **Frequência** | Verificado no CI a cada build |
 | **Marco** | M3 |
@@ -837,7 +837,7 @@ Observações: [lista]
 | OKR | KR | Métrica | AS IS | Meta | Marco |
 |---|---|---|---|---|---|
 | **OKR 1** | KR1.1 | Versão Java | Java 11 | Java 25 | M3 |
-| **OKR 1** | KR1.2 | Versão Spring Boot | 2.6.3 | 4.0.6 | M3 |
+| **OKR 1** | KR1.2 | Versão Spring Boot | 2.6.3 | 4.0.3 | M3 |
 | **OKR 1** | KR1.3 | Warnings no build | N/M | 0 | M3 |
 | **OKR 1** | KR1.4 | MyBatis mappers | > 0 | 0 | M3 |
 | **OKR 1** | KR1.5 | DTOs como records | 0% | ≥ 80% | M3 |
@@ -913,7 +913,7 @@ Observações: [lista]
 | Métrica | Meta | Como verificar |
 |---|---|---|
 | M-STACK-01 Versão Java | Java 25 | `java -version` no container |
-| M-STACK-02 Versão Spring Boot | 4.0.6 | `grep spring-boot build.gradle` |
+| M-STACK-02 Versão Spring Boot | 4.0.3 | `grep spring-boot build.gradle` |
 | M-STACK-03 Warnings no build | 0 | `./gradlew build 2>&1 \| grep deprecated \| wc -l` → 0 |
 | M-STACK-04 Referências MyBatis | 0 | `grep -r mybatis build.gradle` → 0 |
 | M-STACK-05 Imports `javax.*` | 0 | `grep -r "import javax\." src/` → 0 |

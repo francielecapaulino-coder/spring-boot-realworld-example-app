@@ -11,7 +11,7 @@ Esta versão corrige imprecisões técnicas da v1.0 com base em pesquisa de vers
 
 | Ponto revisado | v1.0 (incorreto) | v2.0 (correto) | Fonte |
 |---|---|---|---|
-| Versão alvo Spring Boot | 4.0.3 | **4.0.6** (latest patch, maio 2026) | spring.io |
+| Versão alvo Spring Boot | 2.6.3 | **4.0.3** (literal do mandato — item J3) | `docs/00-original-mandate.md` |
 | Java mínimo para Spring Boot 4 | "Java 21" | **Java 17 mínimo**, recomendado Java 25 | docs.spring.io/system-requirements |
 | Java 25 status | "pode não ser LTS" | **Java 25 é LTS** (GA set/2025, suporte até 2030) | oracle.com |
 | DGS Framework compatibilidade | "risco alto, pode ser incompatível" | **DGS 10.x integra nativamente com Spring for GraphQL** — sem breaking change de código | netflix.github.io/dgs |
@@ -50,9 +50,9 @@ Do ponto de vista de custo-benefício para escalabilidade:
 
 ---
 
-### Por que Spring Boot 4.0.6 e não permanecer no 2.x ou usar o 3.x?
+### Por que Spring Boot 4.0.3 e não permanecer no 2.x ou usar o 3.x?
 
-Spring Boot 2.6.3 está em EOL desde novembro de 2023 — sem patches de segurança. Spring Boot 3.x está com a última versão 3.5 encerrando suporte em junho de 2026. Spring Boot 4.0.6 é a versão com suporte ativo até dezembro de 2026, com trilha clara para 4.1.x em 2026.
+Spring Boot 2.6.3 está em EOL desde novembro de 2023 — sem patches de segurança. Spring Boot 3.x está com a última versão 3.5 encerrando suporte em junho de 2026. Spring Boot 4.0.3 é a versão com suporte ativo até dezembro de 2026, com trilha clara para 4.1.x em 2026.
 
 Spring Boot 4 traz, especificamente para este projeto:
 - **Jakarta EE 11** (substitui `javax.*` → `jakarta.*` de forma definitiva)
@@ -61,7 +61,7 @@ Spring Boot 4 traz, especificamente para este projeto:
 - **API Versioning** nativo — relevante para evolução futura do contrato da API
 - **Gradle 9 suportado** — alinhado com a demanda da gestão
 
-**Por que 4.0.6 e não 4.0.3?** A versão 4.0.3 foi superada por três patches de segurança e correções de bugs. Usar a versão mais recente do patch train não adiciona custo — adiciona segurança. A versão 4.0.6 corrige CVEs identificadas em versões anteriores do 4.0.x.
+**Por que `4.0.3`?** A versão `4.0.3` é a especificada literalmente pela gestão (item J3 do mandato). Em 2026-06-22 a PM Franciele decidiu mantê-la (GAP-D). Caso, na implementação, surja a necessidade de um patch posterior da mesma linha (`4.0.x`) por correção de segurança, a mudança deve ser proposta como adendo e aprovada pela PM, atualizando `docs/00-original-mandate.md`.
 
 ---
 
@@ -110,7 +110,7 @@ A gestão especificou explicitamente Gradle 9.3.1 ou superior sem deprecation wa
 | [INI-01](#ini-01) | Fundação do processo de desenvolvimento | Fase 0 | OKR 6 | 🔵 Planejado |
 | [INI-02](#ini-02) | Segurança — JWT secret e perfis de ambiente | Fase 1 | OKR 3, OKR 6 | 🔵 Planejado |
 | [INI-03](#ini-03) | Containerização e ambiente local reproduzível | Fase 1 | OKR 3, OKR 4 | 🔵 Planejado |
-| [INI-04](#ini-04) | Modernização do stack — Java 25 + Spring Boot 4.0.6 + Gradle 9.3.1 | Fase 2 | OKR 1 | 🔵 Planejado |
+| [INI-04](#ini-04) | Modernização do stack — Java 25 + Spring Boot 4.0.3 + Gradle 9.3.1 | Fase 2 | OKR 1 | 🔵 Planejado |
 | [INI-05](#ini-05) | Migração de MyBatis para Spring Data JPA + Hibernate | Fase 2 | OKR 1 | 🔵 Planejado |
 | [INI-06](#ini-06) | Introdução de record types Java 25 | Fase 2 | OKR 1 | 🔵 Planejado |
 | [INI-07](#ini-07) | Cobertura de testes por mutação — Pitest 95% | Fase 3 | OKR 2 | 🔵 Planejado |
@@ -293,7 +293,7 @@ Hoje cada desenvolvedor monta o ambiente de forma diferente. O banco varia, a ve
 │  ┌─────────────┐     ┌──────────────┐                       │
 │  │  app:8080   │────▶│ postgres:5432│                       │
 │  │ Spring Boot │     │  PostgreSQL  │                       │
-│  │    4.0.6    │     │   16-alpine  │                       │
+│  │    4.0.3    │     │   16-alpine  │                       │
 │  └──────┬──────┘     └──────────────┘                       │
 │         │ métricas                                           │
 │         ▼                                                    │
@@ -353,7 +353,7 @@ scripts/validate_startup.py
 
 ---
 
-## INI-04 — Modernização do stack: Java 25 + Spring Boot 4.0.6 + Gradle 9.3.1 {#ini-04}
+## INI-04 — Modernização do stack: Java 25 + Spring Boot 4.0.3 + Gradle 9.3.1 {#ini-04}
 
 ### Por que esta iniciativa existe
 
@@ -364,7 +364,7 @@ Spring Boot 2.6.3 está em EOL. Java 11 perde suporte gratuito da Oracle em sete
 | Entregável | Por que está incluído |
 |---|---|
 | Java 11 → Java 25 LTS | LTS mais recente, suporte até 2030, virtual threads estáveis, structured concurrency estável |
-| Spring Boot 2.6.3 → 4.0.6 | Versão com suporte ativo; Jakarta EE 11; OpenTelemetry nativo; Gradle 9 |
+| Spring Boot 2.6.3 → 4.0.3 | Versão com suporte ativo; Jakarta EE 11; OpenTelemetry nativo; Gradle 9 |
 | Gradle → 9.3.1 sem deprecation warnings | Requisito explícito da gestão; performance de build; configuration cache estável |
 | `javax.*` → `jakarta.*` | Breaking change obrigatório no Spring Boot 3+/4.x — sem isso o build não compila |
 | Reconfiguração Spring Security 6.x | `WebSecurityConfigurerAdapter` foi removido — código atual não compila sem ajuste |
@@ -452,7 +452,7 @@ Anotações `@DgsComponent`, `@DgsQuery`, `@DgsMutation` continuam funcionando s
 | Entregável | Como verificar |
 |---|---|
 | Java 25 em uso | `./gradlew -version` e `System.getProperty("java.version")` no actuator |
-| Spring Boot 4.0.6 | `build.gradle` + `./gradlew dependencies \| grep spring-boot` |
+| Spring Boot 4.0.3 | `build.gradle` + `./gradlew dependencies \| grep spring-boot` |
 | Build sem warnings | Saída de `./gradlew build` — zero linhas com `[WARNING]` ou `deprecated` |
 | Zero imports `javax.*` | `grep -r "import javax\." src/` retorna 0 resultados |
 | Zero Joda-Time | `grep "joda" build.gradle` retorna 0 resultados |
@@ -480,7 +480,7 @@ Anotações `@DgsComponent`, `@DgsQuery`, `@DgsMutation` continuam funcionando s
 | OKR | KR | Meta |
 |---|---|---|
 | OKR 1 | KR1.1 | Java 25 em execução |
-| OKR 1 | KR1.2 | Spring Boot 4.0.6 |
+| OKR 1 | KR1.2 | Spring Boot 4.0.3 |
 | OKR 1 | KR1.3 | 0 warnings de deprecação no build |
 | OKR 1 | KR1.6 | 0 ocorrências de Joda-Time |
 
@@ -1231,7 +1231,7 @@ INI-01 ── Processo
 | Decisão | Escolha | Alternativa descartada | Motivo do descarte |
 |---|---|---|---|
 | Runtime | **Java 25 LTS** | Java 21 LTS | Java 25 tem 4 anos a mais de suporte gratuito; gestão especificou Java 25 |
-| Framework | **Spring Boot 4.0.6** | Spring Boot 3.5 | 3.5 encerra suporte em junho/2026; 4.0.6 é o LTS atual |
+| Framework | **Spring Boot 4.0.3** | Spring Boot 3.5 | 3.5 encerra suporte em junho/2026; 4.0.3 é o LTS atual |
 | Build | **Gradle 9.3.1** | Maven | Gestão especificou Gradle 9.3.1; Spring Boot 4 suporta nativamente |
 | ORM | **Spring Data JPA + Hibernate** | Manter MyBatis | JPA é nativo no Spring Boot 4; soft delete e cache dependem de JPA |
 | GraphQL | **DGS 10.x** (integra com Spring for GraphQL) | Reescrever para Spring for GraphQL puro | DGS 10.x usa Spring for GraphQL internamente — sem custo de reescrita |
@@ -1246,4 +1246,4 @@ INI-01 ── Processo
 *Toda mudança de escopo refletida aqui antes de ser implementada*  
 *13 iniciativas · 7 OKRs · 40 KRs · Stack validada em junho 2026*
 
-As principais correções desta revisão: a versão do Spring Boot foi corrigida para 4.0.6 (latest patch atual, não 4.0.3); o risco do DGS Framework foi completamente revisado — DGS 10.x integra nativamente com Spring for GraphQL, então não é breaking change algum; Java 25 foi confirmado como LTS com suporte até 2030; Gradle 9.3.1 foi confirmado como compatível com Spring Boot 4; e virtual threads foram incluídos como a escolha de escalabilidade de melhor custo-benefício em vez de WebFlux.
+As principais correções desta revisão: a versão do Spring Boot foi mantida em 4.0.3 conforme o literal do mandato (decisão da PM em 2026-06-22, GAP-D); o risco do DGS Framework foi completamente revisado — DGS 10.x integra nativamente com Spring for GraphQL, então não é breaking change algum; Java 25 foi confirmado como LTS com suporte até 2030; Gradle 9.3.1 foi confirmado como compatível com Spring Boot 4; e virtual threads foram incluídos como a escolha de escalabilidade de melhor custo-benefício em vez de WebFlux.

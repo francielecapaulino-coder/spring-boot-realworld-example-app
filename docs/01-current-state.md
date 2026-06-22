@@ -547,7 +547,7 @@ http://localhost:8081
 |---|---|
 | **Problema** | Spring Boot 2.x teve suporte encerrado em novembro de 2023 |
 | **Impacto** | Sem patches de segurança; CVEs conhecidas não serão corrigidas pelo fornecedor |
-| **Mitigação** | Migrar para Spring Boot 4.0.6 (requer Java 17+ e ajustes de breaking changes) |
+| **Mitigação** | Migrar para Spring Boot 4.0.3 (requer Java 17+ e ajustes de breaking changes) |
 | **Iniciativa** | INI-04 / EPIC-04 |
 
 #### JWT secret e sessionTime hardcoded
@@ -681,7 +681,7 @@ Produção sem modificações:     ████░░░░░░░░░░░
 | Substituir SQLite por PostgreSQL | Médio | INI-03 / EPIC-03 | Fase 1 |
 | Mover `jwt.secret` para variável de ambiente | Baixo | INI-02 / EPIC-02 | Fase 1 |
 | Mover `jwt.sessionTime` para variável de ambiente | Baixo | INI-02 / EPIC-02 | Fase 1 |
-| Upgrade Spring Boot 2.x → 4.0.6 + Java 25 | Alto | INI-04 / EPIC-04 | Fase 3 |
+| Upgrade Spring Boot 2.x → 4.0.3 + Java 25 | Alto | INI-04 / EPIC-04 | Fase 3 |
 | Configurar HTTPS / TLS | Baixo (infra) | Fora do escopo | Após M6 |
 
 ### Gaps de modernização técnica
