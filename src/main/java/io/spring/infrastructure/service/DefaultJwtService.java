@@ -3,7 +3,6 @@ package io.spring.infrastructure.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
 import java.nio.charset.StandardCharsets;
@@ -17,24 +16,25 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DefaultJwtService implements JwtService {
+  // HS512 JCA name; javax.crypto.* is part of the JDK and stays as javax (not Jakarta EE).
+  private static final String HS512_JCA_NAME = "HmacSHA512";
+
   private final SecretKey signingKey;
-  private final SignatureAlgorithm signatureAlgorithm;
-  private int sessionTime;
+  private final int sessionTime;
 
   @Autowired
   public DefaultJwtService(
       @Value("${jwt.secret}") String secret, @Value("${jwt.sessionTime}") int sessionTime) {
     this.sessionTime = sessionTime;
-    signatureAlgorithm = SignatureAlgorithm.HS512;
     this.signingKey =
-        new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), signatureAlgorithm.getJcaName());
+        new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), HS512_JCA_NAME);
   }
 
   @Override
   public String toToken(User user) {
     return Jwts.builder()
-        .setSubject(user.getId())
-        .setExpiration(expireTimeFromNow())
+        .subject(user.getId())
+        .expiration(expireTimeFromNow())
         .signWith(signingKey)
         .compact();
   }
@@ -43,8 +43,8 @@ public class DefaultJwtService implements JwtService {
   public Optional<String> getSubFromToken(String token) {
     try {
       Jws<Claims> claimsJws =
-          Jwts.parserBuilder().setSigningKey(signingKey).build().parseClaimsJws(token);
-      return Optional.ofNullable(claimsJws.getBody().getSubject());
+          Jwts.parser().verifyWith(signingKey).build().parseSignedClaims(token);
+      return Optional.ofNullable(claimsJws.getPayload().getSubject());
     } catch (Exception e) {
       return Optional.empty();
     }

@@ -2,7 +2,7 @@
 # Stage 1: build
 # Compila o projeto e gera o .jar usando Gradle
 # =============================================================================
-FROM eclipse-temurin:11-jdk-alpine AS build
+FROM eclipse-temurin:25-jdk-alpine AS build
 
 WORKDIR /app
 
@@ -27,7 +27,7 @@ RUN ./gradlew bootJar --no-daemon
 # Stage 2: runtime
 # Imagem enxuta apenas com JRE — sem JDK, sem fontes, sem Gradle
 # =============================================================================
-FROM eclipse-temurin:11-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 
 WORKDIR /app
 
