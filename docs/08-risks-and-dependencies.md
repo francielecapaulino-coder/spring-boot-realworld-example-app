@@ -92,7 +92,7 @@ Também documenta as **dependências externas** — técnicas, de equipe e de pr
 
 **Descrição**
 
-O projeto usa o Netflix DGS Framework 4.9.21. A versão 10.x do DGS foi redesenhada para usar o Spring for GraphQL internamente, mas a compatibilidade exata com Spring Boot 4.0.6 precisa ser verificada no Maven Central antes de iniciar INI-04. Se houver incompatibilidade na versão disponível, INI-04 fica bloqueado até a decisão sobre reescrita de resolvers (ver ADR-001).
+O projeto usa o Netflix DGS Framework 4.9.21. A versão 10.x do DGS foi redesenhada para usar o Spring for GraphQL internamente, mas a compatibilidade exata com Spring Boot 4.0.3 precisa ser verificada no Maven Central antes de iniciar INI-04. Se houver incompatibilidade na versão disponível, INI-04 fica bloqueado até a decisão sobre reescrita de resolvers (ver ADR-001).
 
 **Fase afetada:** Fase 3 (INI-04 / EPIC-04)  
 **Marco afetado:** M3  
@@ -100,7 +100,7 @@ O projeto usa o Netflix DGS Framework 4.9.21. A versão 10.x do DGS foi redesenh
 
 **Mitigação**
 
-Verificar disponibilidade e compatibilidade do DGS 10.x com Spring Boot 4.0.6 no Maven Central **antes de iniciar qualquer código de INI-04**. Esta verificação é pré-condição do DoR de EPIC-04 (US-04.01).
+Verificar disponibilidade e compatibilidade do DGS 10.x com Spring Boot 4.0.3 no Maven Central **antes de iniciar qualquer código de INI-04**. Esta verificação é pré-condição do DoR de EPIC-04 (US-04.01).
 
 ```bash
 # Verificar versão disponível antes de iniciar
@@ -109,7 +109,7 @@ Verificar disponibilidade e compatibilidade do DGS 10.x com Spring Boot 4.0.6 no
 
 **Plano de contingência**
 
-Se DGS 10.x não for compatível com Spring Boot 4.0.6:
+Se DGS 10.x não for compatível com Spring Boot 4.0.3:
 
 | Opção | Esforço | Recomendação |
 |---|---|---|
@@ -216,7 +216,7 @@ Se Java 25 estiver indisponível no CI:
 
 **Descrição**
 
-O upgrade de Spring Boot 2.6.3 → 4.0.6 envolve múltiplas breaking changes: `javax.*` → `jakarta.*`, Spring Security 6.x, DGS 10.x, Hibernate 6.x. É muito provável que os testes de integração (INI-08) identifiquem comportamentos diferentes após o upgrade — isso é esperado e desejado, mas representa ciclos de correção adicionais antes de M3.
+O upgrade de Spring Boot 2.6.3 → 4.0.3 envolve múltiplas breaking changes: `javax.*` → `jakarta.*`, Spring Security 6.x, DGS 10.x, Hibernate 6.x. É muito provável que os testes de integração (INI-08) identifiquem comportamentos diferentes após o upgrade — isso é esperado e desejado, mas representa ciclos de correção adicionais antes de M3.
 
 **Fase afetada:** Fases 3 e Testes  
 **Marco afetado:** M3 (atraso potencial)  
@@ -269,7 +269,7 @@ Se a migração de Joda-Time revelar inconsistências no comportamento de datas 
 
 **Descrição**
 
-O upgrade de Spring Boot 2.6.3 → 4.0.6 atualiza dezenas de dependências transitivas automaticamente. Algumas delas podem ter breaking changes próprias que não são óbvias na migração principal. Exemplos: versões de Jackson, Hibernate, Flyway, jjwt.
+O upgrade de Spring Boot 2.6.3 → 4.0.3 atualiza dezenas de dependências transitivas automaticamente. Algumas delas podem ter breaking changes próprias que não são óbvias na migração principal. Exemplos: versões de Jackson, Hibernate, Flyway, jjwt.
 
 **Fase afetada:** Fase 3 (INI-04)  
 **Marco afetado:** M3  
@@ -763,7 +763,7 @@ Pitest com mutadores `STRONGER` pode ser significativamente mais lento que os te
 | Dependência | Status | Necessária em | Como verificar |
 |---|---|---|---|
 | **Java 25 LTS** disponível no CI | ✅ GA desde set/2025 | Fase 3 | `actions/setup-java@v4` com `java-version: '25'` em branch de teste |
-| **Spring Boot 4.0.6** no Maven Central | ✅ Disponível | Fase 3 | `https://search.maven.org/artifact/org.springframework.boot/spring-boot` |
+| **Spring Boot 4.0.3** no Maven Central | ✅ Disponível | Fase 3 | `https://search.maven.org/artifact/org.springframework.boot/spring-boot` |
 | **DGS Framework 10.x** compatível com SB4 | ⚠️ Verificar | Fase 3 | `https://search.maven.org/artifact/com.netflix.graphql.dgs/graphql-dgs-spring-boot-starter` |
 | **Gradle 9.3.1** estável | ✅ Disponível | Fase 3 | `https://gradle.org/releases/` |
 | **PostgreSQL 16 Alpine** no Docker Hub | ✅ Disponível | Fase 1 | `docker pull postgres:16-alpine` |

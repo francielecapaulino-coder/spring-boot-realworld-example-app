@@ -39,7 +39,7 @@ Cada épico contém:
 | [EPIC-01](#epic-01) | Fundação do processo de desenvolvimento | Fase 0 | INI-01 | 🔵 Planejado |
 | [EPIC-02](#epic-02) | Segurança e eliminação de vulnerabilidades | Fase 1 | INI-02 | 🔵 Planejado |
 | [EPIC-03](#epic-03) | Containerização e ambiente local reproduzível | Fase 1 | INI-03 | 🔵 Planejado |
-| [EPIC-04](#epic-04) | Modernização do runtime — Java 25 + Spring Boot 4.0.6 + Gradle 9.3.1 | Fase 3 | INI-04 | 🔵 Planejado |
+| [EPIC-04](#epic-04) | Modernização do runtime — Java 25 + Spring Boot 4.0.3 + Gradle 9.3.1 | Fase 3 | INI-04 | 🔵 Planejado |
 | [EPIC-05](#epic-05) | Migração de persistência — MyBatis para Spring Data JPA | Fase 3 | INI-05 | 🔵 Planejado |
 | [EPIC-06](#epic-06) | Modernização de código — record types Java 25 | Fase 3 | INI-06 | 🔵 Planejado |
 | [EPIC-07](#epic-07) | Qualidade — cobertura por mutação com Pitest | Fase Testes | INI-07 | 🔵 Planejado |
@@ -395,7 +395,7 @@ O script `scripts/validate_startup.py`:
 
 ---
 
-## EPIC-04 — Modernização do runtime: Java 25 + Spring Boot 4.0.6 + Gradle 9.3.1 {#epic-04}
+## EPIC-04 — Modernização do runtime: Java 25 + Spring Boot 4.0.3 + Gradle 9.3.1 {#epic-04}
 
 ### Contexto
 
@@ -409,7 +409,7 @@ Este é o épico de maior risco técnico do projeto porque afeta todo o codebase
 
 Quando este épico estiver concluído:
 - Java 25 compilando e executando
-- Spring Boot 4.0.6 como framework principal
+- Spring Boot 4.0.3 como framework principal
 - Gradle 9.3.1 sem nenhum warning de deprecação
 - Virtual threads habilitados
 - Zero imports `javax.*`
@@ -420,7 +420,7 @@ Quando este épico estiver concluído:
 
 **Está incluído:**
 - Upgrade Java 11 → Java 25
-- Upgrade Spring Boot 2.6.3 → 4.0.6
+- Upgrade Spring Boot 2.6.3 → 4.0.3
 - Upgrade Gradle → 9.3.1 com zero deprecation warnings
 - Migração de todos os imports `javax.*` → `jakarta.*`
 - Reconfiguração do Spring Security 6.x (remoção do `WebSecurityConfigurerAdapter`)
@@ -470,7 +470,7 @@ DEPOIS: SecurityConfig sem herança
 |---|---|---|
 | US-04.01 | Documentar ADR-001 sobre DGS Framework vs Spring for GraphQL | `docs` |
 | US-04.02 | Atualizar `build.gradle` para Java 25 e Gradle 9.3.1 | `chore` |
-| US-04.03 | Atualizar Spring Boot de 2.6.3 para 4.0.6 e resolver conflitos de dependências | `chore` |
+| US-04.03 | Atualizar Spring Boot de 2.6.3 para 4.0.3 e resolver conflitos de dependências | `chore` |
 | US-04.04 | Migrar todos os imports `javax.*` para `jakarta.*` incluindo `DefaultJwtService` | `refactor` |
 | US-04.05 | Reconfigurar Spring Security 6.x removendo `WebSecurityConfigurerAdapter` | `refactor` |
 | US-04.06 | Atualizar DGS Framework para versão 10.x compatível com Spring Boot 4 | `chore` |

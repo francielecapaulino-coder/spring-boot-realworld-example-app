@@ -8,7 +8,7 @@ Você é um agente de desenvolvimento assistido por IA operando no projeto RealW
 
 - **Repositório:** https://github.com/francielecapaulino-coder/spring-boot-realworld-example-app
 - **Linguagem atual:** Java 11 + Spring Boot 2.6.3 (EOL) + MyBatis + SQLite
-- **Linguagem alvo:** Java 25 + Spring Boot 4.0.6 + Spring Data JPA + PostgreSQL 16
+- **Linguagem alvo:** Java 25 + Spring Boot 4.0.3 + Spring Data JPA + PostgreSQL 16
 - **Build:** Gradle 9.3.1
 - **PM:** Franciele (aprova todas as PRs)
 - **Branches:** `master` (protegida) | `bleeding` (harness) | `tipo/us-XX.XX-descricao` (feature)
