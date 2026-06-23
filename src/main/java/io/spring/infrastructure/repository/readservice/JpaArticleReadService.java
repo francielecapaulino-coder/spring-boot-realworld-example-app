@@ -263,7 +263,7 @@ public class JpaArticleReadService implements ArticleReadService {
 
   /**
    * Collapses the joined rows (one per article-tag pair) into distinct ArticleData, preserving
-   * the row order and accumulating the tag list. Mirrors the MyBatis collection resultMap.
+   * the row order and accumulating the tag list. Mirrors the legacy mapper collection shape.
    */
   private List<ArticleData> mapArticleRows(List<Object[]> rows) {
     Map<String, ArticleData> byId = new LinkedHashMap<>();

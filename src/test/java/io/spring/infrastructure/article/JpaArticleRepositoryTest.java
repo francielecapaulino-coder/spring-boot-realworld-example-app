@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 @Import({JpaArticleRepository.class, JpaUserRepository.class})
-public class MyBatisArticleRepositoryTest extends DbTestBase {
+public class JpaArticleRepositoryTest extends DbTestBase {
   @Autowired private ArticleRepository articleRepository;
 
   @Autowired private UserRepository userRepository;

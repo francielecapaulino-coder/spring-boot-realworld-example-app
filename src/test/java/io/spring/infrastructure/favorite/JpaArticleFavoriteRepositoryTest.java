@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 @Import({JpaArticleFavoriteRepository.class})
-public class MyBatisArticleFavoriteRepositoryTest extends DbTestBase {
+public class JpaArticleFavoriteRepositoryTest extends DbTestBase {
   @Autowired private ArticleFavoriteRepository articleFavoriteRepository;
 
   @Autowired private ArticleFavoriteJpaRepository articleFavoriteJpaRepository;

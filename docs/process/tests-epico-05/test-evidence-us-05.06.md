@@ -91,15 +91,15 @@ grep -rn "@MybatisTest" src/test
 
 | Suite | Tipo | Cobre |
 |---|---|---|
-| `MyBatisUserRepositoryTest` | `@DataJpaTest` + `@Import(JpaUserRepository.class)` | save/find/update + follow/unfollow |
-| `MyBatisArticleRepositoryTest` | `@DataJpaTest` + `@Import({JpaArticleRepository.class, JpaUserRepository.class})` | save com tags, update slug, remove |
-| `MyBatisCommentRepositoryTest` | `@DataJpaTest` + `@Import(JpaCommentRepository.class)` | save/find |
-| `MyBatisArticleFavoriteRepositoryTest` | `@DataJpaTest` + `@Import(JpaArticleFavoriteRepository.class)` | save/find/remove (chave composta `@EmbeddedId`) |
+| `JpaUserRepositoryTest` | `@DataJpaTest` + `@Import(JpaUserRepository.class)` | save/find/update + follow/unfollow |
+| `JpaArticleRepositoryTest` | `@DataJpaTest` + `@Import({JpaArticleRepository.class, JpaUserRepository.class})` | save com tags, update slug, remove |
+| `JpaCommentRepositoryTest` | `@DataJpaTest` + `@Import(JpaCommentRepository.class)` | save/find |
+| `JpaArticleFavoriteRepositoryTest` | `@DataJpaTest` + `@Import(JpaArticleFavoriteRepository.class)` | save/find/remove (chave composta `@EmbeddedId`) |
 | `ArticleRepositoryTransactionTest` | `@SpringBootTest` | Rollback transacional ao salvar artigo com tag conflitante |
 | `ArticleQueryServiceTest`, `CommentQueryServiceTest`, `ProfileQueryServiceTest`, `TagsQueryServiceTest` | `@SpringBootTest` | Camada `application` exercitando os novos read services JPA |
 | `*ApiTest` (8 classes em `src/test/java/io/spring/api/`) | `@SpringBootTest` | Contrato REST end-to-end |
 
-> Nome das classes de teste mantido (`MyBatis*Test`) para preservar histórico do git e diff mínimo; o conteúdo foi migrado para Jpa*.
+> Classes de repositório renomeadas para `Jpa*Test` para satisfazer o critério de saída da US-05.05/US-05.06: zero artefatos `MyBatis*` sob `src/`.
 
 ### V6 — Pitest (mutation score ≥ 95%)
 

@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 @Import(JpaUserRepository.class)
-public class MyBatisUserRepositoryTest extends DbTestBase {
+public class JpaUserRepositoryTest extends DbTestBase {
   @Autowired private UserRepository userRepository;
   private User user;
 

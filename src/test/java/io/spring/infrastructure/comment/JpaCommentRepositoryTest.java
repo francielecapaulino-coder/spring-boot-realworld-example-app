@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 @Import({JpaCommentRepository.class})
-public class MyBatisCommentRepositoryTest extends DbTestBase {
+public class JpaCommentRepositoryTest extends DbTestBase {
   @Autowired private CommentRepository commentRepository;
 
   @Test

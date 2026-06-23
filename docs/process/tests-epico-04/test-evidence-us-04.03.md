@@ -72,8 +72,8 @@ Spring Security 6 e Jackson 3) sobre **Java 25**. Os critérios de aceite são:
    for cls in RealworldApplicationTests ArticleQueryServiceTest \
               CommentQueryServiceTest ProfileQueryServiceTest \
               TagsQueryServiceTest ArticleRepositoryTransactionTest \
-              MyBatisArticleRepositoryTest MyBatisCommentRepositoryTest \
-              MyBatisArticleFavoriteRepositoryTest MyBatisUserRepositoryTest; do
+              JpaArticleRepositoryTest JpaCommentRepositoryTest \
+              JpaArticleFavoriteRepositoryTest JpaUserRepositoryTest; do
      f=$(find build/test-results -name "TEST-*${cls}.xml" | head -1)
      echo "$cls: $(grep -c 'DockerClientProviderStrategy\|HikariPool$PoolInitializationException' "$f") linhas Docker"
    done
@@ -87,10 +87,10 @@ Spring Security 6 e Jackson 3) sobre **Java 25**. Os critérios de aceite são:
    ProfileQueryServiceTest: 4 linhas Docker
    TagsQueryServiceTest: 4 linhas Docker
    ArticleRepositoryTransactionTest: 6 linhas Docker
-   MyBatisArticleRepositoryTest: 12 linhas Docker
-   MyBatisCommentRepositoryTest: 4 linhas Docker
-   MyBatisArticleFavoriteRepositoryTest: 8 linhas Docker
-   MyBatisUserRepositoryTest: 16 linhas Docker
+   JpaArticleRepositoryTest: 12 linhas Docker
+   JpaCommentRepositoryTest: 4 linhas Docker
+   JpaArticleFavoriteRepositoryTest: 8 linhas Docker
+   JpaUserRepositoryTest: 16 linhas Docker
    ```
 
 ## Resultado consolidado
