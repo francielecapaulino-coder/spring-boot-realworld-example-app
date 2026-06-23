@@ -1016,6 +1016,20 @@ Ou via AOP para não poluir os controllers — decisão a ser tomada pelo time e
 
 ## INI-12 — Soft delete de artigos e comentários {#ini-12}
 
+> ⚠️ **DEPENDÊNCIA BLOQUEANTE — NÃO INICIAR SEM INI-05 CONCLUÍDA**
+>
+> `@Where(clause = "is_deleted = false")` é uma anotação Hibernate/JPA.
+> Ela **não existe** no modelo MyBatis atual. Esta iniciativa é tecnicamente
+> impossível de implementar sem que INI-05 (migração Spring Data JPA +
+> Hibernate) esteja encerrada e mergeada em `master`.
+>
+> Qualquer tentativa de paralelizar INI-12 com INI-04 ou INI-05 resultará
+> em código que compila mas não funciona (MyBatis ignora a anotação
+> silenciosamente).
+>
+> **Dependência confirmada em:** Definition of Ready abaixo + diagrama de
+> dependências ao final deste documento (`INI-05 ──▶ INI-12`).
+
 ### Por que esta iniciativa existe
 
 Deleção permanente é irreversível e impossibilita auditoria. Soft delete — registros marcados como `is_deleted = true` em vez de removidos — preserva o histórico, habilita auditoria futura e é pré-requisito para qualquer conformidade com requisitos de retenção de dados. Para o usuário, o comportamento é idêntico. Para o negócio, a diferença é total.
