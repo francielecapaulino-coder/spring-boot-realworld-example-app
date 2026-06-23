@@ -132,6 +132,11 @@ A classe apenas habilita `@EnableTransactionManagement` — sem dependência MyB
 
 As 6 interfaces de read service tornaram-se contratos limpos (sem `@Mapper`, sem `@Param`). Mantê-las num pacote chamado `mybatis` seria um nome misleading. O `git mv` preserva o histórico e o `sed` global atualizou todos os consumidores (`ArticleQueryService`, `ProfileQueryService`, etc.).
 
+### Notas de revisão para exceções aceitas
+
+- `javax.crypto.SecretKey` em `DefaultJwtService` é API do JDK para criptografia/JWT, não API Java EE/Jakarta. Portanto não possui equivalente `jakarta.*` e permanece permitido; a regra de migração cobre `javax.persistence.*`, `javax.validation.*`, `javax.servlet.*` e `javax.annotation.*`.
+- `src/main/resources/application-test.properties` contém `jwt.secret=test-only-...` apenas para o perfil de teste, com texto explícito de que não é segredo real. A verificação de segurança deve excluir esse arquivo e continuar retornando zero ocorrências fora do perfil de teste.
+
 ---
 
 ## Definition of Done

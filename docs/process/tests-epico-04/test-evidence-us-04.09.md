@@ -2,8 +2,8 @@
 
 ## Visão geral
 
-Branch: `feature/trilha-b-epic04-runner-restantes`  
-Data: 2026-06-23  
+Branch: `feature/trilha-b-epic04-runner-restantes`<br>
+Data: 2026-06-23<br>
 Update: Aplicado upgrade completo Spring Boot 3.4 + Jakarta EE 10 + Security 6 + DGS 12.0.1 + java.time + virtual threads.
 
 ---
@@ -144,7 +144,7 @@ BUILD SUCCESSFUL in 39s
 - Registrar o resultado de Pitest ≥ 95% em comentário ou edição deste arquivo, caso necessário
 - Fechar EPIC-04 com a confirmação final de CI completa
 
---- 
+---
 
-**Assinatura:**  
+**Assinatura:**<br>
 Validado em 2026-06-23 no Mac local; aguarda CI full green para encerramento formal.
