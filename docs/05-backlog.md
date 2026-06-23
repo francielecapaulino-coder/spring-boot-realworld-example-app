@@ -146,10 +146,42 @@ Modernização completa do runtime com zero regressão e base preparada para os 
 
 ---
 
+## EPIC-05 — Migração MyBatis → Spring Data JPA + Hibernate {#epic-05}
+
+### Status: ✅ Entregue (branch `refactor/us-05.01-jpa-setup`, issue #81, 2026-06-23)
+
+### Histórias entregues
+
+| ID | Título | Tipo | Estado |
+|---|---|---|---|
+| US-05.01 | Adicionar Spring Data JPA + config Hibernate (`ddl-auto=validate`, `open-in-view=false`, dialect PG) | `chore` | ✅ DONE |
+| US-05.02 | Anotar `User`, `Article`, `Tag`, `Comment`, `ArticleFavorite`, `FollowRelation` com `@Entity` (chaves compostas via `@EmbeddedId`, `Article.tags` via `@ManyToMany`) | `refactor` | ✅ DONE |
+| US-05.03 | Criar interfaces Spring Data (`io.spring.infrastructure.jpa`) + impls JPA `@Primary` (`Jpa*Repository`) das interfaces de domínio | `refactor` | ✅ DONE |
+| US-05.04 | Migrar 6 read services (`User`, `Tag`, `Comment`, `Article`, `ArticleFavorites`, `UserRelationship`) MyBatis XML → impls JPA via `EntityManager` + SQL nativo (ADR-002) | `refactor` | ✅ DONE |
+| US-05.05 | Remover artefatos MyBatis (mappers, XML, deps, config), renomear `MyBatisConfig` → `TransactionConfig`, mover interfaces de read service para fora do pacote `mybatis` | `refactor` | ✅ DONE |
+| US-05.06 | Evidência consolidada (`docs/process/tests-epico-05/test-evidence-us-05.06.md`) | `test` | ✅ DONE |
+
+### Mandato atendido
+
+- **J1** — *"Migrate MyBatis to Spring Data/JPA/Hibernate"*
+
+### ADR aplicado
+
+- **ADR-002** — Queries JPA: derivação → JPQL → Specifications → SQL nativo. SQL nativo usado **apenas** nos read services que exigem agregação de tags (`ArticleData`) e cursor pagination com `Timestamp`.
+
+### Validação
+
+- ✅ `./gradlew compileJava` 0 erros
+- ✅ `./gradlew compileTestJava` 0 erros
+- ✅ Testes unitários puros verdes
+- 🟡 `./gradlew test` (Testcontainers) e `pitest` delegados ao CI — Docker indisponível localmente (mesmo padrão US-04.09)
+
+---
+
 ## Próximos passos
 
-1. **Aguardar merge dos PRs #79 e #80**
-2. **Complementar evidência US-04.09** com status final de CI (Pitest e contrato)
-3. **Seguir para EPIC-05 (MyBatis → JPA)** (ou EPIC-06/ registros, conforme priorização da gestão)
+1. **Aguardar merge dos PRs #79 e #80 (EPIC-04)**
+2. **Validar EPIC-05 no CI** (testes Testcontainers + Pitest ≥ 95%)
+3. **Seguir para EPIC-06** (introdução de records — `J5`, depende de EPIC-05 entregue)
 
 ---
