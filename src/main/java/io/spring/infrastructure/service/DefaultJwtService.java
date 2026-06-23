@@ -3,21 +3,20 @@ package io.spring.infrastructure.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Optional;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DefaultJwtService implements JwtService {
-  // HS512 JCA name; javax.crypto.* is part of the JDK and stays as javax (not Jakarta EE).
-  private static final String HS512_JCA_NAME = "HmacSHA512";
+  // javax.crypto.SecretKey is part of the JDK and stays as javax (not Jakarta EE).
 
   private final SecretKey signingKey;
   private final int sessionTime;
@@ -26,8 +25,7 @@ public class DefaultJwtService implements JwtService {
   public DefaultJwtService(
       @Value("${jwt.secret}") String secret, @Value("${jwt.sessionTime}") int sessionTime) {
     this.sessionTime = sessionTime;
-    this.signingKey =
-        new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), HS512_JCA_NAME);
+    this.signingKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
   }
 
   @Override

@@ -70,12 +70,6 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
     }
   }
 
-  @Override
-  public DataFetcherExceptionHandlerResult onException(
-      DataFetcherExceptionHandlerParameters handlerParameters) {
-    return handleException(handlerParameters).join();
-  }
-
   public static Error getErrorsAsData(ConstraintViolationException cve) {
     List<FieldErrorResource> errors = new ArrayList<>();
     for (ConstraintViolation<?> violation : cve.getConstraintViolations()) {

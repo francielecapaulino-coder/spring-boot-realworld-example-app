@@ -2,6 +2,7 @@ package io.spring.api.security;
 
 import static java.util.Arrays.asList;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,6 +26,22 @@ public class WebSecurityConfig {
   @Bean
   public JwtTokenFilter jwtTokenFilter() {
     return new JwtTokenFilter();
+  }
+
+  /**
+   * Prevents Spring Boot from auto-registering {@link JwtTokenFilter} as a standalone servlet
+   * filter. The filter is already wired into the Spring Security filter chain via {@code
+   * HttpSecurity#addFilterBefore}; a duplicate registration would execute the filter twice and the
+   * authentication set by the first invocation is wiped by {@code SecurityContextHolderFilter}
+   * before downstream security filters run, causing valid requests to be rejected with HTTP 401.
+   */
+  @Bean
+  public FilterRegistrationBean<JwtTokenFilter> jwtTokenFilterRegistration(
+      JwtTokenFilter jwtTokenFilter) {
+    FilterRegistrationBean<JwtTokenFilter> registration =
+        new FilterRegistrationBean<>(jwtTokenFilter);
+    registration.setEnabled(false);
+    return registration;
   }
 
   @Bean

@@ -1,23 +1,30 @@
 package io.spring.application;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import io.spring.JacksonCustomizations.DateTimeSerializer;
+import java.time.Instant;
+import tools.jackson.databind.annotation.JsonSerialize;
 
-public class DateTimeCursor extends PageCursor<DateTime> {
+public class DateTimeCursor extends PageCursor<Instant> {
 
-  public DateTimeCursor(DateTime data) {
+  public DateTimeCursor(Instant data) {
     super(data);
   }
 
   @Override
-  public String toString() {
-    return String.valueOf(getData().getMillis());
+  @JsonSerialize(using = DateTimeSerializer.class)
+  public Instant getData() {
+    return super.getData();
   }
 
-  public static DateTime parse(String cursor) {
+  @Override
+  public String toString() {
+    return String.valueOf(getData().toEpochMilli());
+  }
+
+  public static Instant parse(String cursor) {
     if (cursor == null) {
       return null;
     }
-    return new DateTime().withMillis(Long.parseLong(cursor)).withZone(DateTimeZone.UTC);
+    return Instant.ofEpochMilli(Long.parseLong(cursor));
   }
 }
