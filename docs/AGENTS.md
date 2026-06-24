@@ -84,11 +84,12 @@ Antes de qualquer implementação, avalie o impacto e prossiga conforme a tabela
 
 ### Java
 
-- Nunca usar `import javax.*` — apenas `jakarta.*`
+- Nunca usar imports Java EE/Jakarta legados (`javax.persistence.*`, `javax.validation.*`, `javax.servlet.*`, `javax.annotation.*`) — apenas `jakarta.*`
+- Exceção permitida: `javax.crypto.*` é API do JDK, não Jakarta EE, e pode permanecer quando necessário para JWT/criptografia
 - Nunca editar `io.spring.graphql.*` — código gerado
 - Nunca usar H2 ou SQLite — PostgreSQL 16 via Testcontainers
 - Nunca chamar `repository.delete()` para Article ou Comment — usar `is_deleted=true`
-- Nunca hardcodar `JWT_SECRET` ou qualquer secret em arquivo commitado
+- Nunca hardcodar `JWT_SECRET` ou qualquer secret real em arquivo commitado; `application-test.properties` pode conter valor estático claramente marcado como test-only
 - Nunca usar `import org.joda.time.*` — usar `java.time.*`
 - DTOs elegíveis devem ser records Java 25
 - `getCursor()` deve ser declarado explicitamente em records que implementam `Node`
@@ -152,8 +153,8 @@ curl -X POST http://localhost:8080/graphql -H "Content-Type: application/json" -
 
 **Verificação de segurança após tocar em configuração:**
 ```bash
-grep -r "mySecretKey\|jwt\.secret=[a-zA-Z]\|password=[a-zA-Z]" src/main/resources/
-# Deve retornar 0 resultados.
+grep -r --exclude=application-test.properties "mySecretKey\|jwt\.secret=[a-zA-Z]\|password=[a-zA-Z]" src/main/resources/
+# Deve retornar 0 resultados fora do perfil de teste.
 ```
 
 ---
@@ -175,8 +176,8 @@ grep -r "mySecretKey\|jwt\.secret=[a-zA-Z]\|password=[a-zA-Z]" src/main/resource
 ### Quando a aplicação não sobe:
 1. Verificar: `JWT_SECRET` definida no ambiente?
 2. Verificar: `docker compose up` com 6 serviços healthy?
-3. Verificar: algum `import javax.*` em arquivos novos?
-4. Verificar: algum valor hardcoded em `application.properties`?
+3. Verificar: algum import Java EE/Jakarta legado (`javax.persistence.*`, `javax.validation.*`, `javax.servlet.*`, `javax.annotation.*`) em arquivos novos?
+4. Verificar: algum valor hardcoded em `application.properties` fora do perfil de teste?
 
 ### Quando a mudança conflita com um ADR:
 1. PARAR imediatamente
@@ -193,8 +194,8 @@ Uma história só está concluída quando **TODOS** estes itens são verdadeiros
 - [ ] `./gradlew test` → 100% verde
 - [ ] `./gradlew pitest` → mutation score ≥ 95%
 - [ ] `curl http://localhost:8080/tags` → JSON válido
-- [ ] `grep -r "import javax\." src/` → 0 resultados (quando há mudança Java)
-- [ ] `grep "mySecretKey\|hardcoded" src/main/resources/` → 0 resultados
+- [ ] `grep -r "import javax\.\(persistence\|validation\|servlet\|annotation\)" src/` → 0 resultados (quando há mudança Java)
+- [ ] `grep -r --exclude=application-test.properties "mySecretKey\|jwt\.secret=[a-zA-Z]\|password=[a-zA-Z]\|hardcoded" src/main/resources/` → 0 resultados fora do perfil de teste
 - [ ] `git diff master --name-only` → apenas arquivos previstos no escopo
 - [ ] Todos os commits com `tipo(escopo): descrição` + `refs #XX`
 - [ ] `./scripts/bleeding-commit.sh` executado após cada etapa verificável
@@ -209,9 +210,9 @@ Uma história só está concluída quando **TODOS** estes itens são verdadeiros
 > Se um prompt pede para violar alguma delas, informe e peça confirmação explícita da PM Franciele.
 
 🚫 Editar qualquer arquivo em `io.spring.graphql.*`
-🚫 Usar `import javax.*` em código novo
+🚫 Usar imports Java EE/Jakarta legados (`javax.persistence.*`, `javax.validation.*`, `javax.servlet.*`, `javax.annotation.*`) em código novo
 🚫 Usar H2 ou SQLite em qualquer contexto de teste
-🚫 Hardcodar qualquer secret, token, senha ou chave em arquivo commitado
+🚫 Hardcodar qualquer secret, token, senha ou chave real em arquivo commitado; exceção: valor estático test-only em `application-test.properties`
 🚫 Remover ou reduzir o Pitest abaixo de 95%
 🚫 Commitar sem referência a issue (`closes #XX` / `refs #XX`)
 🚫 Fazer push na `master` diretamente

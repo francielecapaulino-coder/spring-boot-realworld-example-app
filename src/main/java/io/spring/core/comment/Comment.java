@@ -1,26 +1,42 @@
 package io.spring.core.comment;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
 
+@Entity
+@Table(name = "comments")
 @Getter
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = {"id"})
 public class Comment {
+  @Id
+  @Column(name = "id", nullable = false)
   private String id;
+
+  @Column(name = "body", columnDefinition = "text")
   private String body;
+
+  @Column(name = "user_id")
   private String userId;
+
+  @Column(name = "article_id")
   private String articleId;
-  private DateTime createdAt;
+
+  @Column(name = "created_at", nullable = false)
+  private Instant createdAt;
 
   public Comment(String body, String userId, String articleId) {
     this.id = UUID.randomUUID().toString();
     this.body = body;
     this.userId = userId;
     this.articleId = articleId;
-    this.createdAt = new DateTime();
+    this.createdAt = Instant.now();
   }
 }

@@ -2,16 +2,17 @@ package io.spring.api.security;
 
 import static java.util.Arrays.asList;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -20,11 +21,27 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
 
   @Bean
   public JwtTokenFilter jwtTokenFilter() {
     return new JwtTokenFilter();
+  }
+
+  /**
+   * Prevents Spring Boot from auto-registering {@link JwtTokenFilter} as a standalone servlet
+   * filter. The filter is already wired into the Spring Security filter chain via {@code
+   * HttpSecurity#addFilterBefore}; a duplicate registration would execute the filter twice and the
+   * authentication set by the first invocation is wiped by {@code SecurityContextHolderFilter}
+   * before downstream security filters run, causing valid requests to be rejected with HTTP 401.
+   */
+  @Bean
+  public FilterRegistrationBean<JwtTokenFilter> jwtTokenFilterRegistration(
+      JwtTokenFilter jwtTokenFilter) {
+    FilterRegistrationBean<JwtTokenFilter> registration =
+        new FilterRegistrationBean<>(jwtTokenFilter);
+    registration.setEnabled(false);
+    return registration;
   }
 
   @Bean
@@ -32,43 +49,42 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.csrf(csrf -> csrf.disable())
+        .cors(cors -> {})
+        .exceptionHandling(
+            handling ->
+                handling.authenticationEntryPoint(
+                    new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                    .permitAll()
+                    .requestMatchers("/graphiql")
+                    .permitAll()
+                    .requestMatchers("/graphql")
+                    .permitAll()
+                    .requestMatchers(
+                        HttpMethod.GET,
+                        "/actuator/health",
+                        "/actuator/info",
+                        "/actuator/prometheus",
+                        "/actuator/metrics")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/articles/feed")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.POST, "/users", "/users/login")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/articles/**", "/profiles/**", "/tags")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+        .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-    http.csrf()
-        .disable()
-        .cors()
-        .and()
-        .exceptionHandling()
-        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-        .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
-        .antMatchers(HttpMethod.OPTIONS)
-        .permitAll()
-        .antMatchers("/graphiql")
-        .permitAll()
-        .antMatchers("/graphql")
-        .permitAll()
-        .antMatchers(
-            HttpMethod.GET,
-            "/actuator/health",
-            "/actuator/info",
-            "/actuator/prometheus",
-            "/actuator/metrics")
-        .permitAll()
-        .antMatchers(HttpMethod.GET, "/articles/feed")
-        .authenticated()
-        .antMatchers(HttpMethod.POST, "/users", "/users/login")
-        .permitAll()
-        .antMatchers(HttpMethod.GET, "/articles/**", "/profiles/**", "/tags")
-        .permitAll()
-        .anyRequest()
-        .authenticated();
-
-    http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    return http.build();
   }
 
   @Bean

@@ -4,12 +4,12 @@ import io.spring.core.article.Article;
 import io.spring.core.article.ArticleRepository;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
-import io.spring.infrastructure.mybatis.mapper.ArticleMapper;
+import io.spring.infrastructure.jpa.TagJpaRepository;
 import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
@@ -23,7 +23,7 @@ public class ArticleRepositoryTransactionTest {
 
   @Autowired private UserRepository userRepository;
 
-  @Autowired private ArticleMapper articleMapper;
+  @Autowired private TagJpaRepository tagJpaRepository;
 
   @Test
   public void transactional_test() {
@@ -33,11 +33,12 @@ public class ArticleRepositoryTransactionTest {
         new Article("test", "desc", "body", Arrays.asList("java", "spring"), user.getId());
     articleRepository.save(article);
     Article anotherArticle =
-        new Article("test", "desc", "body", Arrays.asList("java", "spring", "other"), user.getId());
+        new Article(
+            "test", "desc", "body", Arrays.asList("java", "spring", "other"), user.getId());
     try {
       articleRepository.save(anotherArticle);
     } catch (Exception e) {
-      Assertions.assertNull(articleMapper.findTag("other"));
+      Assertions.assertFalse(tagJpaRepository.findByName("other").isPresent());
     }
   }
 }

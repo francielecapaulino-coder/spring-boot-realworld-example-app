@@ -16,18 +16,18 @@ import io.spring.application.user.UserService;
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
-import io.spring.infrastructure.mybatis.readservice.UserReadService;
+import io.spring.infrastructure.repository.readservice.UserReadService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(UsersApi.class)
@@ -40,13 +40,13 @@ import org.springframework.test.web.servlet.MockMvc;
 public class UsersApiTest {
   @Autowired private MockMvc mvc;
 
-  @MockBean private UserRepository userRepository;
+  @MockitoBean private UserRepository userRepository;
 
-  @MockBean private JwtService jwtService;
+  @MockitoBean private JwtService jwtService;
 
-  @MockBean private UserReadService userReadService;
+  @MockitoBean private UserReadService userReadService;
 
-  @MockBean private UserService userService;
+  @MockitoBean private UserService userService;
 
   @Autowired private PasswordEncoder passwordEncoder;
 

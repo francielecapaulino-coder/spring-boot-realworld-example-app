@@ -1,47 +1,62 @@
 package io.spring;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import java.io.IOException;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 @Configuration
 public class JacksonCustomizations {
 
+  /**
+   * ISO-8601 date-time formatter that always emits milliseconds and a literal {@code +00:00}
+   * offset, e.g. {@code 2024-06-22T13:45:30.000+00:00}. Uses {@link
+   * DateTimeFormatterBuilder#appendOffset(String, String)} so that a zero offset is rendered as
+   * {@code +00:00} instead of the ISO-8601 short form {@code Z}.
+   */
+  public static final DateTimeFormatter ISO_DATE_TIME_MILLIS_UTC =
+      new DateTimeFormatterBuilder()
+          .appendPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
+          .appendOffset("+HH:MM", "+00:00")
+          .toFormatter()
+          .withZone(ZoneOffset.UTC);
+
+  /**
+   * Forces the {@link DateTimeSerializer} for {@link Instant} on the auto-configured {@code
+   * ObjectMapper}, taking precedence over the default {@code JavaTimeModule} serializer registered
+   * by {@code jackson-datatype-jsr310}.
+   */
   @Bean
-  public Module realWorldModules() {
-    return new RealWorldModules();
+  public JsonMapperBuilderCustomizer instantJacksonCustomizer() {
+    return builder -> builder.addModule(new RealWorldModules());
   }
 
   public static class RealWorldModules extends SimpleModule {
-    private static final long serialVersionUID = 1L;
 
     public RealWorldModules() {
-      addSerializer(DateTime.class, new DateTimeSerializer());
+      addSerializer(Instant.class, new DateTimeSerializer());
     }
   }
 
-  public static class DateTimeSerializer extends StdSerializer<DateTime> {
+  public static class DateTimeSerializer extends StdSerializer<Instant> {
 
-    private static final long serialVersionUID = 1L;
-
-    protected DateTimeSerializer() {
-      super(DateTime.class);
+    public DateTimeSerializer() {
+      super(Instant.class);
     }
 
     @Override
-    public void serialize(DateTime value, JsonGenerator gen, SerializerProvider provider)
-        throws IOException {
+    public void serialize(Instant value, JsonGenerator gen, SerializationContext provider) {
       if (value == null) {
         gen.writeNull();
       } else {
-        gen.writeString(ISODateTimeFormat.dateTime().withZoneUTC().print(value));
+        gen.writeString(ISO_DATE_TIME_MILLIS_UTC.format(value));
       }
     }
   }

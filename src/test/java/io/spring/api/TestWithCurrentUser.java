@@ -7,15 +7,15 @@ import io.spring.application.data.UserData;
 import io.spring.core.service.JwtService;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
-import io.spring.infrastructure.mybatis.readservice.UserReadService;
+import io.spring.infrastructure.repository.readservice.UserReadService;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 abstract class TestWithCurrentUser {
-  @MockBean protected UserRepository userRepository;
+  @MockitoBean protected UserRepository userRepository;
 
-  @MockBean protected UserReadService userReadService;
+  @MockitoBean protected UserReadService userReadService;
 
   protected User user;
   protected UserData userData;
@@ -24,7 +24,7 @@ abstract class TestWithCurrentUser {
   protected String username;
   protected String defaultAvatar;
 
-  @MockBean protected JwtService jwtService;
+  @MockitoBean protected JwtService jwtService;
 
   protected void userFixture() {
     email = "john@jacob.com";

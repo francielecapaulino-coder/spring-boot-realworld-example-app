@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -68,12 +68,6 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
     } else {
       return defaultHandler.handleException(handlerParameters);
     }
-  }
-
-  @Override
-  public DataFetcherExceptionHandlerResult onException(
-      DataFetcherExceptionHandlerParameters handlerParameters) {
-    return handleException(handlerParameters).join();
   }
 
   public static Error getErrorsAsData(ConstraintViolationException cve) {
