@@ -148,7 +148,7 @@ Modernização completa do runtime com zero regressão e base preparada para os 
 
 ## EPIC-05 — Migração MyBatis → Spring Data JPA + Hibernate {#epic-05}
 
-### Status: ✅ Entregue (branch `refactor/us-05.01-jpa-setup`, issue #81, 2026-06-23)
+### Status: ✅ Concluído e mergeado em `master` (issue #81 fechada, 2026-06-24)
 
 ### Histórias entregues
 
@@ -169,19 +169,31 @@ Modernização completa do runtime com zero regressão e base preparada para os 
 
 - **ADR-002** — Queries JPA: derivação → JPQL → Specifications → SQL nativo. SQL nativo usado **apenas** nos read services que exigem agregação de tags (`ArticleData`) e cursor pagination com `Timestamp`.
 
+### PRs mergeados em `master`
+
+| PR | Título | Mergeado |
+|---|---|---|
+| [#83](https://github.com/francielecapaulino-coder/spring-boot-realworld-example-app/pull/83) | `refactor(epic-05): migrate MyBatis to Spring Data JPA (US-05.01–05.06)` | 2026-06-24 |
+| [#85](https://github.com/francielecapaulino-coder/spring-boot-realworld-example-app/pull/85) | `test(api): integration tests for current REST contract + security forward dispatcher fix` | 2026-06-24 |
+| [#91](https://github.com/francielecapaulino-coder/spring-boot-realworld-example-app/pull/91) | `fix(article): tag reuse on save + UNIQUE(name) on tags (#90)` — fix de regressão da migração JPA | 2026-06-24 |
+
 ### Validação
 
 - ✅ `./gradlew compileJava` 0 erros
 - ✅ `./gradlew compileTestJava` 0 erros
-- ✅ Testes unitários puros verdes
-- 🟡 `./gradlew test` (Testcontainers) e `pitest` delegados ao CI — Docker indisponível localmente (mesmo padrão US-04.09)
+- ✅ `./gradlew test --no-daemon` — **115/115 PASSED** (JDK 25 / Spring Boot 4.0.3 / Hibernate 7.2)
+- ✅ Zero ocorrências de `mybatis`, `@Mapper`, `SqlSession`, `@MybatisTest` em `src/main` e `src/test` (verificado por `grep` em 2026-06-24)
+- ✅ Zero arquivos `*Mapper.xml`, zero classes `MyBatis*` no codebase
+- ✅ Zero `mybatis` em `build.gradle`
+- ✅ Cobertura de integration tests REST do contrato atual (PR #85): 32 testes
+- 🟡 Pitest ≥ 95% delegado para INI-07 (não bloqueia EPIC-05)
 
 ---
 
 ## Próximos passos
 
-1. **Aguardar merge dos PRs #79 e #80 (EPIC-04)**
-2. **Validar EPIC-05 no CI** (testes Testcontainers + Pitest ≥ 95%)
-3. **Seguir para EPIC-06** (introdução de records — `J5`, depende de EPIC-05 entregue)
+1. **Fechar issue #81** com comentário consolidando entrega.
+2. **Seguir para EPIC-06** (introdução de records — `J5`, depende de EPIC-05 entregue).
+3. **Considerar INI-12 / EPIC-12 (soft delete)** — base de soft delete para *articles* já foi parcialmente entregue na issue #88 (PR #89); ampliar para *comments* e *favorites* quando priorizar.
 
 ---
