@@ -2,6 +2,7 @@ package io.spring.api.security;
 
 import static java.util.Arrays.asList;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,7 +62,15 @@ public class WebSecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                auth
+                    // Allow internal FORWARD/ERROR dispatches (e.g. forward to /error
+                    // when a controller throws @ResponseStatus-annotated exceptions
+                    // like ResourceNotFoundException). Without this, the internal
+                    // error forward is re-evaluated by security on an anonymous
+                    // context and returns 401 instead of the intended 4xx status.
+                    .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR)
+                    .permitAll()
+                    .requestMatchers(HttpMethod.OPTIONS, "/**")
                     .permitAll()
                     .requestMatchers("/graphiql")
                     .permitAll()
