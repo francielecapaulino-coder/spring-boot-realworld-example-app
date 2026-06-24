@@ -76,6 +76,14 @@ public class WebSecurityConfig {
                     .permitAll()
                     .requestMatchers("/graphql")
                     .permitAll()
+                    // springdoc-openapi: OpenAPI JSON and Swagger UI must be reachable
+                    // without authentication so the API contract is publicly discoverable.
+                    .requestMatchers(
+                        "/v3/api-docs",
+                        "/v3/api-docs/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**")
+                    .permitAll()
                     .requestMatchers(
                         HttpMethod.GET,
                         "/actuator/health",
