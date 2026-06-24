@@ -2,6 +2,13 @@ package io.spring.api.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -147,16 +154,15 @@ class ArticleApiIntegrationTest extends ApiIntegrationTestBase {
 
   @Test
   void soft_deleted_article_is_excluded_from_list() {
-    // Create two articles with distinct slugs AND distinct tags, then soft-delete
-    // the first one. NOTE: tags are intentionally distinct ("sd-first"/"sd-second")
-    // because a pre-existing interaction between @EntityGraph(attributePaths="tags")
-    // on findBySlug and shared tags in Hibernate 7.2 can return duplicate rows.
-    // This is unrelated to soft delete and is tracked separately.
+    // Two articles share the same tag "sd". The previous @EntityGraph-based
+    // finder would have returned duplicate rows for findBySlug here; the JPQL
+    // fetch-join finder introduced in #90 deduplicates the result so DELETE
+    // succeeds with 204.
     String firstSlug =
         extractJsonString(
             postWithToken(
                     "/articles",
-                    "{\"article\":{\"title\":\"First To Delete\",\"description\":\"d\",\"body\":\"b\",\"tagList\":[\"sd-first\"]}}",
+                    "{\"article\":{\"title\":\"First To Delete\",\"description\":\"d\",\"body\":\"b\",\"tagList\":[\"sd\"]}}",
                     authorToken)
                 .getBody(),
             "slug");
@@ -164,7 +170,7 @@ class ArticleApiIntegrationTest extends ApiIntegrationTestBase {
         extractJsonString(
             postWithToken(
                     "/articles",
-                    "{\"article\":{\"title\":\"Second Survives\",\"description\":\"d\",\"body\":\"b\",\"tagList\":[\"sd-second\"]}}",
+                    "{\"article\":{\"title\":\"Second Survives\",\"description\":\"d\",\"body\":\"b\",\"tagList\":[\"sd\"]}}",
                     authorToken)
                 .getBody(),
             "slug");
@@ -204,5 +210,112 @@ class ArticleApiIntegrationTest extends ApiIntegrationTestBase {
     // results in ResourceNotFoundException -> 404.
     ResponseEntity<String> secondDelete = deleteWithToken("/articles/" + slug, authorToken);
     assertThat(secondDelete.getStatusCode().value()).isEqualTo(404);
+  }
+
+  // ---- Regression: tags reused across articles (#90) -------------------------
+
+  @Test
+  void delete_article_succeeds_when_other_articles_share_the_same_tag() {
+    // Reproduces the bug fixed in #90. Root cause was in JpaArticleRepository.save():
+    // when an article was created with a tag whose name already existed, the
+    // code did not reuse the persisted Tag instance. The JPA cascade then
+    // inserted a duplicate row in `tags` with the same name, so a later
+    // findByName() saw 2 rows and Spring Data raised NonUniqueResultException
+    // (surfacing as HTTP 500 on the next POST/DELETE/PUT of an article using
+    // that tag). The fix reuses the existing Tag and a Flyway migration adds
+    // UNIQUE(name) on the tags table as defense in depth.
+    String sharedTag = "regression-shared";
+    String firstSlug =
+        extractJsonString(
+            postWithToken(
+                    "/articles",
+                    "{\"article\":{\"title\":\"Sharer A\",\"description\":\"d\",\"body\":\"b\",\"tagList\":[\""
+                        + sharedTag
+                        + "\"]}}",
+                    authorToken)
+                .getBody(),
+            "slug");
+    String secondSlug =
+        extractJsonString(
+            postWithToken(
+                    "/articles",
+                    "{\"article\":{\"title\":\"Sharer B\",\"description\":\"d\",\"body\":\"b\",\"tagList\":[\""
+                        + sharedTag
+                        + "\"]}}",
+                    authorToken)
+                .getBody(),
+            "slug");
+
+    ResponseEntity<String> deleteResponse =
+        deleteWithToken("/articles/" + firstSlug, authorToken);
+    assertThat(deleteResponse.getStatusCode().value()).isEqualTo(204);
+
+    // First article is gone, second article is still reachable by slug.
+    assertThat(get("/articles/" + firstSlug).getStatusCode().value()).isEqualTo(404);
+    ResponseEntity<String> getSecond = get("/articles/" + secondSlug);
+    assertThat(getSecond.getStatusCode().value()).isEqualTo(200);
+    assertThat(getSecond.getBody()).contains("\"slug\":\"" + secondSlug + "\"");
+  }
+
+  @Test
+  void concurrent_article_creates_with_same_new_tag_do_not_duplicate_tag()
+      throws Exception {
+    // Two parallel POST /articles using the same brand-new tag name must both
+    // succeed (or be retried transparently by reconcileTag) and the tags table
+    // must contain exactly ONE row for that name. The UNIQUE(name) constraint
+    // added in V3 is the database-level safety net; the application's
+    // reconcileTag handles the race by retrying findByName when the constraint
+    // fires on the losing writer.
+    String concurrentTag = "concurrent-race-tag";
+    int requests = 4;
+    ExecutorService executor = Executors.newFixedThreadPool(requests);
+    CountDownLatch start = new CountDownLatch(1);
+    List<Future<Integer>> results = new ArrayList<>();
+    try {
+      for (int i = 0; i < requests; i++) {
+        final int index = i;
+        results.add(
+            executor.submit(
+                () -> {
+                  start.await();
+                  ResponseEntity<String> response =
+                      postWithToken(
+                          "/articles",
+                          "{\"article\":{\"title\":\"Concurrent "
+                              + index
+                              + "\",\"description\":\"d\",\"body\":\"b\",\"tagList\":[\""
+                              + concurrentTag
+                              + "\"]}}",
+                          authorToken);
+                  return response.getStatusCode().value();
+                }));
+      }
+      start.countDown();
+      for (Future<Integer> r : results) {
+        // All requests must complete with a 2xx (no HTTP 500 leak from a
+        // DataIntegrityViolationException reaching the controller).
+        assertThat(r.get(20, TimeUnit.SECONDS)).isBetween(200, 299);
+      }
+    } finally {
+      executor.shutdownNow();
+      executor.awaitTermination(5, TimeUnit.SECONDS);
+    }
+
+    // GET /tags must list the concurrent tag exactly once. The endpoint returns
+    // a deduplicated array of tag names; we assert presence and that no later
+    // POST/DELETE breaks with NonUniqueResultException by performing one more
+    // article creation that reuses the tag (would have failed without the fix).
+    ResponseEntity<String> tagList = get("/tags");
+    assertThat(tagList.getStatusCode().value()).isEqualTo(200);
+    assertThat(tagList.getBody()).contains(concurrentTag);
+
+    ResponseEntity<String> followUp =
+        postWithToken(
+            "/articles",
+            "{\"article\":{\"title\":\"Follow Up\",\"description\":\"d\",\"body\":\"b\",\"tagList\":[\""
+                + concurrentTag
+                + "\"]}}",
+            authorToken);
+    assertThat(followUp.getStatusCode().value()).isEqualTo(200);
   }
 }
