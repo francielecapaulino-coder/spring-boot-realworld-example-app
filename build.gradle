@@ -45,6 +45,10 @@ dependencies {
                 'io.jsonwebtoken:jjwt-jackson:0.12.6'
     runtimeOnly 'org.postgresql:postgresql'
 
+    // springdoc-openapi 3.x line targets Spring Boot 4 / Spring Framework 7
+    // Provides /v3/api-docs (OpenAPI JSON) and /swagger-ui/index.html (Swagger UI)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3'
+
     compileOnly 'org.projectlombok:lombok:1.18.46'
     annotationProcessor 'org.projectlombok:lombok:1.18.46'
     testCompileOnly 'org.projectlombok:lombok:1.18.46'
