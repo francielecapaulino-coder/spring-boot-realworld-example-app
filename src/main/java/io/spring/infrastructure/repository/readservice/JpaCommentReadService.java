@@ -10,6 +10,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
@@ -77,8 +79,15 @@ public class JpaCommentReadService implements CommentReadService {
     return rows.stream().map(this::toCommentData).collect(Collectors.toList());
   }
 
+  private static Instant toInstant(Object value) {
+    if (value instanceof LocalDateTime localDateTime) {
+      return localDateTime.toInstant(ZoneOffset.UTC);
+    }
+    return ((Timestamp) value).toInstant();
+  }
+
   private CommentData toCommentData(Object[] row) {
-    Instant createdAt = ((Timestamp) row[2]).toInstant();
+    Instant createdAt = toInstant(row[2]);
     ProfileData profileData =
         new ProfileData(
             (String) row[4], (String) row[5], (String) row[6], (String) row[7], false);

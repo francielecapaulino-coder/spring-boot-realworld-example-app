@@ -67,6 +67,15 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+// DGS 12.x requires json-path 3.0.0 (Jackson3JsonProvider); Spring Boot 4 BOM pins 2.x.
+// Override the BOM-managed version via the Spring dependency-management plugin so that
+// the strict constraint declared by graphql-dgs-platform:12.0.1 is honoured.
+dependencyManagement {
+    dependencies {
+        dependency 'com.jayway.jsonpath:json-path:3.0.0'
+    }
+}
+
 // Force forked compilation so Lombok can access javac internals on Java 25+
 tasks.withType(JavaCompile).configureEach {
     options.fork = true

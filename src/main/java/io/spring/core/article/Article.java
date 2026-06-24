@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -56,7 +57,7 @@ public class Article {
       name = "article_tags",
       joinColumns = @JoinColumn(name = "article_id"),
       inverseJoinColumns = @JoinColumn(name = "tag_id"))
-  private HashSet<Tag> tags = new HashSet<>();
+  private Set<Tag> tags = new HashSet<>();
 
   public Article(
       String title, String description, String body, List<String> tagList, String userId) {

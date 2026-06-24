@@ -11,6 +11,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -261,6 +263,13 @@ public class JpaArticleReadService implements ArticleReadService {
     return Timestamp.from(Instant.parse(cursor.toString()));
   }
 
+  private static Instant toInstant(Object value) {
+    if (value instanceof LocalDateTime localDateTime) {
+      return localDateTime.toInstant(ZoneOffset.UTC);
+    }
+    return ((Timestamp) value).toInstant();
+  }
+
   /**
    * Collapses the joined rows (one per article-tag pair) into distinct ArticleData, preserving
    * the row order and accumulating the tag list. Mirrors the legacy mapper collection shape.
@@ -286,8 +295,8 @@ public class JpaArticleReadService implements ArticleReadService {
                 data.setTitle((String) row[2]);
                 data.setDescription((String) row[3]);
                 data.setBody((String) row[4]);
-                data.setCreatedAt(((Timestamp) row[5]).toInstant());
-                data.setUpdatedAt(((Timestamp) row[6]).toInstant());
+                data.setCreatedAt(toInstant(row[5]));
+                data.setUpdatedAt(toInstant(row[6]));
                 data.setTagList(new ArrayList<>());
                 data.setProfileData(profileData);
                 return data;
