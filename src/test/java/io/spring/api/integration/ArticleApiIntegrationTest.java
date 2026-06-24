@@ -142,4 +142,67 @@ class ArticleApiIntegrationTest extends ApiIntegrationTestBase {
     assertThat(response.getStatusCode().value()).isEqualTo(200);
     assertThat(response.getBody()).contains("articlesCount");
   }
+
+  // ---- Soft delete (US-88) ---------------------------------------------------
+
+  @Test
+  void soft_deleted_article_is_excluded_from_list() {
+    // Create two articles with distinct slugs AND distinct tags, then soft-delete
+    // the first one. NOTE: tags are intentionally distinct ("sd-first"/"sd-second")
+    // because a pre-existing interaction between @EntityGraph(attributePaths="tags")
+    // on findBySlug and shared tags in Hibernate 7.2 can return duplicate rows.
+    // This is unrelated to soft delete and is tracked separately.
+    String firstSlug =
+        extractJsonString(
+            postWithToken(
+                    "/articles",
+                    "{\"article\":{\"title\":\"First To Delete\",\"description\":\"d\",\"body\":\"b\",\"tagList\":[\"sd-first\"]}}",
+                    authorToken)
+                .getBody(),
+            "slug");
+    String secondSlug =
+        extractJsonString(
+            postWithToken(
+                    "/articles",
+                    "{\"article\":{\"title\":\"Second Survives\",\"description\":\"d\",\"body\":\"b\",\"tagList\":[\"sd-second\"]}}",
+                    authorToken)
+                .getBody(),
+            "slug");
+
+    assertThat(deleteWithToken("/articles/" + firstSlug, authorToken).getStatusCode().value())
+        .isEqualTo(204);
+
+    ResponseEntity<String> list = get("/articles");
+    assertThat(list.getStatusCode().value()).isEqualTo(200);
+    assertThat(list.getBody()).doesNotContain("\"slug\":\"" + firstSlug + "\"");
+    assertThat(list.getBody()).contains("\"slug\":\"" + secondSlug + "\"");
+  }
+
+  @Test
+  void soft_delete_by_non_author_is_forbidden_and_article_remains_visible() {
+    String slug = createArticleAndGetSlug(authorToken);
+    String otherToken = registerAndGetToken("sd-intruder@example.com", "sdintruder", "pass1234");
+
+    ResponseEntity<String> deleteResponse = deleteWithToken("/articles/" + slug, otherToken);
+    assertThat(deleteResponse.getStatusCode().value()).isEqualTo(403);
+
+    // The article must still be reachable since the unauthorized delete was rejected.
+    ResponseEntity<String> getResponse = get("/articles/" + slug);
+    assertThat(getResponse.getStatusCode().value()).isEqualTo(200);
+    assertThat(getResponse.getBody()).contains("\"slug\":\"" + slug + "\"");
+  }
+
+  @Test
+  void second_delete_of_soft_deleted_article_returns_404() {
+    String slug = createArticleAndGetSlug(authorToken);
+
+    assertThat(deleteWithToken("/articles/" + slug, authorToken).getStatusCode().value())
+        .isEqualTo(204);
+
+    // After soft delete the article is no longer visible to reads OR to a
+    // subsequent delete (findBySlug filters it out), so the second call
+    // results in ResourceNotFoundException -> 404.
+    ResponseEntity<String> secondDelete = deleteWithToken("/articles/" + slug, authorToken);
+    assertThat(secondDelete.getStatusCode().value()).isEqualTo(404);
+  }
 }
