@@ -72,7 +72,10 @@ public class ArticleApi {
               if (!AuthorizationService.canWriteArticle(user, article)) {
                 throw new NoAuthorizationException();
               }
-              articleRepository.remove(article);
+              // Soft delete (US-88): keep the row, flip is_deleted=true.
+              // Contract preserved: still returns 204 No Content.
+              article.delete();
+              articleRepository.save(article);
               return ResponseEntity.noContent().build();
             })
         .orElseThrow(ResourceNotFoundException::new);

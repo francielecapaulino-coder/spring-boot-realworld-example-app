@@ -181,7 +181,10 @@ public class ArticleApiTest extends TestWithCurrentUser {
         .then()
         .statusCode(204);
 
-    verify(articleRepository).remove(eq(article));
+    // US-88: DELETE /articles/{slug} now performs a soft delete - the article
+    // is flagged as deleted and persisted via save(), not removed from the DB.
+    verify(articleRepository).save(eq(article));
+    org.junit.jupiter.api.Assertions.assertTrue(article.isDeleted());
   }
 
   @Test
