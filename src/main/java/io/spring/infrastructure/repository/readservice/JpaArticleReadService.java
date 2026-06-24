@@ -49,7 +49,7 @@ public class JpaArticleReadService implements ArticleReadService {
   public ArticleData findById(String id) {
     List<Object[]> rows =
         entityManager
-            .createNativeQuery(SELECT_ARTICLE_DATA + " where A.id = :id")
+            .createNativeQuery(SELECT_ARTICLE_DATA + " where A.id = :id and A.is_deleted = false")
             .setParameter("id", id)
             .getResultList();
     List<ArticleData> articles = mapArticleRows(rows);
@@ -61,7 +61,8 @@ public class JpaArticleReadService implements ArticleReadService {
   public ArticleData findBySlug(String slug) {
     List<Object[]> rows =
         entityManager
-            .createNativeQuery(SELECT_ARTICLE_DATA + " where A.slug = :slug")
+            .createNativeQuery(
+                SELECT_ARTICLE_DATA + " where A.slug = :slug and A.is_deleted = false")
             .setParameter("slug", slug)
             .getResultList();
     List<ArticleData> articles = mapArticleRows(rows);
@@ -114,7 +115,8 @@ public class JpaArticleReadService implements ArticleReadService {
     List<Object[]> rows =
         entityManager
             .createNativeQuery(
-                SELECT_ARTICLE_DATA + " where A.id in :ids order by A.created_at desc")
+                SELECT_ARTICLE_DATA
+                    + " where A.id in :ids and A.is_deleted = false order by A.created_at desc")
             .setParameter("ids", articleIds)
             .getResultList();
     return mapArticleRows(rows);
@@ -129,7 +131,9 @@ public class JpaArticleReadService implements ArticleReadService {
     List<Object[]> rows =
         entityManager
             .createNativeQuery(
-                SELECT_ARTICLE_DATA + " where A.user_id in :authors limit :limit offset :offset")
+                SELECT_ARTICLE_DATA
+                    + " where A.user_id in :authors and A.is_deleted = false"
+                    + " limit :limit offset :offset")
             .setParameter("authors", authors)
             .setParameter("limit", page.getLimit())
             .setParameter("offset", page.getOffset())
@@ -145,7 +149,7 @@ public class JpaArticleReadService implements ArticleReadService {
       return new ArrayList<>();
     }
     StringBuilder sql = new StringBuilder(SELECT_ARTICLE_DATA);
-    sql.append(" where A.user_id in :authors");
+    sql.append(" where A.user_id in :authors and A.is_deleted = false");
     boolean hasCursor = page.getCursor() != null;
     if (hasCursor && page.getDirection() == Direction.NEXT) {
       sql.append(" and A.created_at < :cursor");
@@ -176,7 +180,9 @@ public class JpaArticleReadService implements ArticleReadService {
     Number count =
         (Number)
             entityManager
-                .createNativeQuery("select count(1) from articles A where A.user_id in :authors")
+                .createNativeQuery(
+                    "select count(1) from articles A"
+                        + " where A.user_id in :authors and A.is_deleted = false")
                 .setParameter("authors", authors)
                 .getSingleResult();
     return count.intValue();
@@ -187,7 +193,9 @@ public class JpaArticleReadService implements ArticleReadService {
   public List<String> findArticlesWithCursor(
       String tag, String author, String favoritedBy, CursorPageParameter<?> page) {
     StringBuilder sql = new StringBuilder(SELECT_ARTICLE_IDS);
+    // Soft delete (US-88): non-deleted is always part of the predicate.
     List<String> conditions = new ArrayList<>();
+    conditions.add("A.is_deleted = false");
     if (tag != null) {
       conditions.add("T.name = :tag");
     }
@@ -203,9 +211,7 @@ public class JpaArticleReadService implements ArticleReadService {
     } else if (hasCursor && page.getDirection() == Direction.PREV) {
       conditions.add("A.created_at > :cursor");
     }
-    if (!conditions.isEmpty()) {
-      sql.append(" where ").append(String.join(" AND ", conditions));
-    }
+    sql.append(" where ").append(String.join(" AND ", conditions));
     if (page.getDirection() == Direction.NEXT) {
       sql.append(" order by A.created_at desc");
     } else {
@@ -229,7 +235,9 @@ public class JpaArticleReadService implements ArticleReadService {
   }
 
   private void appendFilters(StringBuilder sql, String tag, String author, String favoritedBy) {
+    // Soft delete (US-88): non-deleted is always part of the predicate.
     List<String> conditions = new ArrayList<>();
+    conditions.add("A.is_deleted = false");
     if (tag != null) {
       conditions.add("T.name = :tag");
     }
@@ -239,9 +247,7 @@ public class JpaArticleReadService implements ArticleReadService {
     if (favoritedBy != null) {
       conditions.add("AFU.username = :favoritedBy");
     }
-    if (!conditions.isEmpty()) {
-      sql.append(" where ").append(String.join(" AND ", conditions));
-    }
+    sql.append(" where ").append(String.join(" AND ", conditions));
   }
 
   private void bindFilters(Query query, String tag, String author, String favoritedBy) {

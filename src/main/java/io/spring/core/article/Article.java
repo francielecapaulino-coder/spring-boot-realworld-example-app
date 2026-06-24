@@ -20,12 +20,17 @@ import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "articles")
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
+// Soft delete (US-88): every JPA query filters out rows where is_deleted = true.
+// Native queries in JpaArticleReadService apply the same predicate explicitly,
+// since @SQLRestriction is only honoured by JPA/HQL, not by native SQL.
+@SQLRestriction("is_deleted = false")
 public class Article {
   @Column(name = "user_id")
   private String userId;
@@ -51,6 +56,9 @@ public class Article {
 
   @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
+
+  @Column(name = "is_deleted", nullable = false)
+  private boolean deleted = false;
 
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
   @JoinTable(
@@ -103,6 +111,16 @@ public class Article {
 
   public List<String> getTagList() {
     return tags.stream().map(Tag::getName).collect(toList());
+  }
+
+  /**
+   * Marks the article as soft-deleted. The row is retained in the database;
+   * subsequent reads filter it out via {@code @SQLRestriction} (JPA) and an
+   * explicit {@code is_deleted = false} predicate on native queries.
+   */
+  public void delete() {
+    this.deleted = true;
+    this.updatedAt = Instant.now();
   }
 
   public static String toSlug(String title) {
