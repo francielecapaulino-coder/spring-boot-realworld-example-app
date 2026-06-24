@@ -70,6 +70,17 @@ The repository contains a lot of test cases to cover both api test and repositor
 
     ./gradlew test
 
+# API documentation (OpenAPI / Swagger)
+
+The REST API contract is documented with OpenAPI 3 via [springdoc-openapi](https://springdoc.org/).
+Start the application (`./gradlew bootRun`) and open:
+
+- **OpenAPI JSON:** http://localhost:8080/v3/api-docs
+- **Swagger UI:**   http://localhost:8080/swagger-ui.html
+
+Both endpoints are publicly reachable (no authentication required) so that the contract
+is discoverable. Protected REST endpoints expect the header `Authorization: Token <jwt>`.
+
 # Code format
 
 Use spotless for code format.
