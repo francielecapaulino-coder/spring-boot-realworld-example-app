@@ -14,7 +14,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "article_favorites")
 @NoArgsConstructor
 @Getter
-@EqualsAndHashCode(of = {"articleId", "userId"})
+// Equality is delegated to the composite key. The fields "articleId" / "userId"
+// referenced previously do not exist on this class - they live inside the
+// embedded id - which produced two Lombok "This field does not exist" warnings.
+// The inner ArticleFavoriteId already declares @EqualsAndHashCode over its own
+// fields, so comparing by id preserves the (articleId, userId) semantics.
+@EqualsAndHashCode(of = {"id"})
 public class ArticleFavorite {
 
   @EmbeddedId private ArticleFavoriteId id;

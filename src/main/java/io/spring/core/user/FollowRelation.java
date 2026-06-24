@@ -15,7 +15,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "follows")
 @NoArgsConstructor
 @Getter
-@EqualsAndHashCode(of = {"userId", "targetId"})
+// Equality is delegated to the composite key. The fields "userId" / "targetId"
+// referenced previously do not exist on this class - they live inside the
+// embedded id - which produced two Lombok "This field does not exist" warnings.
+// The inner FollowRelationId already declares @EqualsAndHashCode over its own
+// fields (via @Data), so comparing by id preserves the (userId, targetId)
+// semantics.
+@EqualsAndHashCode(of = {"id"})
 public class FollowRelation {
 
   @EmbeddedId private FollowRelationId id;
