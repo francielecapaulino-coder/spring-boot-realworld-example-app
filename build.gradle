@@ -166,10 +166,13 @@ pitest {
     outputFormats = ["HTML", "XML"]
     timestampedReports = false
     threads = 4
-    // Baseline locked from the first run (2026-06-25): 55 % mutation,
-    // 57 % line coverage. Thresholds are intentionally pinned at the exact
-    // measured values (no rounding down) so any regression fails the build.
-    // US-07.02..07.05 will raise these progressively up to 95 (KR3.1).
-    mutationThreshold = 55
-    coverageThreshold = 57
+    // Thresholds are pinned at the exact measured values (no rounding down)
+    // so any regression below current baseline fails the build immediately.
+    //   - US-07.01 (2026-06-25): mutation 55 %, line 57 %, test strength 86 %
+    //   - US-07.02 (2026-06-25): mutation 56 %, line 58 %, test strength 87 %
+    //     core package reached 100 % mutation score (21/21 killed)
+    // US-07.03..07.04 will raise these progressively; US-07.05 finalises
+    // at 95 (KR3.1) with STRONGER mutators + CI integration.
+    mutationThreshold = 56
+    coverageThreshold = 58
 }
