@@ -41,7 +41,7 @@ public class CommentDatafetcher {
         .localContext(
             new HashMap<String, Object>() {
               {
-                put(comment.getId(), comment);
+                put(comment.id(), comment);
               }
             })
         .build();
@@ -68,13 +68,13 @@ public class CommentDatafetcher {
     if (first != null) {
       comments =
           commentQueryService.findByArticleIdWithCursor(
-              articleData.getId(),
+              articleData.id(),
               current,
               new CursorPageParameter<>(DateTimeCursor.parse(after), first, Direction.NEXT));
     } else {
       comments =
           commentQueryService.findByArticleIdWithCursor(
-              articleData.getId(),
+              articleData.id(),
               current,
               new CursorPageParameter<>(DateTimeCursor.parse(before), last, Direction.PREV));
     }
@@ -95,7 +95,7 @@ public class CommentDatafetcher {
     return DataFetcherResult.<CommentsConnection>newResult()
         .data(result)
         .localContext(
-            comments.getData().stream().collect(Collectors.toMap(CommentData::getId, c -> c)))
+            comments.getData().stream().collect(Collectors.toMap(CommentData::id, c -> c)))
         .build();
   }
 
@@ -113,10 +113,10 @@ public class CommentDatafetcher {
 
   private Comment buildCommentResult(CommentData comment) {
     return Comment.newBuilder()
-        .id(comment.getId())
-        .body(comment.getBody())
-        .updatedAt(JacksonCustomizations.ISO_DATE_TIME_MILLIS_UTC.format(comment.getCreatedAt()))
-        .createdAt(JacksonCustomizations.ISO_DATE_TIME_MILLIS_UTC.format(comment.getCreatedAt()))
+        .id(comment.id())
+        .body(comment.body())
+        .updatedAt(JacksonCustomizations.ISO_DATE_TIME_MILLIS_UTC.format(comment.createdAt()))
+        .createdAt(JacksonCustomizations.ISO_DATE_TIME_MILLIS_UTC.format(comment.createdAt()))
         .build();
   }
 }

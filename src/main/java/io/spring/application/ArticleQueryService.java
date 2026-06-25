@@ -33,7 +33,7 @@ public class ArticleQueryService {
       return Optional.empty();
     } else {
       if (user != null) {
-        fillExtraInfo(id, user, articleData);
+        articleData = fillExtraInfo(id, user, articleData);
       }
       return Optional.of(articleData);
     }
@@ -45,7 +45,7 @@ public class ArticleQueryService {
       return Optional.empty();
     } else {
       if (user != null) {
-        fillExtraInfo(articleData.getId(), user, articleData);
+        articleData = fillExtraInfo(articleData.id(), user, articleData);
       }
       return Optional.of(articleData);
     }
@@ -135,50 +135,57 @@ public class ArticleQueryService {
         userRelationshipQueryService.followingAuthors(
             currentUser.getId(),
             articles.stream()
-                .map(articleData1 -> articleData1.getProfileData().getId())
+                .map(articleData1 -> articleData1.profileData().id())
                 .collect(toList()));
-    articles.forEach(
-        articleData -> {
-          if (followingAuthors.contains(articleData.getProfileData().getId())) {
-            articleData.getProfileData().setFollowing(true);
-          }
-        });
+    articles.replaceAll(
+        articleData ->
+            followingAuthors.contains(articleData.profileData().id())
+                ? articleData.withProfileData(articleData.profileData().withFollowing(true))
+                : articleData);
   }
 
   private void setFavoriteCount(List<ArticleData> articles) {
     List<ArticleFavoriteCount> favoritesCounts =
         articleFavoritesReadService.articlesFavoriteCount(
-            articles.stream().map(ArticleData::getId).collect(toList()));
+            articles.stream().map(ArticleData::id).collect(toList()));
     Map<String, Integer> countMap = new HashMap<>();
     favoritesCounts.forEach(
         item -> {
           countMap.put(item.id(), item.count());
         });
-    articles.forEach(
-        articleData -> articleData.setFavoritesCount(countMap.get(articleData.getId())));
+    articles.replaceAll(
+        articleData ->
+            articleData.withFavoritesCount(countMap.getOrDefault(articleData.id(), 0)));
   }
 
   private void setIsFavorite(List<ArticleData> articles, User currentUser) {
     Set<String> favoritedArticles =
         articleFavoritesReadService.userFavorites(
-            articles.stream().map(articleData -> articleData.getId()).collect(toList()),
-            currentUser);
+            articles.stream().map(ArticleData::id).collect(toList()), currentUser);
 
-    articles.forEach(
-        articleData -> {
-          if (favoritedArticles.contains(articleData.getId())) {
-            articleData.setFavorited(true);
-          }
-        });
+    articles.replaceAll(
+        articleData ->
+            favoritedArticles.contains(articleData.id())
+                ? articleData.withFavorited(true)
+                : articleData);
   }
 
-  private void fillExtraInfo(String id, User user, ArticleData articleData) {
-    articleData.setFavorited(articleFavoritesReadService.isUserFavorite(user.getId(), id));
-    articleData.setFavoritesCount(articleFavoritesReadService.articleFavoriteCount(id));
-    articleData
-        .getProfileData()
-        .setFollowing(
-            userRelationshipQueryService.isUserFollowing(
-                user.getId(), articleData.getProfileData().getId()));
+  /**
+   * Enriches a single article with the current user's favorite/following state.
+   *
+   * <p>Returns a new {@link ArticleData} instance because {@code ArticleData} is now an
+   * immutable record (US-06.01). Callers must reassign their reference to observe the
+   * enriched fields.
+   */
+  private ArticleData fillExtraInfo(String id, User user, ArticleData articleData) {
+    boolean favorited = articleFavoritesReadService.isUserFavorite(user.getId(), id);
+    int favoritesCount = articleFavoritesReadService.articleFavoriteCount(id);
+    boolean following =
+        userRelationshipQueryService.isUserFollowing(
+            user.getId(), articleData.profileData().id());
+    return articleData
+        .withFavorited(favorited)
+        .withFavoritesCount(favoritesCount)
+        .withProfileData(articleData.profileData().withFollowing(following));
   }
 }

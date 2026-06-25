@@ -277,41 +277,46 @@ public class JpaArticleReadService implements ArticleReadService {
   }
 
   /**
-   * Collapses the joined rows (one per article-tag pair) into distinct ArticleData, preserving
-   * the row order and accumulating the tag list. Mirrors the legacy mapper collection shape.
+   * Collapses the joined rows (one per article-tag pair) into distinct {@link ArticleData}
+   * records, preserving row order and accumulating the tag list per article.
+   *
+   * <p>Performed in two passes because {@code ArticleData} is now an immutable record
+   * (US-06.01): all tag names must be collected before the canonical constructor is called,
+   * since the list cannot be mutated after construction.
    */
   private List<ArticleData> mapArticleRows(List<Object[]> rows) {
-    Map<String, ArticleData> byId = new LinkedHashMap<>();
+    Map<String, Object[]> firstRowByArticleId = new LinkedHashMap<>();
+    Map<String, List<String>> tagsByArticleId = new LinkedHashMap<>();
     for (Object[] row : rows) {
       String articleId = (String) row[0];
-      ArticleData articleData =
-          byId.computeIfAbsent(
-              articleId,
-              id -> {
-                ProfileData profileData =
-                    new ProfileData(
-                        (String) row[8],
-                        (String) row[9],
-                        (String) row[10],
-                        (String) row[11],
-                        false);
-                ArticleData data = new ArticleData();
-                data.setId(id);
-                data.setSlug((String) row[1]);
-                data.setTitle((String) row[2]);
-                data.setDescription((String) row[3]);
-                data.setBody((String) row[4]);
-                data.setCreatedAt(toInstant(row[5]));
-                data.setUpdatedAt(toInstant(row[6]));
-                data.setTagList(new ArrayList<>());
-                data.setProfileData(profileData);
-                return data;
-              });
+      firstRowByArticleId.putIfAbsent(articleId, row);
+      List<String> tags = tagsByArticleId.computeIfAbsent(articleId, k -> new ArrayList<>());
       String tagName = (String) row[7];
-      if (tagName != null && !articleData.getTagList().contains(tagName)) {
-        articleData.getTagList().add(tagName);
+      if (tagName != null && !tags.contains(tagName)) {
+        tags.add(tagName);
       }
     }
-    return new ArrayList<>(byId.values());
+    List<ArticleData> result = new ArrayList<>(firstRowByArticleId.size());
+    for (Map.Entry<String, Object[]> entry : firstRowByArticleId.entrySet()) {
+      String articleId = entry.getKey();
+      Object[] row = entry.getValue();
+      ProfileData profileData =
+          new ProfileData(
+              (String) row[8], (String) row[9], (String) row[10], (String) row[11], false);
+      result.add(
+          new ArticleData(
+              articleId,
+              (String) row[1],
+              (String) row[2],
+              (String) row[3],
+              (String) row[4],
+              false,
+              0,
+              toInstant(row[5]),
+              toInstant(row[6]),
+              tagsByArticleId.get(articleId),
+              profileData));
+    }
+    return result;
   }
 }

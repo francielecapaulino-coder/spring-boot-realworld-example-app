@@ -72,7 +72,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
         .then()
         .statusCode(200)
         .body("article.slug", equalTo(slug))
-        .body("article.body", equalTo(articleData.getBody()))
+        .body("article.body", equalTo(articleData.body()))
         .body("article.createdAt", equalTo(JacksonCustomizations.ISO_DATE_TIME_MILLIS_UTC.format(time)));
   }
 
@@ -114,7 +114,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
         .put("/articles/{slug}", originalArticle.getSlug())
         .then()
         .statusCode(200)
-        .body("article.slug", equalTo(updatedArticleData.getSlug()));
+        .body("article.slug", equalTo(updatedArticleData.slug()));
   }
 
   @Test
