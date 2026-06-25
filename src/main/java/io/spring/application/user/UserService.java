@@ -35,9 +35,9 @@ public class UserService {
   public User createUser(@Valid RegisterParam registerParam) {
     User user =
         new User(
-            registerParam.getEmail(),
-            registerParam.getUsername(),
-            passwordEncoder.encode(registerParam.getPassword()),
+            registerParam.email(),
+            registerParam.username(),
+            passwordEncoder.encode(registerParam.password()),
             "",
             defaultImage);
     userRepository.save(user);
@@ -45,8 +45,8 @@ public class UserService {
   }
 
   public void updateUser(@Valid UpdateUserCommand command) {
-    User user = command.getTargetUser();
-    UpdateUserParam updateUserParam = command.getParam();
+    User user = command.targetUser();
+    UpdateUserParam updateUserParam = command.param();
     user.update(
         updateUserParam.getEmail(),
         updateUserParam.getUsername(),
@@ -74,9 +74,9 @@ class UpdateUserValidator implements ConstraintValidator<UpdateUserConstraint, U
 
   @Override
   public boolean isValid(UpdateUserCommand value, ConstraintValidatorContext context) {
-    String inputEmail = value.getParam().getEmail();
-    String inputUsername = value.getParam().getUsername();
-    final User targetUser = value.getTargetUser();
+    String inputEmail = value.param().getEmail();
+    String inputUsername = value.param().getUsername();
+    final User targetUser = value.targetUser();
 
     boolean isEmailValid =
         userRepository.findByEmail(inputEmail).map(user -> user.equals(targetUser)).orElse(true);
