@@ -14,11 +14,11 @@ public class ErrorResourceSerializer extends ValueSerializer<ErrorResource> {
     Map<String, List<String>> json = new HashMap<>();
     gen.writeStartObject();
     gen.writeObjectPropertyStart("errors");
-    for (FieldErrorResource fieldErrorResource : value.getFieldErrors()) {
-      if (!json.containsKey(fieldErrorResource.getField())) {
-        json.put(fieldErrorResource.getField(), new ArrayList<String>());
+    for (FieldErrorResource fieldErrorResource : value.fieldErrors()) {
+      if (!json.containsKey(fieldErrorResource.field())) {
+        json.put(fieldErrorResource.field(), new ArrayList<String>());
       }
-      json.get(fieldErrorResource.getField()).add(fieldErrorResource.getMessage());
+      json.get(fieldErrorResource.field()).add(fieldErrorResource.message());
     }
     for (Map.Entry<String, List<String>> pair : json.entrySet()) {
       gen.writeArrayPropertyStart(pair.getKey());
