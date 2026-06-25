@@ -1,15 +1,12 @@
 package io.spring.api.exception;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
+/**
+ * Single field-level error entry emitted by validation handlers.
+ *
+ * <p>Pure carrier of data — eligible for {@code record} conversion under US-06.04 /
+ * KR1.5 (mandate J5). No mutable state is required by any caller.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Getter
-@AllArgsConstructor
-public class FieldErrorResource {
-  private String resource;
-  private String field;
-  private String code;
-  private String message;
-}
+public record FieldErrorResource(String resource, String field, String code, String message) {}
