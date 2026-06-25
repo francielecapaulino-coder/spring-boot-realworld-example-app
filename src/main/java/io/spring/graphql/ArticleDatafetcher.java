@@ -81,7 +81,7 @@ public class ArticleDatafetcher {
     return DataFetcherResult.<ArticlesConnection>newResult()
         .data(articlesConnection)
         .localContext(
-            articles.getData().stream().collect(Collectors.toMap(ArticleData::getSlug, a -> a)))
+            articles.getData().stream().collect(Collectors.toMap(ArticleData::slug, a -> a)))
         .build();
   }
 
@@ -131,7 +131,7 @@ public class ArticleDatafetcher {
     return DataFetcherResult.<ArticlesConnection>newResult()
         .data(articlesConnection)
         .localContext(
-            articles.getData().stream().collect(Collectors.toMap(ArticleData::getSlug, a -> a)))
+            articles.getData().stream().collect(Collectors.toMap(ArticleData::slug, a -> a)))
         .build();
   }
 
@@ -185,7 +185,7 @@ public class ArticleDatafetcher {
     return DataFetcherResult.<ArticlesConnection>newResult()
         .data(articlesConnection)
         .localContext(
-            articles.getData().stream().collect(Collectors.toMap(ArticleData::getSlug, a -> a)))
+            articles.getData().stream().collect(Collectors.toMap(ArticleData::slug, a -> a)))
         .build();
   }
 
@@ -238,7 +238,7 @@ public class ArticleDatafetcher {
     return DataFetcherResult.<ArticlesConnection>newResult()
         .data(articlesConnection)
         .localContext(
-            articles.getData().stream().collect(Collectors.toMap(ArticleData::getSlug, a -> a)))
+            articles.getData().stream().collect(Collectors.toMap(ArticleData::slug, a -> a)))
         .build();
   }
 
@@ -293,7 +293,7 @@ public class ArticleDatafetcher {
     return DataFetcherResult.<ArticlesConnection>newResult()
         .data(articlesConnection)
         .localContext(
-            articles.getData().stream().collect(Collectors.toMap(ArticleData::getSlug, a -> a)))
+            articles.getData().stream().collect(Collectors.toMap(ArticleData::slug, a -> a)))
         .build();
   }
 
@@ -311,7 +311,7 @@ public class ArticleDatafetcher {
         .localContext(
             new HashMap<String, Object>() {
               {
-                put(articleData.getSlug(), articleData);
+                put(articleData.slug(), articleData);
               }
             })
         .data(articleResult)
@@ -325,14 +325,14 @@ public class ArticleDatafetcher {
     User current = SecurityUtil.getCurrentUser().orElse(null);
     ArticleData articleData =
         articleQueryService
-            .findById(comment.getArticleId(), current)
+            .findById(comment.articleId(), current)
             .orElseThrow(ResourceNotFoundException::new);
     Article articleResult = buildArticleResult(articleData);
     return DataFetcherResult.<Article>newResult()
         .localContext(
             new HashMap<String, Object>() {
               {
-                put(articleData.getSlug(), articleData);
+                put(articleData.slug(), articleData);
               }
             })
         .data(articleResult)
@@ -349,7 +349,7 @@ public class ArticleDatafetcher {
         .localContext(
             new HashMap<String, Object>() {
               {
-                put(articleData.getSlug(), articleData);
+                put(articleData.slug(), articleData);
               }
             })
         .data(articleResult)
@@ -370,15 +370,15 @@ public class ArticleDatafetcher {
 
   private Article buildArticleResult(ArticleData articleData) {
     return Article.newBuilder()
-        .body(articleData.getBody())
-        .createdAt(JacksonCustomizations.ISO_DATE_TIME_MILLIS_UTC.format(articleData.getCreatedAt()))
-        .description(articleData.getDescription())
-        .favorited(articleData.isFavorited())
-        .favoritesCount(articleData.getFavoritesCount())
-        .slug(articleData.getSlug())
-        .tagList(articleData.getTagList())
-        .title(articleData.getTitle())
-        .updatedAt(JacksonCustomizations.ISO_DATE_TIME_MILLIS_UTC.format(articleData.getUpdatedAt()))
+        .body(articleData.body())
+        .createdAt(JacksonCustomizations.ISO_DATE_TIME_MILLIS_UTC.format(articleData.createdAt()))
+        .description(articleData.description())
+        .favorited(articleData.favorited())
+        .favoritesCount(articleData.favoritesCount())
+        .slug(articleData.slug())
+        .tagList(articleData.tagList())
+        .title(articleData.title())
+        .updatedAt(JacksonCustomizations.ISO_DATE_TIME_MILLIS_UTC.format(articleData.updatedAt()))
         .build();
   }
 }

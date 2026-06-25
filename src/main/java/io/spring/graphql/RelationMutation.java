@@ -56,10 +56,10 @@ public class RelationMutation {
   private Profile buildProfile(@InputArgument("username") String username, User current) {
     ProfileData profileData = profileQueryService.findByUsername(username, current).get();
     return Profile.newBuilder()
-        .username(profileData.getUsername())
-        .bio(profileData.getBio())
-        .image(profileData.getImage())
-        .following(profileData.isFollowing())
+        .username(profileData.username())
+        .bio(profileData.bio())
+        .image(profileData.image())
+        .following(profileData.following())
         .build();
   }
 }

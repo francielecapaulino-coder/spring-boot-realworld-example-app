@@ -38,14 +38,14 @@ public class ProfileDatafetcher {
   public Profile getAuthor(DataFetchingEnvironment dataFetchingEnvironment) {
     Map<String, ArticleData> map = dataFetchingEnvironment.getLocalContext();
     Article article = dataFetchingEnvironment.getSource();
-    return queryProfile(map.get(article.getSlug()).getProfileData().getUsername());
+    return queryProfile(map.get(article.getSlug()).profileData().username());
   }
 
   @DgsData(parentType = COMMENT.TYPE_NAME, field = COMMENT.Author)
   public Profile getCommentAuthor(DataFetchingEnvironment dataFetchingEnvironment) {
     Comment comment = dataFetchingEnvironment.getSource();
     Map<String, CommentData> map = dataFetchingEnvironment.getLocalContext();
-    return queryProfile(map.get(comment.getId()).getProfileData().getUsername());
+    return queryProfile(map.get(comment.getId()).profileData().username());
   }
 
   @DgsData(parentType = DgsConstants.QUERY_TYPE, field = QUERY.Profile)
@@ -62,10 +62,10 @@ public class ProfileDatafetcher {
             .findByUsername(username, current)
             .orElseThrow(ResourceNotFoundException::new);
     return Profile.newBuilder()
-        .username(profileData.getUsername())
-        .bio(profileData.getBio())
-        .image(profileData.getImage())
-        .following(profileData.isFollowing())
+        .username(profileData.username())
+        .bio(profileData.bio())
+        .image(profileData.image())
+        .following(profileData.following())
         .build();
   }
 }

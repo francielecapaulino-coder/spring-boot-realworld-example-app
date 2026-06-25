@@ -51,19 +51,19 @@ public class ProfileApiTest extends TestWithCurrentUser {
 
   @Test
   public void should_get_user_profile_success() throws Exception {
-    when(profileQueryService.findByUsername(eq(profileData.getUsername()), eq(null)))
+    when(profileQueryService.findByUsername(eq(profileData.username()), eq(null)))
         .thenReturn(Optional.of(profileData));
     RestAssuredMockMvc.when()
-        .get("/profiles/{username}", profileData.getUsername())
+        .get("/profiles/{username}", profileData.username())
         .prettyPeek()
         .then()
         .statusCode(200)
-        .body("profile.username", equalTo(profileData.getUsername()));
+        .body("profile.username", equalTo(profileData.username()));
   }
 
   @Test
   public void should_follow_user_success() throws Exception {
-    when(profileQueryService.findByUsername(eq(profileData.getUsername()), eq(user)))
+    when(profileQueryService.findByUsername(eq(profileData.username()), eq(user)))
         .thenReturn(Optional.of(profileData));
     given()
         .header("Authorization", "Token " + token)
@@ -80,7 +80,7 @@ public class ProfileApiTest extends TestWithCurrentUser {
     FollowRelation followRelation = new FollowRelation(user.getId(), anotherUser.getId());
     when(userRepository.findRelation(eq(user.getId()), eq(anotherUser.getId())))
         .thenReturn(Optional.of(followRelation));
-    when(profileQueryService.findByUsername(eq(profileData.getUsername()), eq(user)))
+    when(profileQueryService.findByUsername(eq(profileData.username()), eq(user)))
         .thenReturn(Optional.of(profileData));
 
     given()

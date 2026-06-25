@@ -87,7 +87,7 @@ public class CommentsApiTest extends TestWithCurrentUser {
         .post("/articles/{slug}/comments", article.getSlug())
         .then()
         .statusCode(201)
-        .body("comment.body", equalTo(commentData.getBody()));
+        .body("comment.body", equalTo(commentData.body()));
   }
 
   @Test
@@ -125,7 +125,7 @@ public class CommentsApiTest extends TestWithCurrentUser {
         .prettyPeek()
         .then()
         .statusCode(200)
-        .body("comments[0].id", equalTo(commentData.getId()));
+        .body("comments[0].id", equalTo(commentData.id()));
   }
 
   @Test
