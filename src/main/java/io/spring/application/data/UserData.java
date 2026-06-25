@@ -1,16 +1,9 @@
 package io.spring.application.data;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserData {
-  private String id;
-  private String email;
-  private String username;
-  private String bio;
-  private String image;
-}
+/**
+ * Read-only user view exposed by query services and Jackson-serialised on the wire.
+ *
+ * <p>Pure carrier of data with no behaviour and no required mutable state — eligible
+ * for {@code record} conversion under US-06.02 / KR1.5 (mandate J5).
+ */
+public record UserData(String id, String email, String username, String bio, String image) {}

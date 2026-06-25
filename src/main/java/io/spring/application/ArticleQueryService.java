@@ -152,7 +152,7 @@ public class ArticleQueryService {
     Map<String, Integer> countMap = new HashMap<>();
     favoritesCounts.forEach(
         item -> {
-          countMap.put(item.getId(), item.getCount());
+          countMap.put(item.id(), item.count());
         });
     articles.forEach(
         articleData -> articleData.setFavoritesCount(countMap.get(articleData.getId())));
