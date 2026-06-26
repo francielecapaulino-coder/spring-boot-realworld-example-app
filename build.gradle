@@ -173,8 +173,16 @@ pitest {
     //     core package reached 100 % mutation score (21/21 killed)
     //   - US-07.03 (2026-06-25): mutation 65 %, line 60 %, test strength 93 %
     //     application package reached 99 % mutation score (125/126 killed)
-    // US-07.04 will raise these again; US-07.05 finalises at 95 (KR3.1)
-    // with STRONGER mutators + CI integration.
-    mutationThreshold = 65
-    coverageThreshold = 60
+    //   - US-07.04 (2026-06-26): mutation 72 %, line 63 %, test strength 95 %
+    //     infrastructure package reached 97 % mutation score (123/127 killed)
+    //     - 4 remaining mutants are truly equivalent / unreachable:
+    //       * toInstant.line 276/86: `((Timestamp) value).toInstant()` branch
+    //         is never taken because Hibernate + PostgreSQL always return
+    //         LocalDateTime, never java.sql.Timestamp.
+    //       * toTimestamp.line 266/269: the `else` branch (cursor not Instant)
+    //         is unreachable because all CursorPageParameter usages bind
+    //         Instant; negating the conditional has no observable effect.
+    // US-07.05 finalises at 95 (KR3.1) with STRONGER mutators + CI integration.
+    mutationThreshold = 72
+    coverageThreshold = 63
 }

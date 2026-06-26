@@ -23,4 +23,21 @@ public class JpaCommentRepositoryTest extends DbTestBase {
     Assertions.assertTrue(optional.isPresent());
     Assertions.assertEquals(optional.get(), comment);
   }
+
+  /**
+   * Kills the {@code VoidMethodCall} mutant on {@code remove()} (line 35): if the
+   * delete call is removed, the comment would still be findable after invocation.
+   */
+  @Test
+  public void should_remove_existing_comment_so_it_is_no_longer_findable() {
+    Comment comment = new Comment("removable", "user-1", "article-1");
+    commentRepository.save(comment);
+    Assertions.assertTrue(
+        commentRepository.findById("article-1", comment.getId()).isPresent());
+
+    commentRepository.remove(comment);
+
+    Assertions.assertFalse(
+        commentRepository.findById("article-1", comment.getId()).isPresent());
+  }
 }
