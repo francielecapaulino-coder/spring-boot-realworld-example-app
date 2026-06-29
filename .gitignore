@@ -27,6 +27,8 @@ nbdist/
 
 # Node.js - process tools only (commitlint, playwright)
 node_modules/
+test-results/
+playwright-report/
 
 ### Eclipse / build output ###
 bin/
