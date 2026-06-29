@@ -54,6 +54,15 @@ jobs:
       run: echo "JWT_SECRET=$(openssl rand -base64 64 | tr -d '\n')" >> $GITHUB_ENV
     - name: Test with Gradle
       run: ./gradlew clean test
+    - name: Mutation testing with Pitest (US-07.05)
+      run: ./gradlew pitest
+    - name: Upload Pitest HTML report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: pitest-report
+        path: build/reports/pitest/
+        retention-days: 14
 
   validate-startup:
     name: Validate Docker Compose startup
