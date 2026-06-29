@@ -32,7 +32,7 @@ public abstract class ApiIntegrationTestBase {
     client = RestClient.builder()
         .baseUrl("http://localhost:" + serverPort)
         .defaultStatusHandler(status -> true, (request, response) -> {
-          // suppress exception throwing — tests check status manually via assertions
+          // suppress exception throwing - tests check status manually via assertions
         })
         .build();
   }
