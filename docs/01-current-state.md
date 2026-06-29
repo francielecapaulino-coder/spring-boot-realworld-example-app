@@ -32,7 +32,7 @@
 ---
 
 # 🔍 PARTE 1 — VISÃO DE NEGÓCIO
-> *Para product managers, stakeholders e gestores.*<br>
+> *Para product managers, stakeholders e gestores.*  
 > *Foco em “o que isto significa”.*
 
 ---
@@ -141,7 +141,7 @@ Este projeto é um **backend de referência** criado pela comunidade global de d
 ---
 
 # ⚙️ PARTE 2 — VISÃO TÉCNICA
-> *Para desenvolvedores, tech leads e arquitetos.*<br>
+> *Para desenvolvedores, tech leads e arquitetos.*  
 > *Todos os dados confirmados diretamente do código-fonte no repositório.*
 
 ---
@@ -561,9 +561,9 @@ O repositório contém arquivo `Dockerfile` **básico**:
 ---
 
 **Próxima etapa recomendada pelo Coda:**
-1️⃣ **Executar EPIC-02** (remover secret hardcoded)<br>
-2️⃣ **Executar EPIC-03** (Docker + PostgreSQL)<br>
-3️⃣ **Paralelizar EPIC-04 com EPIC-07/08**<br>
+1️⃣ **Executar EPIC-02** (remover secret hardcoded)  
+2️⃣ **Executar EPIC-03** (Docker + PostgreSQL)  
+3️⃣ **Paralelizar EPIC-04 com EPIC-07/08**  
 4️⃣ **Seguir com EPIC-05 e EPIC-06**
 
 ---
