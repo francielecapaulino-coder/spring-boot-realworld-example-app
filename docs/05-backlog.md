@@ -27,7 +27,7 @@ Quando este épico estiver concluído:
 - Upgrade Gradle → 9.3.1 com zero deprecation warnings
 - Migração de todos os imports `javax.*` → `jakarta.*`
 - Reconfiguração do Spring Security 6.x (remoção do `WebSecurityConfigurerAdapter`)
-- Atualização do DGS Framework para versão 10.x (ver ADR-001 — sem reescrita de resolvers)
+- Atualização do DGS Framework para versão compatível com Spring Boot 4, implementada como 12.0.1 (ver ADR-001 — sem reescrita de resolvers)
 - Remoção de Joda-Time; substituição por `java.time` — incluindo `ArticleData` e `DateTimeCursor` (ver ADR-005)
 - Habilitação de virtual threads via `spring.threads.virtual.enabled=true`
 - ADR registrado sobre DGS vs Spring for GraphQL (ver ADR-001)
@@ -51,7 +51,7 @@ DEPOIS: SecurityConfig sem herança
         → @Bean SecurityFilterChain filterChain(HttpSecurity http)
 ```
 
-**DGS Framework 10.x:** apenas atualização de versão no `build.gradle` — sem reescrita de resolvers (ver ADR-001). O pacote `io.spring.graphql` é código gerado — nunca editar manualmente (ver ADR-004).
+**DGS Framework 12.0.1:** apenas atualização de versão no `build.gradle` — sem reescrita de resolvers (ver ADR-001). O pacote `io.spring.graphql` é código gerado — nunca editar manualmente (ver ADR-004).
 
 **Joda-Time → `java.time`:** `ArticleData.java` usa `DateTime` de Joda-Time para o campo `updatedAt`. Deve ser migrado para `java.time.Instant` antes da conversão para record em EPIC-06 (ver ADR-005).
 
@@ -76,7 +76,7 @@ DEPOIS: SecurityConfig sem herança
 | US-04.03 | Atualizar Spring Boot de 2.6.3 para 4.0.3 e resolver conflitos de dependências | `chore` | ✅ DONE |
 | US-04.04 | Migrar todos os imports `javax.*` para `jakarta.*` incluindo `DefaultJwtService` | `refactor` | ✅ DONE |
 | US-04.05 | Reconfigurar Spring Security 6.x removendo `WebSecurityConfigurerAdapter` | `refactor` | ✅ DONE |
-| US-04.06 | Atualizar DGS Framework para versão 10.x compatível com Spring Boot 4 | `chore` | ✅ DONE (12.0.1) |
+| US-04.06 | Atualizar DGS Framework para versão compatível com Spring Boot 4 | `chore` | ✅ DONE (12.0.1) |
 | US-04.07 | Remover Joda-Time e substituir por `java.time` em todo o codebase incluindo `ArticleData` e `DateTimeCursor` | `refactor` | ✅ DONE |
 | US-04.08 | Habilitar virtual threads via `spring.threads.virtual.enabled=true` | `perf` | ✅ DONE |
 | US-04.09 | Validar que todos os testes passam após o upgrade completo | `test` | ✅ DONE (evidence docs/process/tests-epico-04/test-evidence-us-04.09.md) |

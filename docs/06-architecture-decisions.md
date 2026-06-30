@@ -54,13 +54,13 @@ Esta decisão precisa ser tomada **antes** de iniciar qualquer código do INI-04
 
 ### Opções consideradas
 
-#### Opção A: Atualizar DGS Framework para versão 10.x
+#### Opção A: Atualizar DGS Framework para versão compatível com Spring Boot 4
 
-O DGS Framework 10.x, lançado em 2024, passou por uma transformação significativa: internamente, ele foi **reimplementado sobre o Spring for GraphQL**. Do ponto de vista do código da aplicação:
+O DGS Framework 10.x+ passou por uma transformação significativa: internamente, ele foi **reimplementado sobre o Spring for GraphQL**. No EPIC-04, a versão compatível adotada no `build.gradle` foi **DGS 12.0.1**. Do ponto de vista do código da aplicação:
 
 - As anotações `@DgsComponent`, `@DgsQuery`, `@DgsMutation` continuam funcionando sem alteração
-- O DGS 10.x usa o Spring for GraphQL como transporte e execução internamente
-- A Netflix migrou todos os seus serviços para o DGS 10.x sem alteração de código de resolvers
+- O DGS 10.x+ usa o Spring for GraphQL como transporte e execução internamente
+- O caminho de upgrade preserva os resolvers DGS sem reescrita
 
 **Prós:**
 - Zero reescrita de resolvers GraphQL — apenas atualização de versão no `build.gradle`
@@ -85,13 +85,15 @@ O Spring for GraphQL é a solução oficial do ecossistema Spring para GraphQL d
 - **Reescrita completa de todos os resolvers GraphQL** — `@DgsQuery` → `@QueryMapping`, etc.
 - Curva de aprendizado para o time
 - Risco adicional na Fase 3 que já é a mais complexa do projeto
-- Benefício técnico marginal dado que DGS 10.x já usa Spring for GraphQL internamente
+- Benefício técnico marginal dado que DGS 10.x+ já usa Spring for GraphQL internamente
 
 ### Decisão
 
-**Opção A: Atualizar DGS Framework para versão 10.x.**
+**Opção A: manter DGS Framework e atualizar para uma versão compatível com Spring Boot 4.**
 
-A razão principal é de custo-benefício: o DGS 10.x já usa Spring for GraphQL internamente, portanto os benefícios técnicos da migração direta são marginais. A reescrita de todos os resolvers na Fase 3 — que já carrega o risco de um upgrade completo de framework — adicionaria semanas de trabalho sem ganho funcional para o produto.
+A razão principal é de custo-benefício: o DGS 10.x+ já usa Spring for GraphQL internamente, portanto os benefícios técnicos da migração direta são marginais. A reescrita de todos os resolvers na Fase 3 — que já carrega o risco de um upgrade completo de framework — adicionaria semanas de trabalho sem ganho funcional para o produto.
+
+**Implementação atual:** EPIC-04 adotou `com.netflix.graphql.dgs:dgs-starter:12.0.1`, compatível com Spring Boot 4.0.3, preservando as anotações e resolvers DGS existentes.
 
 A decisão pode ser revisada em uma fase futura quando o projeto estiver estável e a equipe tiver bandwidth para uma migração de menor urgência.
 
@@ -119,7 +121,7 @@ A decisão pode ser revisada em uma fase futura quando o projeto estiver estáve
 | `04-roadmap.md` | Fase 3: "ADR sobre DGS aprovado antes de iniciar qualquer história" |
 | `05-backlog.md` | EPIC-04, US-04.01 |
 | `05-backlog.md` | EPIC-04, US-04.03 (upgrade Spring Boot 4.0.3) — depende desta decisão |
-| `05-backlog.md` | EPIC-04, US-04.06 (atualização DGS para 10.x) — implementa a Opção A |
+| `05-backlog.md` | EPIC-04, US-04.06 (atualização DGS para 12.0.1) — implementa a Opção A |
 
 ---
 
@@ -669,7 +671,7 @@ jwt:
 
 | ADR | Decisão tomada | Fase | Impacto principal |
 |---|---|---|---|
-| ADR-001 | Manter DGS 10.x — sem reescrita de resolvers | Fase 3 | INI-04 é upgrade de versão, não reescrita |
+| ADR-001 | Manter DGS 12.0.1 — sem reescrita de resolvers | Fase 3 | INI-04 é upgrade de versão, não reescrita |
 | ADR-002 | Queries JPA por complexidade: derivação → JPQL → Specifications → SQL nativo | Fase 3 | INI-05: padrão claro para cada tipo de query |
 | ADR-003 | Métricas via AOP — `ApiMetricsAspect` único | Fase 4 | INI-10: controllers sem acoplamento a Micrometer |
 | ADR-004 | `io.spring.graphql` é código gerado — nunca editar, excluir do Pitest | Fase 3 | INI-07: configuração Pitest obrigatória |
