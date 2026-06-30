@@ -24,7 +24,7 @@
 |---|---|---|---|
 | CA-01 | ADR-001 presente com status `✅ Aceito` | ✅ | linha 27 (índice) e linha 41 (`Status: ✅ Aceito`) |
 | CA-02 | Contexto, Opção A, Opção B e Decisão documentados | ✅ | seções "Contexto", "Opções consideradas (A/B)", "Decisão" |
-| CA-03 | Decisão: **Opção A — DGS 10.x (sem reescrita de resolvers)** | ✅ | linha 92 ("Opção A: Atualizar DGS Framework para versão 10.x") |
+| CA-03 | Decisão: **Opção A — manter DGS sem reescrita de resolvers** | ✅ | ADR-001 registra a decisão e a implementação final em DGS 12.0.1 |
 | CA-04 | Consequências e plano de revisão futura | ✅ | seção "Consequências" (linhas 98-112) + linha 96 ("pode ser revisada") |
 | CA-05 | ADR referenciado por INI-04 / US-04.01 **e histórias dependentes** | ✅ | rastreabilidade agora cita US-04.03 e US-04.06 (linhas 121-122) |
 | CA-06 | Decisão não viola ADR-004 (código gerado não editado) | ✅ | `git diff --name-only` → apenas `06-architecture-decisions.md` |
@@ -39,14 +39,14 @@
 41:**Status:** ✅ Aceito
 
 # V2 — decisão pela Opção A
-92:**Opção A: Atualizar DGS Framework para versão 10.x.**
+92:**Opção A: manter DGS Framework e atualizar para uma versão compatível com Spring Boot 4.**
 
 # V3 — nenhum código gerado tocado
 git diff --name-only → docs/06-architecture-decisions.md  (0 arquivos io.spring.graphql)
 
 # CA-05 — histórias dependentes citadas
 121:| 05-backlog.md | EPIC-04, US-04.03 (upgrade Spring Boot 4.0.3) — depende desta decisão |
-122:| 05-backlog.md | EPIC-04, US-04.06 (atualização DGS para 10.x) — implementa a Opção A |
+122:| 05-backlog.md | EPIC-04, US-04.06 (atualização DGS para 12.0.1) — implementa a Opção A |
 ```
 
 ---
@@ -55,7 +55,7 @@ git diff --name-only → docs/06-architecture-decisions.md  (0 arquivos io.sprin
 
 | Verificação | Resultado |
 |---|---|
-| Decisão do ADR inalterada (Opção A — DGS 10.x) | ✅ apenas rastreabilidade ajustada |
+| Decisão do ADR inalterada (Opção A — manter DGS) | ✅ apenas rastreabilidade ajustada |
 | ADR-004 — `io.spring.graphql.*` não editado | ✅ |
 | Risco HIGH (ADR) — confirmação da PM obtida antes da edição | ✅ |
 | Spring Boot 4.0.3 (literal do mandato, GAP-D encerrado) | ✅ consistente em toda a doc |
@@ -64,6 +64,6 @@ git diff --name-only → docs/06-architecture-decisions.md  (0 arquivos io.sprin
 
 ## Conclusão
 
-O ADR-001 está completo, com status `✅ Aceito`, decisão registrada (Opção A — DGS 10.x) e
+O ADR-001 está completo, com status `✅ Aceito`, decisão registrada (Opção A — manter DGS) e
 rastreabilidade ampliada para as histórias dependentes (US-04.03 e US-04.06). A US-04.01 está
 concluída — desbloqueia o início do upgrade do framework (US-04.02 em diante).

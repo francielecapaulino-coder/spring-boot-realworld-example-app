@@ -69,7 +69,7 @@ Antes de qualquer implementação, avalie o impacto e prossiga conforme a tabela
 
 ## 6 ADRs ATIVOS — NUNCA VIOLAR SEM NOVO ADR
 
-- **ADR-001:** Manter DGS 10.x — não reescrever resolvers para Spring for GraphQL nativo
+- **ADR-001:** Manter DGS no Spring Boot 4 com versão compatível atualmente `12.0.1` — não reescrever resolvers para Spring for GraphQL nativo
 - **ADR-002:** Queries JPA: derivação → JPQL → Specifications → SQL nativo
 - **ADR-003:** Métricas via AOP (`ApiMetricsAspect`) — sem Micrometer nos controllers
 - **ADR-004:** `io.spring.graphql.*` é código gerado — nunca editar, excluir do Pitest
