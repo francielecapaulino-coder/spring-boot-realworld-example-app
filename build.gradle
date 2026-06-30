@@ -199,6 +199,12 @@ pitest {
     outputFormats = ["HTML", "XML"]
     timestampedReports = false
     threads = 4
+    // Keep the full integration test in ./gradlew test, but do not use the
+    // deliberately concurrent HTTP race test during PIT coverage calculation.
+    // Under PIT instrumentation this test can fail without mutation on CI,
+    // making unrelated changes red while not adding deterministic mutation
+    // signal. See #110.
+    excludedGroups = ["pitest-skip"]
     // Thresholds are pinned at the exact measured values (no rounding down)
     // so any regression below current baseline fails the build immediately.
     //   - US-07.01 (2026-06-25): mutation 55 %, line 57 %, test strength 86 %

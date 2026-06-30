@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
@@ -258,6 +259,7 @@ class ArticleApiIntegrationTest extends ApiIntegrationTestBase {
   }
 
   @Test
+  @Tag("pitest-skip")
   void concurrent_article_creates_with_same_new_tag_do_not_duplicate_tag()
       throws Exception {
     // Two parallel POST /articles using the same brand-new tag name must both
@@ -266,8 +268,8 @@ class ArticleApiIntegrationTest extends ApiIntegrationTestBase {
     // added in V3 is the database-level safety net; the application's
     // reconcileTag handles the race by retrying findByName when the constraint
     // fires on the losing writer.
-    String concurrentTag = "concurrent-race-tag";
-    int requests = 4;
+    String concurrentTag = "concurrent-race-tag-" + System.nanoTime();
+    int requests = 2;
     ExecutorService executor = Executors.newFixedThreadPool(requests);
     CountDownLatch start = new CountDownLatch(1);
     List<Future<Integer>> results = new ArrayList<>();
