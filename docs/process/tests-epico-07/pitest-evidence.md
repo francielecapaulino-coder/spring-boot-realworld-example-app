@@ -130,6 +130,24 @@ tests written in US-07.02..07.05:
   `InvalidRequestExceptionTest` in US-07.05
 - `io.spring.application.UpdateUserValidator` (11/11) — covered in US-07.03
 
+### 3.5 — Test groups excluded from PIT only
+
+```
+@Tag("pitest-skip")
+```
+
+`ArticleApiIntegrationTest.concurrent_article_creates_with_same_new_tag_do_not_duplicate_tag()`
+is still part of the normal integration suite (`./gradlew test`) but is excluded
+from PIT via `excludedGroups = ["pitest-skip"]`.
+
+Rationale: the test intentionally opens parallel HTTP requests to exercise the
+database `UNIQUE(name)` race for tags. Under PIT instrumentation on CI it can
+exhaust the small test Hikari pool and fail during coverage calculation before
+any mutation is applied. Excluding this one concurrency harness from PIT keeps
+the mutation gate deterministic without lowering thresholds, excluding
+production classes, or removing the integration coverage from the normal test
+suite.
+
 ---
 
 ## 4. GraphQL backlog — documented debt (108 mutants, ~23 % of original 472)
